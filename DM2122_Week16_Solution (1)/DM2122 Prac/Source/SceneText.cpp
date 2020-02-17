@@ -123,11 +123,16 @@ void SceneText::Init()
 	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//WaiMen_Car.obj");
 	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
 
-	meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("val_car", "OBJ//Car_ValTay.obj");
+	/*meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("val_car", "OBJ//Car_ValTay.obj");
 	meshList[GEO_VAL_CAR]->textureID = LoadTGA("Image//Car_Val.tga");
 
 	meshList[GEO_VAL_CAR_WHEEL] = MeshBuilder::GenerateOBJ("val_car_wheel", "OBJ//CarWheel_ValTay.obj");
-	meshList[GEO_VAL_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Val.tga");
+	meshList[GEO_VAL_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Val.tga");*/
+
+	meshList[GEO_SPACESTATION_FLOOR] = MeshBuilder::GenerateOBJ("floor", "OBJ//floor.obj");
+	meshList[GEO_SPACESTATION_FLOOR]->textureID = LoadTGA("Image//floorUV.tga");
+	meshList[GEO_SPACESTATION_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//walls.obj");
+	meshList[GEO_SPACESTATION_WALL]->textureID = LoadTGA("Image//wallUV.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -239,6 +244,16 @@ void SceneText::Render()
 	//modelStack.PopMatrix();
 
 	//modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
+	modelStack.PopMatrix();
 
 
 	//modelStack.PushMatrix();
