@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{1354c9c4-6411-46e3-a63b-fb59abb1ba68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{2de873fb-f817-4d28-8338-10492add3d22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -57,6 +63,18 @@
     <ClInclude Include="Source\SceneText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Controllers\Controller.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Controllers\Keyboard.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Controllers\Mouse.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerInfo\PlayerInfo.h">
+      <Filter>Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\shader.cpp">
@@ -91,6 +109,18 @@
     </ClCompile>
     <ClCompile Include="Source\SceneText.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Controllers\Controller.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Controllers\Keyboard.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Controllers\Mouse.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp">
+      <Filter>Player</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

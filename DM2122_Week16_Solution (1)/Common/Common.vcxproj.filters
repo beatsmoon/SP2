@@ -30,6 +30,15 @@
     <ClInclude Include="Source\Vector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\KeyboardController.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MouseController.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SingletonTemplate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Mtx44.cpp">
@@ -42,6 +51,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\MatrixStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\KeyboardController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MouseController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

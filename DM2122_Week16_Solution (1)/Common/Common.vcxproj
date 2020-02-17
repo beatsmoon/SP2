@@ -19,14 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\KeyboardController.h" />
     <ClInclude Include="Source\MatrixStack.h" />
+    <ClInclude Include="Source\MouseController.h" />
     <ClInclude Include="Source\Mtx44.h" />
     <ClInclude Include="Source\MyMath.h" />
+    <ClInclude Include="Source\SingletonTemplate.h" />
     <ClInclude Include="Source\timer.h" />
     <ClInclude Include="Source\Vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\KeyboardController.cpp" />
     <ClCompile Include="Source\MatrixStack.cpp" />
+    <ClCompile Include="Source\MouseController.cpp" />
     <ClCompile Include="Source\Mtx44.cpp" />
     <ClCompile Include="Source\timer.cpp" />
     <ClCompile Include="Source\Vector3.cpp" />
