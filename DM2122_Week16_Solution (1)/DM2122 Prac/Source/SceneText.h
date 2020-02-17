@@ -20,6 +20,8 @@ class SceneText : public Scene
 		GEO_BACK,
 		GEO_WM_CAR,
 		GEO_WM_CAR_WHEEL,
+		GEO_VAL_CAR,
+		GEO_VAL_CAR_WHEEL,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
