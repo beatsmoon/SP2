@@ -276,6 +276,9 @@ void SceneText::Render()
 	//modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
+	modelStack.Translate(0, -28, 0);
+	modelStack.Scale(4, 4, 4);
+	modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], false);
 	modelStack.PopMatrix();
@@ -283,6 +286,7 @@ void SceneText::Render()
 	modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 
 
@@ -360,23 +364,22 @@ void SceneText::RenderMesh(Mesh* mesh, bool enableLight)
 void SceneText::RenderSkybox()
 {
 	modelStack.PushMatrix();
+	modelStack.Scale(1000.f, 1000.f, 1000.f);
+	modelStack.PushMatrix();
 		///scale, translate, rotate 
-		modelStack.Translate(-50.f, 0.f, 0.f);
-		modelStack.Scale(101.f, 101.f, 101.f);
+		modelStack.Translate(-0.5f, 0.f, 0.f);
 		modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_LEFT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
-		modelStack.Translate(50.f, 0.f, 0.f);
-		modelStack.Scale(101.f, 101.f, 101.f);
+		modelStack.Translate(0.5f, 0.f, 0.f);
 		modelStack.Rotate(-90.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_RIGHT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
-		modelStack.Translate(0.f, 50.f, 0.f);
-		modelStack.Scale(101.f, 101.f, 101.f);
+		modelStack.Translate(0.f, 0.5f, 0.f);
 		modelStack.Rotate(90.f, 1.f, 0.f, 0.f);
 		modelStack.PushMatrix();
 			modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
@@ -385,8 +388,7 @@ void SceneText::RenderSkybox()
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
-		modelStack.Translate(0.f, -50.f, 0.f);
-		modelStack.Scale(101.f, 101.f, 101.f);
+		modelStack.Translate(0.f, -0.5f, 0.f);
 		modelStack.Rotate(-90.f, 1.f, 0.f, 0.f);
 		modelStack.PushMatrix();
 		modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
@@ -395,16 +397,15 @@ void SceneText::RenderSkybox()
 		modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
-		modelStack.Translate(0.f, 0.f, -50.f);
-		modelStack.Scale(101.f, 101.f, 101.f);
+		modelStack.Translate(0.f, 0.f, -0.5f);
 		RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
-		modelStack.Translate(0.f, 0.f, 50.f);
-		modelStack.Scale(101.f, 101.f, 101.f);
+		modelStack.Translate(0.f, 0.f, 0.5f);
 		modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_BACK], false);
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
 
