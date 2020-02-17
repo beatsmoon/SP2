@@ -113,12 +113,10 @@ private:
 	double m_dSpeed;
 	double m_dAcceleration;
 
-	bool m_bJumpUpwards;
 	double m_dJumpSpeed;
 	double m_dJumpAcceleration;
 
 	double m_dFallSpeed;
-	bool m_bFallDownwards;
 	double m_dFallAcceleration;
 
 	double m_dElapsedTime;
