@@ -74,6 +74,8 @@
     </ClInclude>
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h">
       <Filter>Player</Filter>
+    <ClInclude Include="Car.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +123,8 @@
     </ClCompile>
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp">
       <Filter>Player</Filter>
+    <ClCompile Include="Car.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
