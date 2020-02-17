@@ -51,8 +51,6 @@ void SceneText::Init()
 	thePlayer->AttachCamera(&camera);
 
 
-	
-
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
