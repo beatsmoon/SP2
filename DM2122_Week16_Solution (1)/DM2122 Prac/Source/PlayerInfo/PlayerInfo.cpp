@@ -18,14 +18,12 @@ CPlayerInfo *CPlayerInfo::s_instance = 0;
 CPlayerInfo::CPlayerInfo(void)
 	: m_dSpeed(40.0)
 	, m_dAcceleration(10.0)
-	, m_bJumpUpwards(false)
 	, m_dJumpSpeed(30.0)
 	, m_dJumpAcceleration(-10.0)
-	, m_bFallDownwards(false)
 	, m_dFallSpeed(0.0)
 	, m_dFallAcceleration(-10.0)
 	, m_dElapsedTime(0.0)
-	//, attachedCamera(NULL)
+	, attachedCamera(NULL)
 	, theCurrentPosture(STAND)
 {
 }
@@ -55,54 +53,6 @@ void CPlayerInfo::Init(void)
 	//this->SetAABB(Vector3(1,1,1),Vector3(-1,-1,-1));
 }
 
-// Returns true if the player is on ground
-bool CPlayerInfo::isOnGround(void)
-{
-	if (m_bJumpUpwards == false && m_bFallDownwards == false)
-		return true;
-
-	return false;
-}
-
-// Returns true if the player is jumping upwards
-bool CPlayerInfo::isJumpUpwards(void)
-{
-	if (m_bJumpUpwards == true && m_bFallDownwards == false)
-		return true;
-
-	return false;
-}
-
-// Returns true if the player is on freefall
-bool CPlayerInfo::isFreeFall(void)
-{
-	if (m_bJumpUpwards == false && m_bFallDownwards == true)
-		return true;
-
-	return false;
-}
-
-// Set the player's status to free fall mode
-void CPlayerInfo::SetOnFreeFall(bool isOnFreeFall)
-{
-	if (isOnFreeFall == true)
-	{
-		m_bJumpUpwards = false;
-		m_bFallDownwards = true;
-		m_dFallSpeed = 0.0;
-	}
-}
-
-// Set the player to jumping upwards
-void CPlayerInfo::SetToJumpUpwards(bool isOnJumpUpwards)
-{
-	if (isOnJumpUpwards == true)
-	{
-		m_bJumpUpwards = true;
-		m_bFallDownwards = false;
-		m_dJumpSpeed = 10.0;
-	}
-}
 
 // Set position
 void CPlayerInfo::SetPos(const Vector3& pos)
@@ -154,6 +104,7 @@ void CPlayerInfo::SetBoundary(Vector3 max, Vector3 min)
 
 bool CPlayerInfo::Move_FrontBack(const float dt, const bool direction, const float speedMultiplier)
 {
+	cout << position << endl;
 	Vector3 viewVector = target - position;
 	Vector3 rightUV;
 	Vector3 temp;
@@ -164,6 +115,7 @@ bool CPlayerInfo::Move_FrontBack(const float dt, const bool direction, const flo
 	{
 		position += temp * (float)m_dSpeed * (float)dt;
 		target = position + viewVector;
+		cout << position << endl;
 		return true;
 	}
 	else
@@ -324,7 +276,7 @@ bool CPlayerInfo::Look_UpDown(const float dt, const bool direction, double mouse
 
 bool CPlayerInfo::Look_LeftRight(const float dt, const bool direction, double mouse_diff_x)
 {
-	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
+	double camera_yaw = mouse_diff_x * 0.0174555555555556 * 2;		// 3.142 / 180.0 HARDCODED
 	Vector3 viewUV = (target - position).Normalized();
 	Vector3 rightUV;
 
@@ -340,12 +292,6 @@ bool CPlayerInfo::Look_LeftRight(const float dt, const bool direction, double mo
 	return true;
 }
 
-// Stop the player's movement
-void CPlayerInfo::StopVerticalMovement(void)
-{
-	m_bJumpUpwards = false;
-	m_bFallDownwards = false;
-}
 
 // Reset this player instance to default
 void CPlayerInfo::Reset(void)
@@ -356,7 +302,6 @@ void CPlayerInfo::Reset(void)
 	up = defaultUp;
 
 	// Stop vertical movement too
-	StopVerticalMovement();
 }
 
 // Get position x of the player
@@ -382,72 +327,6 @@ double CPlayerInfo::GetJumpAcceleration(void) const
 	return m_dJumpAcceleration;
 }
 
-// Update Jump Upwards
-void CPlayerInfo::UpdateJumpUpwards(double dt)
-{
-	if (m_bJumpUpwards == false)
-		return;
-
-	// Update the jump's elapsed time
-	m_dElapsedTime += dt;
-
-	// Update position and target y values
-	// Use SUVAT equation to update the change in position and target
-	// s = u * t + 0.5 * a * t ^ 2
-	position.y += (float)(m_dJumpSpeed * m_dElapsedTime + 
-						  0.5 * m_dJumpAcceleration * m_dElapsedTime * m_dElapsedTime);
-	target.y += (float)(m_dJumpSpeed * m_dElapsedTime + 
-						0.5 * m_dJumpAcceleration * m_dElapsedTime * m_dElapsedTime);
-	// Use this equation to calculate final velocity, v
-	// SUVAT: v = u + a * t; v is m_dJumpSpeed AFTER updating using SUVAT where u is 
-	// the initial speed and is equal to m_dJumpSpeed
-	m_dJumpSpeed = m_dJumpSpeed + m_dJumpAcceleration * m_dElapsedTime;
-	// Check if the jump speed is less than zero, then it should be falling
-	if (m_dJumpSpeed < 0.0)
-	{
-		m_dJumpSpeed = 0.0;
-		m_bJumpUpwards = false;
-		m_dFallSpeed = 0.0;
-		m_bFallDownwards = true;
-		m_dElapsedTime = 0.0;
-	}
-}
-
-// Update FreeFall
-void CPlayerInfo::UpdateFreeFall(double dt)
-{
-	if (m_bFallDownwards == false)
-		return;
-
-	// Update the jump's elapsed time
-	m_dElapsedTime += dt;
-
-	// Update position and target y values.
-	// Use SUVAT equation to update the change in position and target
-	// s = u * t + 0.5 * a * t ^ 2
-	position.y += (float)(m_dFallSpeed * m_dElapsedTime + 
-						  0.5 * m_dJumpAcceleration * m_dElapsedTime * m_dElapsedTime);
-	target.y += (float)(m_dFallSpeed * m_dElapsedTime + 
-						0.5 * m_dJumpAcceleration * m_dElapsedTime * m_dElapsedTime);
-	// Use this equation to calculate final velocity, v
-	// SUVAT: v = u + a * t;
-	// v is m_dJumpSpeed AFTER updating using SUVAT where u is the initial speed and is equal to m_dJumpSpeed
-	//m_dJumpSpeed += m_dJumpAcceleration * dt;
-	m_dFallSpeed = m_dFallSpeed + m_dFallAcceleration * m_dElapsedTime;
-	// Check if the jump speed is below terrain, then it should be reset to terrain height
-
-
-	//if (position.y < m_pTerrain->GetTerrainHeight(position))
-	//{
-	//	Vector3 viewDirection = target - position;
-	//	position.y = m_pTerrain->GetTerrainHeight(position);
-	//	target = position + viewDirection;
-	//	m_dFallSpeed = 0.0;
-	//	m_bFallDownwards = false;
-	//	m_dElapsedTime = 0.0;
-	//}
-}
-
 /********************************************************************************
  Hero Update
  ********************************************************************************/
@@ -460,72 +339,60 @@ void CPlayerInfo::Update(double dt)
 	target = position + viewVector;
 	// if Mouse Buttons were activated, then act on them
 
-	// If the user presses R key, then reset the view to default values
-		UpdateJumpUpwards(dt);
-		UpdateFreeFall(dt);
 
 	// If a camera is attached to this playerInfo class, then update it
-	//if (attachedCamera)
-	//{
-	//	attachedCamera->SetCameraPos(position);
-	//	attachedCamera->SetCameraTarget(target);
-	//	attachedCamera->SetCameraUp(up);
-	//}
+	if (attachedCamera)
+	{
+		attachedCamera->SetCameraPos(position);
+		attachedCamera->SetCameraTarget(target);
+		attachedCamera->SetCameraUp(up);
+	}
 }
 
 // Constrain the position within the borders
 void CPlayerInfo::Constrain(void)
 {
-	// Constrain player within the boundary
-	if (position.x > maxBoundary.x - 1.0f)
-		position.x = maxBoundary.x - 1.0f;
-	if (position.y > maxBoundary.y - 1.0f)
-	{
-		position.y = maxBoundary.y - 1.0f;
-		m_dJumpSpeed = 0.0;
-		m_bJumpUpwards = false;
-		m_dFallSpeed = 0.0;
-		m_bFallDownwards = true;
-		m_dElapsedTime = 0.0;
-	}
-	if (position.z > maxBoundary.z - 1.0f)
-		position.z = maxBoundary.z - 1.0f;
-	if (position.x < minBoundary.x + 1.0f)
-		position.x = minBoundary.x + 1.0f;
-	if (position.y < minBoundary.y + 1.0f)
-		position.y = minBoundary.y + 1.0f;
-	if (position.z < minBoundary.z + 1.0f)
-		position.z = minBoundary.z + 1.0f;
+	//// Constrain player within the boundary
+	//if (position.x > maxBoundary.x - 1.0f)
+	//	position.x = maxBoundary.x - 1.0f;
+	//if (position.y > maxBoundary.y - 1.0f)
+	//{
+	//	position.y = maxBoundary.y - 1.0f;
+	//	m_dJumpSpeed = 0.0;
+	//	m_bJumpUpwards = false;
+	//	m_dFallSpeed = 0.0;
+	//	m_bFallDownwards = true;
+	//	m_dElapsedTime = 0.0;
+	//}
+	//if (position.z > maxBoundary.z - 1.0f)
+	//	position.z = maxBoundary.z - 1.0f;
+	//if (position.x < minBoundary.x + 1.0f)
+	//	position.x = minBoundary.x + 1.0f;
+	//if (position.y < minBoundary.y + 1.0f)
+	//	position.y = minBoundary.y + 1.0f;
+	//if (position.z < minBoundary.z + 1.0f)
+	//	position.z = minBoundary.z + 1.0f;
 
 	// if the player is not jumping nor falling, then adjust his y position
-	if ((m_bJumpUpwards == false) && (m_bFallDownwards == false))
+	switch (theCurrentPosture)
 	{
-		// if the y position is not equal to terrain height at that position, 
-		// then update y position to the terrain height
-		//if (position.y != m_pTerrain->GetTerrainHeight(position))
-		//	position.y = m_pTerrain->GetTerrainHeight(position);
-
-		switch (theCurrentPosture)
-		{
-		case CROUCH:
-			position.y -= 5.0f;
-			break;
-		case PRONE:
-			position.y -= 7.0f;
-			break;
-		default:
-			break;
-		}
-
+	case CROUCH:
+		position.y -= 5.0f;
+		break;
+	case PRONE:
+		position.y -= 7.0f;
+		break;
+	default:
+		break;
 	}
 }
 
-//void CPlayerInfo::AttachCamera(FPSCamera* _cameraPtr)
-//{
-//	attachedCamera = _cameraPtr;
-//}
+void CPlayerInfo::AttachCamera(Camera2* _cameraPtr)
+{
+	attachedCamera = _cameraPtr;
+}
 
-//void CPlayerInfo::DetachCamera()
-//{
-//	attachedCamera = nullptr;
-//}
+void CPlayerInfo::DetachCamera()
+{
+	attachedCamera = nullptr;
+}

@@ -19,6 +19,12 @@ public:
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
 	virtual void Reset();
+	Vector3 GetCameraPos() const;
+	void SetCameraPos(Vector3 pos);
+	Vector3 GetCameraTarget() const;
+	void SetCameraTarget(Vector3 pos);
+	Vector3 GetCameraUp() const;
+	void SetCameraUp(Vector3 pos);
 };
 
 #endif

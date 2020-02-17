@@ -10,6 +10,8 @@
 
 #include "Application.h"
 
+#include "MouseController.h"
+#include "KeyboardController.h"
 #include "SceneText.h"
 
 GLFWwindow* m_window;
@@ -97,8 +99,13 @@ void Application::Init()
 		//return -1;
 	}
 
-	glfwSetWindowSizeCallback(m_window, resize_callback);
+	// Hide the cursor
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetMouseButtonCallback(m_window, &Application::MouseButtonCallbacks);
+	glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
 
+	glfwSetWindowSizeCallback(m_window, resize_callback);
+	
 }
 
 void Application::Run()
@@ -112,14 +119,17 @@ void Application::Run()
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
+		glfwPollEvents();
+		UpdateInput();
+
 		scene->Update(m_timer.getElapsedTime());
 		scene->Render();
+
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
-		glfwPollEvents();
-        m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
-
+        m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms. 
+		PostInputUpdate();
 	} //Check if the ESC key had been pressed or if the window had been closed
 	scene->Exit();
 	delete scene;
@@ -131,4 +141,49 @@ void Application::Exit()
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW
 	glfwTerminate();
+}
+
+void Application::UpdateInput()
+{
+	// Update Mouse Position
+	double mouse_currX, mouse_currY;
+	glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
+	cout << mouse_currX << endl;
+	MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
+
+	// Update Keyboard Input
+	for (int i = 0; i < KeyboardController::MAX_KEYS; ++i)
+		KeyboardController::GetInstance()->UpdateKeyboardStatus(i, IsKeyPressed(i));
+}
+
+void Application::PostInputUpdate()
+{
+	// If mouse is centered, need to update the center position for next frame
+	if (MouseController::GetInstance()->GetKeepMouseCentered())
+	{
+		double mouse_currX, mouse_currY;
+		mouse_currX = 800 >> 1;
+		mouse_currY = 600 >> 1;
+		MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
+		glfwSetCursorPos(m_window, mouse_currX, mouse_currY);
+	}
+
+	// Call input systems to update at end of frame
+	MouseController::GetInstance()->EndFrameUpdate();
+	KeyboardController::GetInstance()->EndFrameUpdate();
+}
+
+
+void Application::MouseButtonCallbacks(GLFWwindow* window, int button, int action, int mods)
+{
+	// Send the callback to the mouse controller to handle
+	if (action == GLFW_PRESS)
+		MouseController::GetInstance()->UpdateMouseButtonPressed(button);
+	else
+		MouseController::GetInstance()->UpdateMouseButtonReleased(button);
+}
+
+void Application::MouseScrollCallbacks(GLFWwindow* window, double xoffset, double yoffset)
+{
+	MouseController::GetInstance()->UpdateMouseScroll(xoffset, yoffset);
 }

@@ -6,6 +6,9 @@
 #include "Camera2.h"
 #include "Mesh.h"
 #include "Light.h"
+#include "PlayerInfo/PlayerInfo.h"
+#include "Controllers/Keyboard.h"
+#include "Controllers/Mouse.h"
 
 class SceneText : public Scene
 {
@@ -70,6 +73,11 @@ private:
 	Light light[1];
 
 	Camera2 camera;
+	CPlayerInfo* thePlayer;
+	CMouse* theMouse;
+	CKeyboard* theKeyboard;
+	
+
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();

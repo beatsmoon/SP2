@@ -21,6 +21,16 @@ SceneText::SceneText()
 
 SceneText::~SceneText()
 {
+	if (theMouse)
+	{
+		delete theMouse;
+		theMouse = NULL;
+	}
+	if (theKeyboard)
+	{
+		delete theKeyboard;
+		theKeyboard = NULL;
+	}
 }
 
 void SceneText::Init()
@@ -35,7 +45,11 @@ void SceneText::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	thePlayer = CPlayerInfo::GetInstance();
+	thePlayer->Init();
+	camera.Init(thePlayer->GetPos(), thePlayer->GetTarget(), thePlayer->GetUp());
+	thePlayer->AttachCamera(&camera);
+
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -134,6 +148,13 @@ void SceneText::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
+
+	// Hardware Abstraction
+	theKeyboard = new CKeyboard();
+	theKeyboard->Create(thePlayer);
+
+	theMouse = new CMouse();
+	theMouse->Create(thePlayer);
 }
 
 void SceneText::Update(double dt)
@@ -182,7 +203,14 @@ void SceneText::Update(double dt)
 		//to do: switch light type to SPOT and pass the information to
 		light[0].type = Light::LIGHT_SPOT;
 	}
+
+
+	// Hardware Abstraction
+	theKeyboard->Read(dt);
+	theMouse->Read(dt);
+
 	camera.Update(dt);
+	thePlayer->Update();
 	CalculateFrameRate();
 }
 
@@ -250,9 +278,10 @@ void SceneText::Render()
 	//scale, translate, rotate
 	RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	modelStack.PopMatrix();
-
+	string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
 	//No transform needed
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
+	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
 
 }
 
@@ -440,7 +469,7 @@ void SceneText::CalculateFrameRate()
 	static float lastTime = 0.0f;
 	float currentTime = GetTickCount() * 0.001f;
 	++framesPerSecond;
-	printf("Current Frames Per Second: %d\n\n", fps);
+	//printf("Current Frames Per Second: %d\n\n", fps);
 	if (currentTime - lastTime > 1.0f)
 	{
 		lastTime = currentTime;

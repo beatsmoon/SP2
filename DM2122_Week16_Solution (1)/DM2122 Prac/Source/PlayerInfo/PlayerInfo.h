@@ -2,6 +2,7 @@
 #include "Vector3.h"
 //#include "../FPSCamera.h"
 
+#include "../Camera2.h"
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -44,18 +45,6 @@ public:
 
 	// Initialise this class instance
 	void Init(void);
-	// Returns true if the player is on ground
-	bool isOnGround(void);
-	// Returns true if the player is jumping upwards
-	bool isJumpUpwards(void);
-	// Returns true if the player is on freefall
-	bool isFreeFall(void);
-	// Set the player's status to free fall mode
-	void SetOnFreeFall(bool isOnFreeFall);
-	// Set the player to jumping upwards
-	void SetToJumpUpwards(bool isOnJumpUpwards);
-	// Stop the player's vertical movement
-	void StopVerticalMovement(void);
 	// Reset this player instance to default
 	void Reset(void);
 
@@ -104,11 +93,6 @@ public:
 	// Get Fall Acceleration of the player
 	double GetFallAcceleration(void) const;
 
-
-	// Update Jump Upwards
-	void UpdateJumpUpwards(double dt = 0.0333f);
-	// Update FreeFall
-	void UpdateFreeFall(double dt = 0.0333f);
 	// Update
 	void Update(double dt = 0.0333f);
 	void Render();
@@ -117,7 +101,7 @@ public:
 	void Constrain(void);
 
 	// Handling Camera
-	//void AttachCamera(FPSCamera* _cameraPtr);
+	void AttachCamera(Camera2* _cameraPtr);
 	void DetachCamera();
 
 private:
@@ -139,5 +123,5 @@ private:
 
 	double m_dElapsedTime;
 
-	//FPSCamera* attachedCamera;
+	Camera2* attachedCamera;
 };
