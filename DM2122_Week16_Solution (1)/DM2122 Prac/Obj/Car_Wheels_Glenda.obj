@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib Car_Glenda.mtl
+mtllib Car_Wheels_Glenda.mtl
 g default
 v -0.338764 0.314477 0.496834
 v -0.369289 0.374385 0.496834
