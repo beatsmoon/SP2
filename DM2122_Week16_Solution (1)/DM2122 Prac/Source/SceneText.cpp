@@ -264,26 +264,20 @@ void SceneText::Render()
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 	modelStack.PopMatrix();
-//
-//<<<<<<< Updated upstream
-//	//modelStack.PushMatrix();
-//	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-//	//RenderMesh(meshList[GEO_WM_CAR], true);
-//	//modelStack.PopMatrix();
-//=======
-	//racetrack
-	modelStack.PushMatrix();
-	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_RACETRACK], false);
-	modelStack.PopMatrix();
-//>>>>>>> Stashed changes
 
 	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	//RenderMesh(meshList[GEO_WM_CAR], true);
+	//modelStack.PopMatrix();
+
+	//racetrack
+	modelStack.PushMatrix();
+	//RenderMesh(meshList[GEO_RACETRACK], false);
+	modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
 	//RenderMesh(meshList[GEO_VAL_CAR], true);
 
 	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	//RenderMesh(meshList[GEO_VAL_CAR_WHEEL], true);
 	//modelStack.PopMatrix();
 
@@ -295,12 +289,10 @@ void SceneText::Render()
 	modelStack.Scale(4, 4, 4);
 
 	modelStack.PushMatrix();
-	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
 	modelStack.PopMatrix();
 
@@ -311,25 +303,35 @@ void SceneText::Render()
 	//modelStack.Translate(0, -3, 0);
 	//RenderMesh(meshList[GEO_DICE], true);
 	//modelStack.PopMatrix();
-	Vector3 UIPos = Vector3(-15 - 1, -15);
+
+	Vector3 UIPos = Vector3(-15, - 1, -15);
 	Vector3 Dir = thePlayer->GetPos() - UIPos;
 	float angle = atan2f(Dir.x, Dir.z);
+	angle = Math::RadianToDegree(angle);
 	glDisable(GL_CULL_FACE);
 	modelStack.PushMatrix();
-	modelStack.Translate(-15, -1, -15);
-	modelStack.Rotate(45,0,1,0); //side to side
+	modelStack.Translate(-15, -2, -15);
+	modelStack.Rotate(angle,0,1,0); //side to side
+	modelStack.Rotate(-20,1,0,0); //side to side
 	modelStack.Scale(4, 4, 4);
 	RenderMesh(meshList[GEO_INTERFACE_BASE], false);
 	modelStack.PopMatrix();
 	glEnable(GL_CULL_FACE);
 
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, -10, 0);
+	//modelStack.Translate(UIPos.x, 0, UIPos.z);
+	//modelStack.Scale(0.2f, 0.2f, 0.2f);
+	//RenderMesh(meshList[GEO_RACETRACK], false);
+	//modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 	//scale, translate, rotate
-	RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
+	RenderText(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f));
 	modelStack.PopMatrix();
 	string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
 	//No transform needed
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
 
 }
