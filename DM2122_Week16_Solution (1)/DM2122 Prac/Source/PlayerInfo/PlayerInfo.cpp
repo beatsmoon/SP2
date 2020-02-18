@@ -45,9 +45,11 @@ void CPlayerInfo::Init(void)
 	target.Set(0, 0, 0);
 	up.Set(0, 1, 0);
 
+	int spaceStationWidth = 130;
+
 	// Set Boundary
-	maxBoundary.Set(50,1,50);
-	minBoundary.Set(-50, -1, -50);
+	maxBoundary.Set(spaceStationWidth,1, spaceStationWidth);
+	minBoundary.Set(-spaceStationWidth, -1, -spaceStationWidth);
 
 	//this->SetAABB(Vector3(1,1,1),Vector3(-1,-1,-1));
 }
