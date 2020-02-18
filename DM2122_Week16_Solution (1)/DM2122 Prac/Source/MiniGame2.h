@@ -4,6 +4,7 @@
 #include "Camera2.h"
 #include "Mesh.h"
 #include "Light.h"
+#include "Car.h"
 #include "PlayerInfo/PlayerInfo.h"
 #include "Controllers/Keyboard.h"
 #include "Controllers/Mouse.h"
@@ -65,11 +66,16 @@ private:
 	CPlayerInfo* thePlayer;
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
-	
+	Car* theCar;
+	bool NitroUsed = false;
+	bool gameEnd = false;
+	float distance = 0;
 
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderTrack();
+	void NitroBoostCoolDown(double dt);
+	void DistanceTravelled(double dt);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

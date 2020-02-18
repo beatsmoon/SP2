@@ -6,6 +6,7 @@
 #include "shader.hpp"
 #include "MeshBuilder.h"
 #include "Utility.h"
+
 #include "LoadTGA.h"
 
 #define ROT_LIMIT 45.f;
@@ -132,6 +133,12 @@ void MiniGame2::Init()
 
 	theMouse = new CMouse();
 	theMouse->Create(thePlayer);
+	
+	//Car
+	Position temp;
+	temp.Set(0,0,0);
+	//string name, float top_speed, float handling, float acceleration, float nitro, Position pos
+	theCar = new Car("MiniGame2Car",100.f,10.f,10.f,0.f,temp);
 }
 
 void MiniGame2::Update(double dt)
@@ -188,6 +195,8 @@ void MiniGame2::Update(double dt)
 
 	camera.Update(dt);
 	thePlayer->Update();
+	NitroBoostCoolDown(dt);
+	DistanceTravelled(dt);
 	CalculateFrameRate();
 }
 
@@ -234,15 +243,19 @@ void MiniGame2::Render()
 	////scale, translate, rotate
 	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	//modelStack.PopMatrix();
-	string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
+	//string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
 //	string pos = "[" + to_string(thePlayer->GetUp().x) + ", " + to_string(thePlayer->GetUp().y) + ", " + to_string(thePlayer->GetUp().z) + "]";
 
 
 //No transform needed
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
-	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
-
 	RenderTrack();
+	string nitro = to_string(theCar->Get_nitro());
+	RenderTextOnScreen(meshList[GEO_TEXT], "Nitro : " + nitro, Color(0, 1, 0), 2, 0, 2);
+
+	string dis = to_string(distance);
+	RenderTextOnScreen(meshList[GEO_TEXT], "SCORE : " + dis, Color(0, 1, 0), 2, 10, 15);
+
 }
 
 void MiniGame2::Exit()
@@ -309,6 +322,53 @@ void MiniGame2::RenderTrack()
 	RenderMesh(meshList[GEO_TRACK], false);
 	modelStack.PopMatrix();
 
+}
+
+void MiniGame2::NitroBoostCoolDown(double dt) //FOR NITROBOOST TO FILL UP AND FOR TIME USING IT
+{
+	if (NitroUsed == false)
+	{
+		if (theCar->Get_nitro() < 100)
+		{
+			theCar->Set_nitro(theCar->Get_nitro() + (5.f) * (float)(dt));
+		}
+		else
+		{
+			if (Application::IsKeyPressed(VK_SPACE))
+			{
+				NitroUsed = true;
+			}
+		}
+	}
+
+	if (NitroUsed == true)
+	{
+		if (theCar->Get_nitro() > 0)
+		{
+			theCar->Set_nitro(theCar->Get_nitro() - (10.f) * (float)(dt));
+		}
+		else
+		{
+			NitroUsed = false;
+		}
+	}
+
+}
+
+void MiniGame2::DistanceTravelled(double dt)
+{
+	if (gameEnd == false)
+	{
+		if (NitroUsed == false)
+		{
+			distance += (theCar->Get_acceleration() * dt);
+		}
+		if (NitroUsed == true)
+		{
+			distance += (2*theCar->Get_acceleration() * dt);
+
+		}
+	}
 }
 
 void MiniGame2::RenderText(Mesh* mesh, std::string text, Color color)
