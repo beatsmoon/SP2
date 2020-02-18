@@ -156,8 +156,11 @@ void SceneText::Init()
 	meshList[GEO_RACETRACK] = MeshBuilder::GenerateOBJ("track", "OBJ//racetrack.obj");
 	meshList[GEO_RACETRACK]->textureID = LoadTGA("Image//racetrackUV.tga");
 
-	meshList[GEO_PAUSE] = MeshBuilder::GenerateQuad("track",Color(1,1,1),4,4);
+	meshList[GEO_PAUSE] = MeshBuilder::GenerateQuad("pause",Color(1,1,1),4,4);
 	meshList[GEO_PAUSE]->textureID = LoadTGA("Image//pause.tga");
+
+	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("pause", Color(1, 1, 1), 4, 4);
+	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//indicator.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -222,7 +225,7 @@ void SceneText::Update(double dt)
 
 	//if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
 	//{
-
+	//	RenderPauseMenu();
 	//}
 
 	// Hardware Abstraction
@@ -329,10 +332,10 @@ void SceneText::Render()
 	modelStack.PopMatrix();
 	glEnable(GL_CULL_FACE);
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Scale(4, 4, 4);
 	RenderMesh(meshList[GEO_PAUSE], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -342,6 +345,11 @@ void SceneText::Render()
 	//No transform needed
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
+
+	if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
+	{
+		RenderPauseMenu();
+	}
 
 }
 
@@ -445,6 +453,19 @@ void SceneText::RenderSkybox()
 		modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderPauseMenu()
+{
+	modelStack.PushMatrix();
+	modelStack.Scale(4, 4, 4);
+	RenderMesh(meshList[GEO_PAUSE], false);
+	modelStack.PopMatrix(); 
+
+	modelStack.PushMatrix();
+	modelStack.Scale(3, 3, 3);
+	RenderMesh(meshList[GEO_INDICATOR], FALSE);
 	modelStack.PopMatrix();
 }
 
