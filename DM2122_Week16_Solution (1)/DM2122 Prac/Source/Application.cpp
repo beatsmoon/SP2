@@ -13,6 +13,7 @@
 #include "MouseController.h"
 #include "KeyboardController.h"
 #include "SceneText.h"
+#include "MiniGame1//SceneMiniGame1.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -54,6 +55,9 @@ Application::~Application()
 
 void Application::Init()
 {
+	//Minigame1 Add
+	CurrentScene = MAIN;
+	bouncetime = GetTickCount64();
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
 
@@ -113,6 +117,9 @@ void Application::Run()
 	//Main Loop
 
 	Scene* scene = new SceneText();
+	//Minigame1 Add
+	Scene* mainscene= scene;
+	Scene* minigame1 = new SceneMiniGame1();
 
 	scene->Init();
 
@@ -124,7 +131,21 @@ void Application::Run()
 
 		scene->Update(m_timer.getElapsedTime());
 		scene->Render();
-
+		//Minigame1 Add
+		if (Application::IsKeyPressed(VK_TAB) && bouncetime <= GetTickCount64())
+		{
+			bouncetime = GetTickCount64() + 1000; //Add 1s into future
+			if (CurrentScene == MAIN) //Temporay change when actual trigger is activated 
+			{
+				CurrentScene = MINIGAME1;
+				scene = minigame1;
+			}
+			else if (CurrentScene == MINIGAME1)
+			{
+				CurrentScene = MAIN;
+				scene = mainscene;
+			}
+		}
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...

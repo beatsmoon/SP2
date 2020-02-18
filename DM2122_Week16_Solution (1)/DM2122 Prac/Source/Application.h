@@ -31,6 +31,17 @@ private:
 	static int m_window_width;
 	static int m_window_height;
 	StopWatch m_timer;
+
+	//Minigame1 Add
+	double bouncetime;
+	enum SceneType
+	{
+		MAIN,
+		MINIGAME1,
+		MINIGAME2,
+	};
+	SceneType CurrentScene;
+
 };
 
 #endif
