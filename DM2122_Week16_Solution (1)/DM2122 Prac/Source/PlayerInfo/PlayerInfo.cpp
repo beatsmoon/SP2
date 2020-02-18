@@ -18,7 +18,7 @@ CPlayerInfo *CPlayerInfo::s_instance = 0;
 CPlayerInfo::CPlayerInfo(void)
 	: m_dSpeed(40.0)
 	, m_dAcceleration(10.0)
-	, m_dJumpSpeed(30.0)
+	, m_dJumpSpeed(15.0)
 	, m_dJumpAcceleration(-10.0)
 	, m_dFallSpeed(0.0)
 	, m_dFallAcceleration(-10.0)
@@ -159,6 +159,10 @@ bool CPlayerInfo::Move_Jump()
 	//	SetToJumpUpwards(true);
 	//	return true;
 	//}
+	if (position.y <= 0)
+	{
+		Velocity.y = m_dJumpSpeed;
+	}
 	return false;
 }
 
@@ -335,6 +339,16 @@ void CPlayerInfo::Update(double dt)
 	Vector3 viewVector = target - position;
 	viewVector.y = Math::Clamp(viewVector.y, -0.8f, 0.8f);
 	Vector3 viewUV = (viewVector).Normalized();
+
+	position += Velocity * dt;
+	if (position.y > 0)
+		Velocity.y -= 10 * dt;
+	else if (Velocity.y < 0)
+	{
+		position.y = 0;
+		Velocity.y = 0;
+	}
+
 	Constrain();
 	target = position + viewVector;
 	// if Mouse Buttons were activated, then act on them

@@ -109,7 +109,7 @@ private:
 	Vector3 position, target, up;
 	Vector3 maxBoundary, minBoundary;
 	//GroundEntity* m_pTerrain;
-
+	Vector3 Velocity;
 	double m_dSpeed;
 	double m_dAcceleration;
 
