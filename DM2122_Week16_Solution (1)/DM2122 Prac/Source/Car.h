@@ -1,5 +1,6 @@
 #pragma once
-#include"Source/Vertex.h"
+
+#include"Vertex.h"
 #include <string.h>
 
 using namespace std;

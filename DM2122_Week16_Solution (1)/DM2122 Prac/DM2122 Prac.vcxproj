@@ -126,10 +126,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Car.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera2.h" />
+    <ClInclude Include="Source\Car.h" />
     <ClInclude Include="Source\Controllers\Controller.h" />
     <ClInclude Include="Source\Controllers\Keyboard.h" />
     <ClInclude Include="Source\Controllers\Mouse.h" />
@@ -147,10 +147,10 @@
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Car.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera2.cpp" />
+    <ClCompile Include="Source\Car.cpp" />
     <ClCompile Include="Source\Controllers\Controller.cpp" />
     <ClCompile Include="Source\Controllers\Keyboard.cpp" />
     <ClCompile Include="Source\Controllers\Mouse.cpp" />
