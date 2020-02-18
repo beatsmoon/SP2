@@ -348,11 +348,6 @@ void SceneText::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
 
-	if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
-	{
-		RenderPauseMenu();
-	}
-
 }
 
 void SceneText::Exit()
@@ -462,10 +457,36 @@ void SceneText::RenderPause()
 {
 	Vector3 dir = (thePlayer->GetPos() - thePlayer->GetTarget()).Normalized();
 	float angle = atan2f(dir.x, dir.z);
+	angle = Math::RadianToDegree(angle);
+	float angle2;
+	if (angle > 0)
+	{
+		if ((angle < 45) || (angle > 135))
+			angle2 = atan2f(dir.y, dir.z);
+		else
+			angle2 = atan2f(dir.y, dir.x);
+	}
+	else
+	{
+		if ((angle > -45) || (angle < -135))
+			angle2 = atan2f(dir.y, dir.z);
+		else
+			angle2 = atan2f(dir.y, dir.x);
+	}
+	angle2 = Math::RadianToDegree(angle2);
 	Vector3 pos = thePlayer->GetPos() - 5 * dir;
+
 	modelStack.PushMatrix();
 	modelStack.Translate(pos.x, pos.y, pos.z);
 	modelStack.Rotate(angle, 0, 1, 0); //side to side
+	if (angle > 135 || angle < -45)
+	{
+		modelStack.Rotate(180, 1, 0, 0);
+		modelStack.Rotate(angle2, 1, 0, 0); //up to down
+	}
+	else
+		modelStack.Rotate(-angle2, 1, 0, 0); //up to down
+	modelStack.Translate(-0.5f, 0, 0);
 		RenderMesh(meshList[GEO_PAUSE], false);
 	modelStack.PopMatrix();
 }
