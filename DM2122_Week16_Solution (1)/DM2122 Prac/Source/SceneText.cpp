@@ -137,7 +137,7 @@ void SceneText::Init()
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
 	meshList[GEO_INTERFACE_BASE] = MeshBuilder::GenerateQuad("UIBase", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_INTERFACE_BASE]->textureID = LoadTGA("Image//back.tga");
+	meshList[GEO_INTERFACE_BASE]->textureID = LoadTGA("Image//UIBase.tga");
 
 	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//WaiMen_Car.obj");
 	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
@@ -278,9 +278,11 @@ void SceneText::Render()
 
 	//modelStack.PopMatrix();
 
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -28, 0);
 	modelStack.Scale(4, 4, 4);
+
 	modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], false);
@@ -290,6 +292,7 @@ void SceneText::Render()
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
 	modelStack.PopMatrix();
+
 	modelStack.PopMatrix();
 
 
@@ -297,6 +300,17 @@ void SceneText::Render()
 	//modelStack.Translate(0, -3, 0);
 	//RenderMesh(meshList[GEO_DICE], true);
 	//modelStack.PopMatrix();
+	Vector3 UIPos = Vector3(-15 - 1, -15);
+	Vector3 Dir = thePlayer->GetPos() - UIPos;
+	float angle = atan2f(Dir.x, Dir.z);
+	glDisable(GL_CULL_FACE);
+	modelStack.PushMatrix();
+	modelStack.Translate(-15, -1, -15);
+	modelStack.Rotate(45,0,1,0); //side to side
+	modelStack.Scale(4, 4, 4);
+	RenderMesh(meshList[GEO_INTERFACE_BASE], false);
+	modelStack.PopMatrix();
+	glEnable(GL_CULL_FACE);
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
