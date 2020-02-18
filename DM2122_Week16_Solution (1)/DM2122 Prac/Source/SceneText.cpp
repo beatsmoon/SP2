@@ -153,6 +153,9 @@ void SceneText::Init()
 	meshList[GEO_SPACESTATION_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//walls.obj");
 	meshList[GEO_SPACESTATION_WALL]->textureID = LoadTGA("Image//wallUV.tga");
 
+	meshList[GEO_RACETRACK] = MeshBuilder::GenerateOBJ("track", "OBJ//racetrack.obj");
+	meshList[GEO_RACETRACK]->textureID = LoadTGA("Image//racetrackUV.tga");
+
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -261,11 +264,19 @@ void SceneText::Render()
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 	modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_WM_CAR], true);
-	//modelStack.PopMatrix();
+//
+//<<<<<<< Updated upstream
+//	//modelStack.PushMatrix();
+//	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+//	//RenderMesh(meshList[GEO_WM_CAR], true);
+//	//modelStack.PopMatrix();
+//=======
+	//racetrack
+	modelStack.PushMatrix();
+	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_RACETRACK], false);
+	modelStack.PopMatrix();
+//>>>>>>> Stashed changes
 
 	//modelStack.PushMatrix();
 	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
