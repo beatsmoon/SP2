@@ -30,17 +30,5 @@ public:
 	virtual bool Look_LeftRight(const float deltaTime, const bool direction, double mouse_diff_x);
 	// Detect and process jumps on the controller
 	virtual bool Move_Jump();
-	// Detect and process toggling crouch and standing posture
-	virtual bool Move_ToggleCrouch();
-	// Detect and process prone posture
-	virtual bool Move_SetProne();
-	// Reload current weapon
-	virtual bool Reload(const float deltaTime);
-	// Change current weapon (for primary only)
-	virtual bool Change(const float deltaTime);
-	// Fire primary weapon
-	virtual bool FirePrimary(const float deltaTime);
-	// Fire secondary weapon
-	virtual bool FireSecondary(const float deltaTime);
 };
 

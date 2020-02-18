@@ -41,16 +41,17 @@ int CMouse::Read(const float deltaTime)
 	static int scroll = 0;
 	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != scroll)
 	{
-		Change(deltaTime);
 		scroll = MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET);
 	}
 
 	// if Mouse Buttons were activated, then act on them
 	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
-		FirePrimary(deltaTime);
+	{
 
+	}
 	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
-		FireSecondary(deltaTime);
+	{
 
+	}
 	return 0;
 }

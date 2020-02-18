@@ -54,15 +54,6 @@ int CKeyboard::Read(const float deltaTime)
 		Move_Jump();
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
 	{
-		HoldTime_Control += deltaTime;
-		if (HoldTime_Control > 0.5)
-			Move_SetProne();
-	}
-	else if (KeyboardController::GetInstance()->IsKeyReleased(VK_CONTROL))
-	{
-		if (HoldTime_Control < 0.5)
-			Move_ToggleCrouch();
-		HoldTime_Control = 0.0;
 	}
 
 
