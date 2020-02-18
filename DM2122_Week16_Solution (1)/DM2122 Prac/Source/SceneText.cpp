@@ -6,6 +6,7 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
+#include "../../Common/Source/KeyboardController.h"
 
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
@@ -156,7 +157,7 @@ void SceneText::Init()
 	meshList[GEO_RACETRACK] = MeshBuilder::GenerateOBJ("track", "OBJ//racetrack.obj");
 	meshList[GEO_RACETRACK]->textureID = LoadTGA("Image//racetrackUV.tga");
 
-	meshList[GEO_PAUSE] = MeshBuilder::GenerateQuad("track",Color(1,1,1),4,4);
+	meshList[GEO_PAUSE] = MeshBuilder::GenerateQuad("pauses",Color(1,1,1),4,4);
 	meshList[GEO_PAUSE]->textureID = LoadTGA("Image//pause.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
@@ -312,7 +313,7 @@ void SceneText::Render()
 	//modelStack.PopMatrix();
 
 	Vector3 UIPos = Vector3(-15, - 1, -15);
-	Vector3 Dir = thePlayer->GetPos() - UIPos;
+	Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
 	float angle = atan2f(Dir.x, Dir.z);
 	angle = Math::RadianToDegree(angle);
 	glDisable(GL_CULL_FACE);
@@ -332,10 +333,8 @@ void SceneText::Render()
 	//RenderMesh(meshList[GEO_RACETRACK], false);
 	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Scale(4, 4, 4);
-	RenderMesh(meshList[GEO_PAUSE], false);
-	modelStack.PopMatrix();
+	if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
+		RenderPause();
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -448,6 +447,18 @@ void SceneText::RenderSkybox()
 		modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderPause()
+{
+	Vector3 dir = (thePlayer->GetPos() - thePlayer->GetTarget()).Normalized();
+	float angle = atan2f(dir.x, dir.z);
+	Vector3 pos = thePlayer->GetPos() - 5 * dir;
+	modelStack.PushMatrix();
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(angle, 0, 1, 0); //side to side
+		RenderMesh(meshList[GEO_PAUSE], false);
 	modelStack.PopMatrix();
 }
 
