@@ -19,7 +19,7 @@ CController::~CController()
 // Create this controller
 bool CController::Create(CPlayerInfo* thePlayerInfo)
 {
-	cout << "CController::Create()" << endl;
+	//cout << "CController::Create()" << endl;
 	this->thePlayerInfo = thePlayerInfo;
 	return false;
 }

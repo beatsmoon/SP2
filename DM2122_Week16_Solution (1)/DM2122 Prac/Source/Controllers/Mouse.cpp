@@ -18,7 +18,7 @@ CMouse::~CMouse()
 bool CMouse::Create(CPlayerInfo* thePlayerInfo)
 {
 	CController::Create(thePlayerInfo);
-	cout << "CMouse::Create()" << endl;
+	//cout << "CMouse::Create()" << endl;
 
 	return false;
 }
