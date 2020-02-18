@@ -14,16 +14,6 @@ protected:
 	static CPlayerInfo *s_instance;
 	CPlayerInfo(void);
 
-	// The postures of the FPS player/camera
-	enum CURRENT_POSTURE
-	{
-		STAND = 0,
-		CROUCH,
-		PRONE,
-		NUM_POSTURE,
-	};
-	CURRENT_POSTURE theCurrentPosture;
-
 public:
 	static CPlayerInfo *GetInstance()
 	{
@@ -71,8 +61,6 @@ public:
 	bool Move_FrontBack(const float deltaTime, const bool direction, const float speedMultiplier = 1.0f);
 	bool Move_LeftRight(const float deltaTime, const bool direction);
 	bool Move_Jump();
-	bool Move_ToggleCrouch();
-	bool Move_SetProne();
 	bool Look_UpDown(const float deltaTime, const bool direction);
 	bool Look_LeftRight(const float deltaTime, const bool direction);
 	bool Look_UpDown(const float deltaTime, const bool direction, double mouse_diff_y);

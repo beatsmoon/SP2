@@ -24,7 +24,6 @@ CPlayerInfo::CPlayerInfo(void)
 	, m_dFallAcceleration(-10.0)
 	, m_dElapsedTime(0.0)
 	, attachedCamera(NULL)
-	, theCurrentPosture(STAND)
 {
 }
 
@@ -164,36 +163,6 @@ bool CPlayerInfo::Move_Jump()
 		Velocity.y = m_dJumpSpeed;
 	}
 	return false;
-}
-
-bool CPlayerInfo::Move_ToggleCrouch()
-{
-	Vector3 viewDirection = target - position;
-	if (theCurrentPosture == STAND)
-	{
-		theCurrentPosture = CROUCH;
-		//position.y = m_pTerrain->GetTerrainHeight(Vector3(position.x, 0.0f, position.z)) - 5.0f;
-		target = position + viewDirection;
-		m_dSpeed = 30.0f;
-	}
-	else if (theCurrentPosture != STAND)
-	{
-		theCurrentPosture = STAND;
-		//position.y = m_pTerrain->GetTerrainHeight(Vector3(position.x, 0.0f, position.z));
-		target = position + viewDirection;
-		m_dSpeed = 40.0f;
-	}
-	return true;
-}
-
-bool CPlayerInfo::Move_SetProne()
-{
-	Vector3 viewDirection = target - position;
-	theCurrentPosture = PRONE;
-	//position.y = m_pTerrain->GetTerrainHeight(Vector3(position.x, 0.0f, position.z)) - 7.0f;
-	target = position + viewDirection;
-	m_dSpeed = 10.0f;
-	return true;
 }
 
 bool CPlayerInfo::Look_UpDown(const float dt, const bool direction)
@@ -387,18 +356,6 @@ void CPlayerInfo::Constrain(void)
 	//if (position.z < minBoundary.z + 1.0f)
 	//	position.z = minBoundary.z + 1.0f;
 
-	// if the player is not jumping nor falling, then adjust his y position
-	switch (theCurrentPosture)
-	{
-	case CROUCH:
-		position.y -= 5.0f;
-		break;
-	case PRONE:
-		position.y -= 7.0f;
-		break;
-	default:
-		break;
-	}
 }
 
 void CPlayerInfo::AttachCamera(Camera2* _cameraPtr)
