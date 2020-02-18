@@ -1,3 +1,4 @@
+#include "MiniGame2.h"
 #include "SceneText.h"
 #include "GL\glew.h"
 #include "Application.h"
@@ -6,13 +7,12 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
-#include "MiniGame2.h"
 
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
 #define LSPEED 10.f
 
-SceneText::SceneText()
+MiniGame2::MiniGame2()
 {
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
@@ -20,7 +20,7 @@ SceneText::SceneText()
 	}
 }
 
-SceneText::~SceneText()
+MiniGame2::~MiniGame2()
 {
 	if (theMouse)
 	{
@@ -34,7 +34,7 @@ SceneText::~SceneText()
 	}
 }
 
-void SceneText::Init()
+void MiniGame2::Init()
 {
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
@@ -48,12 +48,8 @@ void SceneText::Init()
 
 	thePlayer = CPlayerInfo::GetInstance();
 	thePlayer->Init();
-	camera.Init(thePlayer->GetPos(), thePlayer->GetTarget(), thePlayer->GetUp());
+	camera.Init(Vector3(0,0,0), Vector3(0,-90,0),Vector3(0,0.60f,-0.80f));
 	thePlayer->AttachCamera(&camera);
-
-
-	
-
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
@@ -119,40 +115,10 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1); 
 
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
 
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-
-	meshList[GEO_INTERFACE_BASE] = MeshBuilder::GenerateQuad("UIBase", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_INTERFACE_BASE]->textureID = LoadTGA("Image//back.tga");
-
-	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//WaiMen_Car.obj");
-	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
-
-	/*meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("val_car", "OBJ//Car_ValTay.obj");
-	meshList[GEO_VAL_CAR]->textureID = LoadTGA("Image//Car_Val.tga");
-
-	meshList[GEO_VAL_CAR_WHEEL] = MeshBuilder::GenerateOBJ("val_car_wheel", "OBJ//CarWheel_ValTay.obj");
-	meshList[GEO_VAL_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Val.tga");*/
-
-	meshList[GEO_SPACESTATION_FLOOR] = MeshBuilder::GenerateOBJ("floor", "OBJ//floor.obj");
-	meshList[GEO_SPACESTATION_FLOOR]->textureID = LoadTGA("Image//floorUV.tga");
-	meshList[GEO_SPACESTATION_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//walls.obj");
-	meshList[GEO_SPACESTATION_WALL]->textureID = LoadTGA("Image//wallUV.tga");
+	meshList[GEO_TRACK] = MeshBuilder::GenerateQuad("track", Color(1.f, 1.f, 1.f), 1.f, 1.f);
+	meshList[GEO_TRACK]->textureID = LoadTGA("Image//MiniGame2Track.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -168,7 +134,7 @@ void SceneText::Init()
 	theMouse->Create(thePlayer);
 }
 
-void SceneText::Update(double dt)
+void MiniGame2::Update(double dt)
 {
 	if (Application::IsKeyPressed(0x31))
 	{
@@ -215,6 +181,7 @@ void SceneText::Update(double dt)
 		light[0].type = Light::LIGHT_SPOT;
 	}
 
+
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
 	theMouse->Read(dt);
@@ -224,13 +191,14 @@ void SceneText::Update(double dt)
 	CalculateFrameRate();
 }
 
-void SceneText::Render()
+void MiniGame2::Render()
 {
 	//Clear color & depth buffer every frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	viewStack.LoadIdentity();
-	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+	//viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+	viewStack.LookAt(0, 0, 0, 0, -90, 0, 0, 0.60f, 0.80f);
 	modelStack.LoadIdentity();
 
 	// passing the light direction if it is a direction light	
@@ -255,61 +223,29 @@ void SceneText::Render()
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	RenderSkybox();
 
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 	modelStack.PopMatrix();
 
 	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_WM_CAR], true);
+	////scale, translate, rotate
+	//RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
 	//modelStack.PopMatrix();
-
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_VAL_CAR], true);
-
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_VAL_CAR_WHEEL], true);
-	//modelStack.PopMatrix();
-
-	//modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -28, 0);
-	modelStack.Scale(4, 4, 4);
-	modelStack.PushMatrix();
-	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
-
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, -3, 0);
-	//RenderMesh(meshList[GEO_DICE], true);
-	//modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	//scale, translate, rotate
-	RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
-	modelStack.PopMatrix();
 	string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
-	//No transform needed
-	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
+//	string pos = "[" + to_string(thePlayer->GetUp().x) + ", " + to_string(thePlayer->GetUp().y) + ", " + to_string(thePlayer->GetUp().z) + "]";
+
+
+//No transform needed
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
 
+	RenderTrack();
 }
 
-void SceneText::Exit()
+void MiniGame2::Exit()
 {
 	// Cleanup here
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -323,7 +259,7 @@ void SceneText::Exit()
 
 }
 
-void SceneText::RenderMesh(Mesh* mesh, bool enableLight)
+void MiniGame2::RenderMesh(Mesh* mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -364,55 +300,18 @@ void SceneText::RenderMesh(Mesh* mesh, bool enableLight)
 	if(mesh->textureID > 0) glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void SceneText::RenderSkybox()
+void MiniGame2::RenderTrack()
 {
 	modelStack.PushMatrix();
-	modelStack.Scale(1000.f, 1000.f, 1000.f);
-	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(-0.5f, 0.f, 0.f);
-		modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-		RenderMesh(meshList[GEO_LEFT], false);
+	modelStack.Translate(0, -50, 0);
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Scale(50, 50, 50);
+	RenderMesh(meshList[GEO_TRACK], false);
 	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(0.5f, 0.f, 0.f);
-		modelStack.Rotate(-90.f, 0.f, 1.f, 0.f);
-		RenderMesh(meshList[GEO_RIGHT], false);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(0.f, 0.5f, 0.f);
-		modelStack.Rotate(90.f, 1.f, 0.f, 0.f);
-		modelStack.PushMatrix();
-			modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-			RenderMesh(meshList[GEO_TOP], false);
-		modelStack.PopMatrix();
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(0.f, -0.5f, 0.f);
-		modelStack.Rotate(-90.f, 1.f, 0.f, 0.f);
-		modelStack.PushMatrix();
-		modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
-		RenderMesh(meshList[GEO_BOTTOM], false);
-		modelStack.PopMatrix();
-		modelStack.PopMatrix();
-	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(0.f, 0.f, -0.5f);
-		RenderMesh(meshList[GEO_FRONT], false);
-	modelStack.PopMatrix();
-	modelStack.PushMatrix();
-		///scale, translate, rotate 
-		modelStack.Translate(0.f, 0.f, 0.5f);
-		modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-		RenderMesh(meshList[GEO_BACK], false);
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
+
 }
 
-void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
+void MiniGame2::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -440,7 +339,7 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 
 }
 
-void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void MiniGame2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -483,7 +382,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneText::CalculateFrameRate()
+void MiniGame2::CalculateFrameRate()
 {
 	static float framesPerSecond = 0.0f;
 	static int fps;

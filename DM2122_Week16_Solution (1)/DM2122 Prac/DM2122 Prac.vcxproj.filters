@@ -49,6 +49,9 @@
     <ClCompile Include="Source\Car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MiniGame2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Controllers\Mouse.h">
@@ -106,6 +109,9 @@
       <Filter>Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Car.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MiniGame2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

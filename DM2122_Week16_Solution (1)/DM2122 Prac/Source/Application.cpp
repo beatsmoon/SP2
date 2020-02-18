@@ -13,6 +13,7 @@
 #include "MouseController.h"
 #include "KeyboardController.h"
 #include "SceneText.h"
+#include "MiniGame2.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -111,8 +112,9 @@ void Application::Init()
 void Application::Run()
 {
 	//Main Loop
+	
+	Scene* scene = new MiniGame2();
 
-	Scene* scene = new SceneText();
 
 	scene->Init();
 
