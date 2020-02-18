@@ -156,6 +156,9 @@ void SceneText::Init()
 	meshList[GEO_RACETRACK] = MeshBuilder::GenerateOBJ("track", "OBJ//racetrack.obj");
 	meshList[GEO_RACETRACK]->textureID = LoadTGA("Image//racetrackUV.tga");
 
+	meshList[GEO_PAUSE] = MeshBuilder::GenerateQuad("track",Color(1,1,1),4,4);
+	meshList[GEO_PAUSE]->textureID = LoadTGA("Image//pause.tga");
+
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -217,6 +220,10 @@ void SceneText::Update(double dt)
 		light[0].type = Light::LIGHT_SPOT;
 	}
 
+	//if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
+	//{
+
+	//}
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
@@ -324,6 +331,11 @@ void SceneText::Render()
 	//modelStack.Scale(0.2f, 0.2f, 0.2f);
 	//RenderMesh(meshList[GEO_RACETRACK], false);
 	//modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Scale(4, 4, 4);
+	RenderMesh(meshList[GEO_PAUSE], false);
+	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
