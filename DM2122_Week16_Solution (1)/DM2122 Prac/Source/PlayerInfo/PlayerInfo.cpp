@@ -46,8 +46,8 @@ void CPlayerInfo::Init(void)
 	up.Set(0, 1, 0);
 
 	// Set Boundary
-	maxBoundary.Set(1,1,1);
-	minBoundary.Set(-1, -1, -1);
+	maxBoundary.Set(50,1,50);
+	minBoundary.Set(-50, -1, -50);
 
 	//this->SetAABB(Vector3(1,1,1),Vector3(-1,-1,-1));
 }
@@ -335,26 +335,19 @@ void CPlayerInfo::Update(double dt)
 // Constrain the position within the borders
 void CPlayerInfo::Constrain(void)
 {
-	//// Constrain player within the boundary
-	//if (position.x > maxBoundary.x - 1.0f)
-	//	position.x = maxBoundary.x - 1.0f;
+	// Constrain player within the boundary
+	if (position.x > maxBoundary.x - 1.0f)
+		position.x = maxBoundary.x - 1.0f;
 	//if (position.y > maxBoundary.y - 1.0f)
-	//{
 	//	position.y = maxBoundary.y - 1.0f;
-	//	m_dJumpSpeed = 0.0;
-	//	m_bJumpUpwards = false;
-	//	m_dFallSpeed = 0.0;
-	//	m_bFallDownwards = true;
-	//	m_dElapsedTime = 0.0;
-	//}
-	//if (position.z > maxBoundary.z - 1.0f)
-	//	position.z = maxBoundary.z - 1.0f;
-	//if (position.x < minBoundary.x + 1.0f)
-	//	position.x = minBoundary.x + 1.0f;
+	if (position.z > maxBoundary.z - 1.0f)
+		position.z = maxBoundary.z - 1.0f;
+	if (position.x < minBoundary.x + 1.0f)
+		position.x = minBoundary.x + 1.0f;
 	//if (position.y < minBoundary.y + 1.0f)
 	//	position.y = minBoundary.y + 1.0f;
-	//if (position.z < minBoundary.z + 1.0f)
-	//	position.z = minBoundary.z + 1.0f;
+	if (position.z < minBoundary.z + 1.0f)
+		position.z = minBoundary.z + 1.0f;
 
 }
 
