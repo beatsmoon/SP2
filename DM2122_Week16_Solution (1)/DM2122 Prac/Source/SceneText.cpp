@@ -157,8 +157,11 @@ void SceneText::Init()
 	meshList[GEO_RACETRACK] = MeshBuilder::GenerateOBJ("track", "OBJ//racetrack.obj");
 	meshList[GEO_RACETRACK]->textureID = LoadTGA("Image//racetrackUV.tga");
 
-	meshList[GEO_PAUSE] = MeshBuilder::GenerateQuad("pauses",Color(1,1,1),4,4);
+	meshList[GEO_PAUSE] = MeshBuilder::GenerateQuad("pause",Color(1,1,1),4,4);
 	meshList[GEO_PAUSE]->textureID = LoadTGA("Image//pause.tga");
+
+	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("pause", Color(1, 1, 1), 4, 4);
+	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//indicator.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -223,7 +226,7 @@ void SceneText::Update(double dt)
 
 	//if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
 	//{
-
+	//	RenderPauseMenu();
 	//}
 
 	// Hardware Abstraction
@@ -344,6 +347,11 @@ void SceneText::Render()
 	//No transform needed
 	RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
+
+	if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
+	{
+		RenderPauseMenu();
+	}
 
 }
 
