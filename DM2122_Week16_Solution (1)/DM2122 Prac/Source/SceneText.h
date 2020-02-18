@@ -25,9 +25,14 @@ class SceneText : public Scene
 		GEO_WM_CAR_WHEEL,
 		GEO_VAL_CAR,
 		GEO_VAL_CAR_WHEEL,
+		GEO_G_CAR,
+		GEO_G_CAR_WHEEL,
+		GEO_C_CAR,
+		GEO_C_CAR_WHEEL,
 		GEO_SPACESTATION_FLOOR,
 		GEO_SPACESTATION_WALL,
 		GEO_SPACESTATION_CEILING,
+		GEO_INTERFACE_BASE,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -84,7 +89,11 @@ private:
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
-
+	void RenderSpaceStation();
+	void RenderWMCar();
+	void RenderValCar();
+	void RenderGCar();
+	void RenderCCar();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();

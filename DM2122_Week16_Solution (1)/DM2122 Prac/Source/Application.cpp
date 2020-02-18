@@ -148,7 +148,7 @@ void Application::UpdateInput()
 	// Update Mouse Position
 	double mouse_currX, mouse_currY;
 	glfwGetCursorPos(m_window, &mouse_currX, &mouse_currY);
-	cout << mouse_currX << endl;
+	//cout << mouse_currX << endl;
 	MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
 
 	// Update Keyboard Input

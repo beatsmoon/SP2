@@ -20,7 +20,7 @@ CKeyboard::~CKeyboard()
 bool CKeyboard::Create(CPlayerInfo* thePlayerInfo)
 {
 	CController::Create(thePlayerInfo);
-	cout << "CKeyboard::Create()" << endl;
+	//cout << "CKeyboard::Create()" << endl;
 	return false;
 }
 

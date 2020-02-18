@@ -19,7 +19,7 @@ CController::~CController()
 // Create this controller
 bool CController::Create(CPlayerInfo* thePlayerInfo)
 {
-	cout << "CController::Create()" << endl;
+	//cout << "CController::Create()" << endl;
 	this->thePlayerInfo = thePlayerInfo;
 	return false;
 }
@@ -123,27 +123,27 @@ bool CController::Move_SetProne()
 // Reload current weapon
 bool CController::Reload(const float deltaTime)
 {
-	cout << "CController::Reload()" << endl;
+	//cout << "CController::Reload()" << endl;
 	return false;
 }
 
 // Change current weapon (for primary only)
 bool CController::Change(const float deltaTime)
 {
-	cout << "CController::Change()" << endl;
+	//cout << "CController::Change()" << endl;
 	return false;
 }
 
 // Fire primary weapon
 bool CController::FirePrimary(const float deltaTime)
 {
-	cout << "CController::FirePrimary()" << endl;
+//	cout << "CController::FirePrimary()" << endl;
 	return false;
 }
 
 // Fire secondary weapon
 bool CController::FireSecondary(const float deltaTime)
 {
-	cout << "CController::FireSecondary()" << endl;
+	//cout << "CController::FireSecondary()" << endl;
 	return false;
 }

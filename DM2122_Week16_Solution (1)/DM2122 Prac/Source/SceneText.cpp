@@ -136,17 +136,36 @@ void SceneText::Init()
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
-	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//WaiMen_Car.obj");
-	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
+	meshList[GEO_INTERFACE_BASE] = MeshBuilder::GenerateQuad("UIBase", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INTERFACE_BASE]->textureID = LoadTGA("Image//back.tga");
 
-	/*meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("val_car", "OBJ//Car_ValTay.obj");
+	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("wm_car", "OBJ//Car_WaiMen.obj");
+	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//Car_WaiMen.tga");
+
+	meshList[GEO_WM_CAR_WHEEL] = MeshBuilder::GenerateOBJ("wm_car", "OBJ//Car_Wheel_WaiMen.obj");
+	meshList[GEO_WM_CAR_WHEEL]->textureID = LoadTGA("Image//Car_WaiMen.tga");
+
+	meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("val_car", "OBJ//Car_Val.obj");
 	meshList[GEO_VAL_CAR]->textureID = LoadTGA("Image//Car_Val.tga");
 
-	meshList[GEO_VAL_CAR_WHEEL] = MeshBuilder::GenerateOBJ("val_car_wheel", "OBJ//CarWheel_ValTay.obj");
-	meshList[GEO_VAL_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Val.tga");*/
+	meshList[GEO_VAL_CAR_WHEEL] = MeshBuilder::GenerateOBJ("val_car_wheel", "OBJ//Car_Wheel_Val.obj");
+	meshList[GEO_VAL_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Val.tga");
+
+	meshList[GEO_G_CAR] = MeshBuilder::GenerateOBJ("glenda_car", "OBJ//Car_Glenda.obj");
+	meshList[GEO_G_CAR]->textureID = LoadTGA("Image//Car_Glenda.tga");
+
+	meshList[GEO_G_CAR_WHEEL] = MeshBuilder::GenerateOBJ("glenda_car_wheel", "OBJ//Car_Wheel_Glenda.obj");
+	meshList[GEO_G_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Glenda.tga");
+
+	meshList[GEO_C_CAR] = MeshBuilder::GenerateOBJ("clement_car", "OBJ//Car_Clement.obj");
+	meshList[GEO_C_CAR]->textureID = LoadTGA("Image//Car_Clement.tga");
+
+	meshList[GEO_C_CAR_WHEEL] = MeshBuilder::GenerateOBJ("clement_car_wheel", "OBJ//Car_Wheel_Clement.obj");
+	meshList[GEO_C_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Clement.tga");
 
 	meshList[GEO_SPACESTATION_FLOOR] = MeshBuilder::GenerateOBJ("floor", "OBJ//floor.obj");
 	meshList[GEO_SPACESTATION_FLOOR]->textureID = LoadTGA("Image//floorUV.tga");
+
 	meshList[GEO_SPACESTATION_WALL] = MeshBuilder::GenerateOBJ("wall", "OBJ//walls.obj");
 	meshList[GEO_SPACESTATION_WALL]->textureID = LoadTGA("Image//wallUV.tga");
 
@@ -259,37 +278,42 @@ void SceneText::Render()
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
 	modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_WM_CAR], true);
-	//modelStack.PopMatrix();
+	
 
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_VAL_CAR], true);
-
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_VAL_CAR_WHEEL], true);
-	//modelStack.PopMatrix();
+	
 
 	//modelStack.PopMatrix();
 
+	RenderSpaceStation();
+
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -28, 0);
-	modelStack.Scale(4, 4, 4);
-	modelStack.PushMatrix();
-	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], false);
+	modelStack.Translate(-84, -15.6f, -38);
+	modelStack.Scale(3, 3, 3);
+	RenderWMCar();
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
-	modelStack.PopMatrix();
+	modelStack.Translate(-84, -27.6f, 35);
+	modelStack.Rotate(90.f, 0, 1, 0);
+	modelStack.Scale(35, 35, 35);
+	RenderValCar();
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(105, -27.6f, 30);
+	modelStack.Rotate(180.f, 0, 1, 0);
+	modelStack.Scale(10, 10, 10);
+	RenderGCar();
+	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate(95, -20.6f, -39);
+	modelStack.Scale(37, 37, 37);
+	RenderCCar();
+	modelStack.PopMatrix();
+
+	
+	
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, -3, 0);
 	//RenderMesh(meshList[GEO_DICE], true);
@@ -406,6 +430,97 @@ void SceneText::RenderSkybox()
 		modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
 		RenderMesh(meshList[GEO_BACK], false);
 	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderSpaceStation()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(0, -50, 0);
+	modelStack.Scale(12, 8, 8);
+	modelStack.PushMatrix();
+	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
+	modelStack.PopMatrix();
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderWMCar()
+{
+	modelStack.PushMatrix();
+	
+	
+	RenderMesh(meshList[GEO_WM_CAR], true);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(6.45f, -2.5f, 4.8f);
+	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(6.45f, -2.5f, -4.8f);
+	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	//modelStack.Scale(5, 5, 5);
+	modelStack.Translate(-9.2f, -2.5f, 4.8f);
+	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-9.2f, -2.5f, -4.8f);
+	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderValCar()
+{
+	modelStack.PushMatrix();
+	
+	
+	RenderMesh(meshList[GEO_VAL_CAR], false);
+
+	modelStack.PushMatrix();
+	//modelStack.Translate(0,0,0);
+	RenderMesh(meshList[GEO_VAL_CAR_WHEEL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderGCar()
+{
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_G_CAR], false);
+
+	modelStack.PushMatrix();
+	//modelStack.Translate(0,0,0);
+	RenderMesh(meshList[GEO_G_CAR_WHEEL], true);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderCCar()
+{
+	modelStack.PushMatrix();
+	
+
+	RenderMesh(meshList[GEO_C_CAR], false);
+
+	modelStack.PushMatrix();
+	//modelStack.Translate(0,0,0);
+	RenderMesh(meshList[GEO_C_CAR_WHEEL], true);
+	modelStack.PopMatrix();
+
 	modelStack.PopMatrix();
 }
 

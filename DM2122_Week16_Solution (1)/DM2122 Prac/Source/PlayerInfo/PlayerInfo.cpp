@@ -16,7 +16,7 @@
 CPlayerInfo *CPlayerInfo::s_instance = 0;
 
 CPlayerInfo::CPlayerInfo(void)
-	: m_dSpeed(40.0)
+	: m_dSpeed(80.0)
 	, m_dAcceleration(10.0)
 	, m_dJumpSpeed(15.0)
 	, m_dJumpAcceleration(-10.0)
@@ -104,7 +104,7 @@ void CPlayerInfo::SetBoundary(Vector3 max, Vector3 min)
 
 bool CPlayerInfo::Move_FrontBack(const float dt, const bool direction, const float speedMultiplier)
 {
-	cout << position << endl;
+	//cout << position << endl;
 	Vector3 viewVector = target - position;
 	Vector3 rightUV;
 	Vector3 temp;
@@ -115,7 +115,7 @@ bool CPlayerInfo::Move_FrontBack(const float dt, const bool direction, const flo
 	{
 		position += temp * (float)m_dSpeed * (float)dt;
 		target = position + viewVector;
-		cout << position << endl;
+		//cout << position << endl;
 		return true;
 	}
 	else
