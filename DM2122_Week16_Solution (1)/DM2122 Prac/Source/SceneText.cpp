@@ -136,6 +136,9 @@ void SceneText::Init()
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
+	meshList[GEO_INTERFACE_BASE] = MeshBuilder::GenerateQuad("UIBase", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INTERFACE_BASE]->textureID = LoadTGA("Image//back.tga");
+
 	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//WaiMen_Car.obj");
 	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
 
