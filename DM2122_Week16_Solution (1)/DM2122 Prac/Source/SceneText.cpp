@@ -663,7 +663,6 @@ void SceneText::Render()
 	RenderWMCar();
 	modelStack.PopMatrix();
 
-	RenderStatsUI();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-84, -27.6f, 35);
@@ -684,6 +683,9 @@ void SceneText::Render()
 	modelStack.Scale(37, 37, 37);
 	RenderCCar();
 	modelStack.PopMatrix();
+
+
+	RenderStatsUI();
 
 	if (thePlayer->GetPause() || pauseHeight > 0)
 		RenderPause();
