@@ -199,6 +199,9 @@ void MiniGame2::Update(double dt)
 
 	camera.Update(dt);
 	thePlayer->Update();
+	
+	Rotate += 50 * (float)(dt);
+
 	LanesRandom();
 	RockGoingDown(dt);
 	NitroBoostCoolDown(dt);
@@ -346,7 +349,7 @@ void MiniGame2::RenderTrack()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(50, 50, 50);
+	modelStack.Scale(55, 55, 55);
 	RenderMesh(meshList[GEO_TRACK], false);
 	modelStack.PopMatrix();
 
@@ -356,6 +359,7 @@ void MiniGame2::RenderRock(float posX, float posZ)
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(posX, -50, posZ);
+	modelStack.Rotate(-Rotate, 1, 0, 0);
 	modelStack.Scale(3, 3, 3);
 	RenderMesh(meshList[GEO_ROCK], false);
 	modelStack.PopMatrix();
@@ -428,7 +432,7 @@ void MiniGame2::RockGoingDown(double dt)
 	{
 		if (StartZ > -30)
 		{
-			StartZ -= (8) * (float)(dt);
+			StartZ -= (theCar->Get_acceleration()/100 * (getDistance()/100)) + (8)*(float)(dt);
 		}
 		else
 		{
@@ -436,6 +440,11 @@ void MiniGame2::RockGoingDown(double dt)
 			StartZ = 30;
 		}
 	}
+}
+
+float MiniGame2::getDistance()
+{
+	return distance;
 }
 
 void MiniGame2::RenderText(Mesh* mesh, std::string text, Color color)

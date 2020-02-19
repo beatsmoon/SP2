@@ -74,7 +74,8 @@ private:
 	float distance = 0;
 	float lanes = 3;
 	float StartZ = 30; //Starting Position of Z
-	
+	float Rotate = 0;
+
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderTrack();
 	void RenderRock(float posX, float posZ);
@@ -83,6 +84,8 @@ private:
 	void LanesRandom(); // Rand() for which lane rock should be at
 	void RockGoingDown(double dt); //posZ going down
 
+
+	float getDistance();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
