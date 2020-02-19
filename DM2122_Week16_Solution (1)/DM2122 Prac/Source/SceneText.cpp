@@ -684,6 +684,7 @@ void SceneText::Render()
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
 		RenderPause();
 
+
 	modelStack.PushMatrix();
 	//scale, translate, rotate
 	RenderText(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f));
@@ -925,6 +926,13 @@ void SceneText::RenderPause()
 		modelStack.Rotate(-angle2, 1, 0, 0); //up to down
 	modelStack.Translate(-0.5f, 0, 0);
 		RenderMesh(meshList[GEO_PAUSE], false);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f, 0.f, 0.1f);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[GEO_INDICATOR], false);
+		modelStack.PopMatrix();
+
 	modelStack.PopMatrix();
 }
 
