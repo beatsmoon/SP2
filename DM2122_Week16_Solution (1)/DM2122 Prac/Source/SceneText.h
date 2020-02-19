@@ -156,8 +156,8 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 	
-	bool test = false;
-	float testHeight = 0;
+	bool CarUI[4] = { false, };
+	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);

@@ -407,21 +407,15 @@ void SceneText::Update(double dt)
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
 		{
 			light[i].power = 10;
-			if (i == 0)
-			{
-				test = true;
-				if (testHeight < 8)
-					testHeight += 24 * dt;
-			}
+			CarUI[i] = true;
+				if (CarUIHeight[i] < 8)
+					CarUIHeight[i] += 24 * dt;
 		}
 		else
 		{
 			light[i].power = 0;
-			if (i == 0)
-			{
-				test = false;
-				testHeight = 0;
-			}
+			CarUI[i] = false;
+			CarUIHeight[i] = 0;
 		}
 	}
 
@@ -675,36 +669,6 @@ void SceneText::Render()
 	RenderCCar();
 	modelStack.PopMatrix();
 
-	
-	
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, -3, 0);
-	//RenderMesh(meshList[GEO_DICE], true);
-	//modelStack.PopMatrix();
-	if (test)
-	{
-		Vector3 UIPos = Vector3(-35, -1, -35);
-		Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
-		float angle = atan2f(Dir.x, Dir.z);
-		angle = Math::RadianToDegree(angle);
-		glDisable(GL_CULL_FACE);
-		modelStack.PushMatrix();
-		modelStack.Translate(UIPos.x, -5, UIPos.z);
-		modelStack.Rotate(angle, 0, 1, 0); //side to side
-		modelStack.Rotate(-20, 1, 0, 0); //side to side
-		modelStack.Scale(8, testHeight, 8);
-		RenderMesh(meshList[GEO_INTERFACE_BASE], false);
-		modelStack.PopMatrix();
-		glEnable(GL_CULL_FACE);
-	}
-
-	//modelStack.PushMatrix();
-	//modelStack.Translate(0, -10, 0);
-	//modelStack.Translate(UIPos.x, 0, UIPos.z);
-	//modelStack.Scale(0.2f, 0.2f, 0.2f);
-	//RenderMesh(meshList[GEO_RACETRACK], false);
-	//modelStack.PopMatrix();
-
 	if (thePlayer->GetPause() || pauseHeight > 0)
 		RenderPause();
 	else
@@ -871,6 +835,20 @@ void SceneText::RenderWMCar()
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
+
+	Vector3 UIPos = Vector3(-35, -1, -35);
+	Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
+	float angle = atan2f(Dir.x, Dir.z);
+	angle = Math::RadianToDegree(angle);
+	glDisable(GL_CULL_FACE);
+	modelStack.PushMatrix();
+	modelStack.Translate(UIPos.x, -5, UIPos.z);
+	modelStack.Rotate(angle, 0, 1, 0); //side to side
+	modelStack.Rotate(-20, 1, 0, 0); //side to side
+	modelStack.Scale(8, CarUIHeight[0], 8);
+	RenderMesh(meshList[GEO_INTERFACE_BASE], false);
+	modelStack.PopMatrix();
+	glEnable(GL_CULL_FACE);
 }
 
 void SceneText::RenderValCar()
