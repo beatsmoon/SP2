@@ -6,6 +6,7 @@
 //#include "../../../Common/Source/KeyboardController.h"
 #include "Mtx44.h"
 #include "MatrixStack.h"
+#include "../../../Common/Source/MouseController.h"
 //#include "RenderHelper.h"
 //#include "GraphicsManager.h"
 //#include "MeshBuilder.h"
@@ -18,12 +19,13 @@ CPlayerInfo *CPlayerInfo::s_instance = 0;
 CPlayerInfo::CPlayerInfo(void)
 	: m_dSpeed(80.0)
 	, m_dAcceleration(10.0)
-	, m_dJumpSpeed(15.0)
+	, m_dJumpSpeed(20.0)
 	, m_dJumpAcceleration(-10.0)
 	, m_dFallSpeed(0.0)
 	, m_dFallAcceleration(-10.0)
 	, m_dElapsedTime(0.0)
 	, attachedCamera(NULL)
+	, m_bPause(false)
 {
 }
 
@@ -169,6 +171,8 @@ bool CPlayerInfo::Move_Jump()
 
 bool CPlayerInfo::Look_UpDown(const float dt, const bool direction)
 {
+	if (m_bPause)
+		return false;
 	Vector3 viewUV = (target - position).Normalized();
 	Vector3 rightUV;
 	if (direction)
@@ -201,6 +205,8 @@ bool CPlayerInfo::Look_UpDown(const float dt, const bool direction)
 
 bool CPlayerInfo::Look_LeftRight(const float dt, const bool direction)
 {
+	if (m_bPause)
+		return false;
 	Vector3 viewUV = (target - position).Normalized();
 	Vector3 rightUV;
 	if (direction)
@@ -251,6 +257,8 @@ bool CPlayerInfo::Look_UpDown(const float dt, const bool direction, double mouse
 
 bool CPlayerInfo::Look_LeftRight(const float dt, const bool direction, double mouse_diff_x)
 {
+	if (m_bPause)
+		return false;
 	double camera_yaw = mouse_diff_x * 0.0174555555555556 * 2;		// 3.142 / 180.0 HARDCODED
 	Vector3 viewUV = (target - position).Normalized();
 	Vector3 rightUV;
@@ -264,6 +272,23 @@ bool CPlayerInfo::Look_LeftRight(const float dt, const bool direction, double mo
 	rightUV.y = 0;
 	rightUV.Normalize();
 	up = rightUV.Cross(viewUV).Normalized();
+	return true;
+}
+
+bool CPlayerInfo::Toggle_Pause()
+{
+	m_bPause = !m_bPause;
+	if (m_bPause)
+	{
+		MouseController::GetInstance()->SetKeepMouseCentered(false);
+	}
+	else
+	{
+		MouseController::GetInstance()->SetKeepMouseCentered(true);
+	}
+
+	Application::ToggleCursor();
+
 	return true;
 }
 
@@ -300,6 +325,11 @@ Vector3 CPlayerInfo::GetUp(void) const
 double CPlayerInfo::GetJumpAcceleration(void) const
 {
 	return m_dJumpAcceleration;
+}
+
+bool CPlayerInfo::GetPause()
+{
+	return m_bPause;
 }
 
 /********************************************************************************

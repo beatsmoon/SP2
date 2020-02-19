@@ -101,3 +101,12 @@ bool CController::Move_Jump()
 	}
 	return false;
 }
+
+bool CController::Toggle_Pause()
+{
+	if (thePlayerInfo)
+	{
+		thePlayerInfo->Toggle_Pause();
+	}
+	return false;
+}

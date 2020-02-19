@@ -30,5 +30,7 @@ public:
 	virtual bool Look_LeftRight(const float deltaTime, const bool direction, double mouse_diff_x);
 	// Detect and process jumps on the controller
 	virtual bool Move_Jump();
+	// Detect and process Pause Interface
+	virtual bool Toggle_Pause();
 };
 

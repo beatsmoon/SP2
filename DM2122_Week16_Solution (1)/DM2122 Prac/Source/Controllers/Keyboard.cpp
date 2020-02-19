@@ -52,9 +52,8 @@ int CKeyboard::Read(const float deltaTime)
 		Look_LeftRight(deltaTime, false);
 	if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE))
 		Move_Jump();
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
-	{
-	}
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_CONTROL))
+		Toggle_Pause();
 
 
 	/*

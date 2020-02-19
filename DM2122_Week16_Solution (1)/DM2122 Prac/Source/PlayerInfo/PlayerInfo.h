@@ -65,6 +65,7 @@ public:
 	bool Look_LeftRight(const float deltaTime, const bool direction);
 	bool Look_UpDown(const float deltaTime, const bool direction, double mouse_diff_y);
 	bool Look_LeftRight(const float deltaTime, const bool direction, double mouse_diff_x);
+	bool Toggle_Pause();
 
 	// Get position
 	Vector3 GetPos(void) const;
@@ -80,6 +81,8 @@ public:
 	double GetFallSpeed(void) const;
 	// Get Fall Acceleration of the player
 	double GetFallAcceleration(void) const;
+
+	bool GetPause();
 
 	// Update
 	void Update(double dt = 0.0333f);
@@ -110,4 +113,6 @@ private:
 	double m_dElapsedTime;
 
 	Camera2* attachedCamera;
+
+	bool m_bPause;
 };

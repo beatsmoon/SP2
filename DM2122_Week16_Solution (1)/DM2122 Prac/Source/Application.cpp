@@ -172,6 +172,29 @@ void Application::PostInputUpdate()
 	KeyboardController::GetInstance()->EndFrameUpdate();
 }
 
+void Application::ToggleCursor()
+{
+	double mouse_currX, mouse_currY;
+	mouse_currX = 800 >> 1;
+	mouse_currY = 600 >> 1;
+	MouseController::GetInstance()->UpdateMousePosition(mouse_currX, mouse_currY);
+	glfwSetCursorPos(m_window, mouse_currX, mouse_currY);
+	if (MouseController::GetInstance()->GetKeepMouseCentered())
+	{
+		// Hide the cursor
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetMouseButtonCallback(m_window, &Application::MouseButtonCallbacks);
+		glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
+	}
+	else
+	{
+		// Hide the cursor
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetMouseButtonCallback(m_window, &Application::MouseButtonCallbacks);
+		glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
+	}
+}
+
 
 void Application::MouseButtonCallbacks(GLFWwindow* window, int button, int action, int mods)
 {
