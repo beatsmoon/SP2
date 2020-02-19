@@ -72,7 +72,7 @@ private:
 	bool gameEnd = false;
 	bool rock1End = true;
 	float distance = 0;
-	float lanes = 3;
+	int lanes;
 	float StartZ = 30; //Starting Position of Z
 	float Rotate = 0;
 

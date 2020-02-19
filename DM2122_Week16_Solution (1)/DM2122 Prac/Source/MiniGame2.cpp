@@ -417,10 +417,9 @@ void MiniGame2::DistanceTravelled(double dt)
 
 void MiniGame2::LanesRandom()
 {
-	
+	srand(time(NULL));
 	if (rock1End == true)
 	{
-		srand(time(NULL));
 		lanes = (rand() % 3);
 		rock1End = false;
 	}
@@ -432,7 +431,14 @@ void MiniGame2::RockGoingDown(double dt)
 	{
 		if (StartZ > -30)
 		{
-			StartZ -= (theCar->Get_acceleration()/100 * (getDistance()/100)) + (8)*(float)(dt);
+			if (NitroUsed == false)
+			{
+				StartZ -= (theCar->Get_acceleration() / 100 * (getDistance() / 100)) + (8) * (float)(dt);
+			}
+			else if (NitroUsed == true)
+			{
+				StartZ -= ((theCar->Get_acceleration() / 100 * (getDistance() / 100)) + (8) * (float)(dt)) * 2;
+			}
 		}
 		else
 		{
