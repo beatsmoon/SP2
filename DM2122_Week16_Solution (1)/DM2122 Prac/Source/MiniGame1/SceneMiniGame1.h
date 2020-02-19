@@ -68,10 +68,14 @@ private:
 	bool playing;
 
 	double gameupdate;
-	float nextupdate;
+	double nextupdate;
+
+	double animationtime;
+	double nextanimation;
 
 	int score;
-	
+	float gapsize;
+
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

@@ -69,7 +69,7 @@ void MiniGame1Obj::setvelx(float newx)
 
 void MiniGame1Obj::setvely(float newy)
 {
-	velocityx = newy;
+	velocityy = newy;
 }
 
 void MiniGame1Obj::setsizex(float newx)

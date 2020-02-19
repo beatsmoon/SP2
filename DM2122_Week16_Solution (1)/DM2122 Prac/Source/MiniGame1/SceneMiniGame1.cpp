@@ -74,23 +74,25 @@ void SceneMiniGame1::Init()
 	meshList[GEO_WALLTEST] = MeshBuilder::GenerateQuad("FlappyCarBackgroundTest", Color(1, 1, 1), 1.f, 1.f);
 	
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//Car_FlappyCar1_Clement.tga");
+	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image/Background_FlappyCar1_Clement.tga");
 
 	meshList[GEO_CAR] = MeshBuilder::GenerateQuad("FlappyCar", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_CAR]->textureID = LoadTGA("Image//Background_FlappyCar1_Clement.tga");
+	meshList[GEO_CAR]->textureID = LoadTGA("Image//Car_FlappyCar1_Clement.tga");
 	
 	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga"); \
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga"); 
 
 	playing = false;
 	gameupdate = GetTickCount64();
-	nextupdate = 6000;
+	nextupdate = 5000;
 
 	Player = new MiniGame1Obj(400, 300, 0, 0);
-	gamespeed = -0.2;
+	gamespeed = -0.4;
 	score = 0;
+	nextanimation = 250;
+	gapsize = 80;
 }
 
 void SceneMiniGame1::Update(double dt)
@@ -121,21 +123,35 @@ void SceneMiniGame1::Update(double dt)
 		if (gameupdate <= GetTickCount64())
 		{
 			gameupdate = GetTickCount64() + nextupdate;
-			gamespeed -= 0.1;
+			if (gamespeed > -3.5)
+			{
+				gamespeed -= 0.5;
+				gapsize += 4;
+			}
 
 			WallMid = WallStart;
-			while (WallMid->getnextadress() != nullptr)
-			{
-				WallMid = WallMid->getnextadress();
+			if (WallStart != nullptr)
+			{ 
+				while (WallMid->getnextadress() != nullptr)
+				{
+					WallMid = WallMid->getnextadress();
+				}
 			}
-			float size = (rand() % 585) + 10; //Random num from 0 - 595
+			float size = (rand() % 580) + 10; //Random num from 0 - 595
 			MiniGame1Obj* newwall = new MiniGame1Obj(810, size, gamespeed-1, 0);
-			WallMid->setnextaddress(newwall);
+			if (WallStart == nullptr)
+			{
+				WallStart = newwall;
+			}
+			else
+			{
+				WallMid->setnextaddress(newwall);
+			}
 		}
 
 		//Update Wall Position
 		WallMid = WallStart;
-		while (true)
+		while (WallMid != nullptr)
 		{
 			WallMid->movexybyvelocity();
 			if (WallMid->getnextadress() == nullptr)
@@ -146,7 +162,7 @@ void SceneMiniGame1::Update(double dt)
 		}
 
 		//Delete Wall
-		if (WallStart->returnlocationx() <= -20)
+		if (WallStart != nullptr && WallStart->returnlocationx() <= -20)
 		{
 			MiniGame1Obj* store = WallStart;
 			WallStart = WallStart->getnextadress();
@@ -166,6 +182,7 @@ void SceneMiniGame1::Update(double dt)
 			}
 			BackgroundMid = BackgroundMid->getnextadress();
 		}
+		
 		if (BackgroundMid->returnlocationx() <= 400)
 		{
 			MiniGame1Obj* NewBackGround = new MiniGame1Obj(BackgroundMid->returnlocationx() + 798.5 ,300,BackgroundMid->returnvelocityx(),0);
@@ -179,6 +196,26 @@ void SceneMiniGame1::Update(double dt)
 			BackgroundStart = Store;
 		}
 		
+		//Player Movement
+		Player->setvely(Player->returnvelocityy() + -0.15);
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE))
+		{
+			Player->setvely(0.7);
+		}
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_MENU))
+		{
+			Player->setvely(5);
+
+		}
+		Player->movexybyvelocity();
+		if (Player->returnlocationy() < 25)
+		{
+			Player->sety(25);
+		}
+		else if (Player->returnlocationy() > 575)
+		{
+			Player->sety(575);
+		}
 	}
 	else
 	{
@@ -188,8 +225,9 @@ void SceneMiniGame1::Update(double dt)
 			BackgroundStart->setvelx(gamespeed);
 			gameupdate = GetTickCount64() + nextupdate;
 			srand(time(NULL)); //Get Time seed
-			float size = (rand() % 585) + 10;
+			float size = (rand() % 580) + 10;
 			WallStart = new MiniGame1Obj(800,size, gamespeed-1,0);
+			Player->setvely(0);
 		}
 	}
 }
@@ -205,28 +243,45 @@ void SceneMiniGame1::Render()
 
 	// passing the light direction if it is a direction light	
 
-
+	//Render Background
 	BackgroundMid = BackgroundStart;
 	while (BackgroundMid != nullptr)
 	{
 		RenderImageOnScreen(meshList[GEO_BACKGROUND], 800, 600, BackgroundMid->returnlocationx(), BackgroundMid->returnlocationy());
 		BackgroundMid = BackgroundMid->getnextadress();
 	}
+	//Render Car
+	RenderImageOnScreen(meshList[GEO_CAR], 50, 50, Player->returnlocationx(), Player->returnlocationy());
 
+	//Render Wallks
 	WallMid = WallStart;
 	while (WallMid != nullptr)
 	{
-		//Render top half
-		if (WallMid->returnlocationy() < 590)
+		bool Topactive = true;
+		bool Bottomactive = true;
+		//Check if at top
+		if (WallMid->returnlocationy() > 590) //At top
 		{
-			float topheight = ((600 - WallMid->returnlocationy())/2) + WallMid->returnlocationy() + 30/*Gap Size*/;
-			RenderImageOnScreen(meshList[GEO_WALL], 50, ((600 - WallMid->returnlocationy())) ,WallMid->returnlocationx(), topheight);
+			Topactive = false;
+			//Render Bottom Half
+			float botheight = ((WallMid->returnlocationy()) / 2) - gapsize;
+			RenderImageOnScreen(meshList[GEO_WALL], 50, WallMid->returnlocationy(), WallMid->returnlocationx(), botheight);
 		}
-
-		//Render top half
-		if (WallMid->returnlocationy() > 10)
+		//Check if at bottom
+		if (WallMid->returnlocationy() < 10) //At Bottom
 		{
-			float botheight = ((WallMid->returnlocationy()) / 2) - 30/*Gap Size*/;
+			Bottomactive = false;
+			//Render Top Half
+			float topheight = ((600 - WallMid->returnlocationy()) / 2) + WallMid->returnlocationy() + gapsize;
+			RenderImageOnScreen(meshList[GEO_WALL], 50, ((600 - WallMid->returnlocationy())), WallMid->returnlocationx(), topheight);
+		}
+		
+		if (Topactive == true && Bottomactive == true)
+		{
+			float topheight = ((600 - WallMid->returnlocationy()) / 2) + WallMid->returnlocationy() + (gapsize / 2)/*Gap Size*/;
+			RenderImageOnScreen(meshList[GEO_WALL], 50, ((600 - WallMid->returnlocationy())), WallMid->returnlocationx(), topheight);
+
+			float botheight = ((WallMid->returnlocationy()) / 2) - (gapsize / 2)/*Gap Size*/;
 			RenderImageOnScreen(meshList[GEO_WALL], 50, WallMid->returnlocationy(), WallMid->returnlocationx(), botheight);
 		}
 		
