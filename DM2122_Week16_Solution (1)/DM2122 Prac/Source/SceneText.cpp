@@ -207,7 +207,7 @@ void SceneText::Init()
 	light[4].type = Light::LIGHT_POINT;
 	light[4].position.Set(0, 20, -60);
 	light[4].color.Set(0.5f, 0.5f, 0.5f);
-	light[4].power = 10;
+	light[4].power = 0;
 	light[4].kC = 1.f;
 	light[4].kL = 0.01f;
 	light[4].kQ = 0.001f;
@@ -216,10 +216,10 @@ void SceneText::Init()
 	light[4].exponent = 3.f;
 	light[4].spotDirection.Set(0.f, 1.f, 0.f);
 
-	light[5].type = Light::LIGHT_POINT;
-	light[5].position.Set(0, 20, 60);
+	light[5].type = Light::LIGHT_DIRECTIONAL;
+	light[5].position.Set(0, 20, 0);
 	light[5].color.Set(0.5f, 0.5f, 0.5f);
-	light[5].power = 10;
+	light[5].power = 2;
 	light[5].kC = 1.f;
 	light[5].kL = 0.01f;
 	light[5].kQ = 0.001f;
@@ -667,16 +667,22 @@ void SceneText::Render()
 		break;
 	case STATE_TEST_DRIVE:
 		modelStack.PushMatrix();
-		modelStack.Translate(0, -10, 0);
-		//modelStack.Translate(UIPos.x, 0, UIPos.z);
-		//modelStack.Scale(0.2f, 0.2f, 0.2f);
-		modelStack.Scale(10, 10, 10);
+		//modelStack.Scale(10, 10, 10);
+		RenderSkybox();
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, -20, 0);
+		modelStack.Scale(16, 16, 16);
 		RenderMesh(meshList[GEO_RACETRACK], false);
 		modelStack.PopMatrix();
-		break;
-	case STATE_MINI_GAME1:
-		break;
-	case STATE_MINI_GAME2:
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-110, -13.6f, -38);
+		modelStack.Rotate(90, 0, 1, 0);
+		//modelStack.Scale(3, 3, 3);
+		RenderWMCar();
+		modelStack.PopMatrix();
 		break;
 	}
 	//RenderSkybox();
@@ -872,7 +878,7 @@ void SceneText::RenderSpaceStation()
 
 	modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_SPACESTATION_WALL], true);
+	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
