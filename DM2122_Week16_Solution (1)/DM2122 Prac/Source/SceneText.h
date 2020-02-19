@@ -137,6 +137,16 @@ class SceneText : public Scene
 		U_TOTAL,
 	};
 
+	enum STATE
+	{
+		STATE_START_MENU,
+		STATE_SELECTION_SCREEN,
+		STATE_TEST_DRIVE,
+		STATE_MINI_GAME1,
+		STATE_MINI_GAME2,
+		STATE_TOTAL
+	};
+
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -152,7 +162,7 @@ private:
 	CPlayerInfo* thePlayer;
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
-	
+	int renderingState = STATE_SELECTION_SCREEN;
 
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);

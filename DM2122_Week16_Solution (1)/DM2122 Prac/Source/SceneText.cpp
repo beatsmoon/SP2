@@ -397,6 +397,11 @@ void SceneText::Update(double dt)
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
 		{
 			light[i].power = 10;
+			if (Application::IsKeyPressed('Z'))
+			{
+				renderingState = STATE_TEST_DRIVE;
+			}
+			
 		}
 		else
 		{
@@ -577,6 +582,7 @@ void SceneText::Render()
 		glUniform1f(m_parameters[U_LIGHT4_POWER], light[4].power);
 	}
 
+<<<<<<< Updated upstream
 	if (light[5].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(light[5].position.x, light[5].position.y, light[5].position.z);
@@ -601,12 +607,23 @@ void SceneText::Render()
 		glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 	}
 	RenderSkybox();
+=======
+	switch (renderingState)
+	{
+	case STATE_START_MENU : 
+		break;
+	case STATE_SELECTION_SCREEN:
+		RenderSkybox();
+		RenderSpaceStation();
+>>>>>>> Stashed changes
 
-	modelStack.PushMatrix();
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(-84, -15.6f, -38);
+		modelStack.Scale(3, 3, 3);
+		RenderWMCar();
+		modelStack.PopMatrix();
 
+<<<<<<< Updated upstream
 	
 
 	
@@ -614,32 +631,59 @@ void SceneText::Render()
 	//modelStack.PopMatrix();
 
 	RenderSpaceStation();
+=======
+		modelStack.PushMatrix();
+		modelStack.Translate(-84, -27.6f, 35);
+		modelStack.Rotate(90.f, 0, 1, 0);
+		modelStack.Scale(35, 35, 35);
+		RenderValCar();
+		modelStack.PopMatrix();
+>>>>>>> Stashed changes
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-84, -15.6f, -38);
-	modelStack.Scale(3, 3, 3);
-	RenderWMCar();
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(105, -27.6f, 30);
+		modelStack.Rotate(180.f, 0, 1, 0);
+		modelStack.Scale(10, 10, 10);
+		RenderGCar();
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-84, -27.6f, 35);
-	modelStack.Rotate(90.f, 0, 1, 0);
-	modelStack.Scale(35, 35, 35);
-	RenderValCar();
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(95, -20.6f, -39);
+		modelStack.Scale(37, 37, 37);
+		RenderCCar();
+		modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(105, -27.6f, 30);
-	modelStack.Rotate(180.f, 0, 1, 0);
-	modelStack.Scale(10, 10, 10);
-	RenderGCar();
-	modelStack.PopMatrix();
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
+			RenderPause();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(95, -20.6f, -39);
-	modelStack.Scale(37, 37, 37);
-	RenderCCar();
-	modelStack.PopMatrix();
+		break;
+	case STATE_TEST_DRIVE:
+		modelStack.PushMatrix();
+		modelStack.Translate(0, -10, 0);
+		//modelStack.Translate(UIPos.x, 0, UIPos.z);
+		//modelStack.Scale(0.2f, 0.2f, 0.2f);
+		modelStack.Scale(10,10,10);
+		RenderMesh(meshList[GEO_RACETRACK], false);
+		modelStack.PopMatrix();
+		break;
+	case STATE_MINI_GAME1:
+		break;
+	case STATE_MINI_GAME2:
+		break;
+	}
+
+
+
+
+
+	
+
+	/*modelStack.PushMatrix();
+	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
+	modelStack.PopMatrix();*/
+
+	
 
 	
 	
@@ -648,6 +692,7 @@ void SceneText::Render()
 	//RenderMesh(meshList[GEO_DICE], true);
 	//modelStack.PopMatrix();
 
+<<<<<<< Updated upstream
 	modelStack.PushMatrix();
 	//scale, translate, rotate
 	RenderText(meshList[GEO_TEXT], "HELLO WORLD", Color(0, 1, 0));
@@ -656,6 +701,39 @@ void SceneText::Render()
 	//No transform needed
 	RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
+=======
+	//Vector3 UIPos = Vector3(-35, - 1, -35);
+	//Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
+	//float angle = atan2f(Dir.x, Dir.z);
+	//angle = Math::RadianToDegree(angle);
+	//glDisable(GL_CULL_FACE);
+	//modelStack.PushMatrix();
+	//modelStack.Translate(UIPos.x, -5, UIPos.z);
+	//modelStack.Rotate(angle,0,1,0); //side to side
+	//modelStack.Rotate(-20,1,0,0); //side to side
+	//modelStack.Scale(8, 8, 8);
+	//RenderMesh(meshList[GEO_INTERFACE_BASE], false);
+	//modelStack.PopMatrix();
+	//glEnable(GL_CULL_FACE);
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(0, -10, 0);
+	//modelStack.Translate(UIPos.x, 0, UIPos.z);
+	//modelStack.Scale(0.2f, 0.2f, 0.2f);
+	//RenderMesh(meshList[GEO_RACETRACK], false);
+	//modelStack.PopMatrix();
+
+	//
+
+	//modelStack.PushMatrix();
+	////scale, translate, rotate
+	//RenderText(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f));
+	//modelStack.PopMatrix();
+	//string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
+	////No transform needed
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
+	//RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
+>>>>>>> Stashed changes
 
 }
 
