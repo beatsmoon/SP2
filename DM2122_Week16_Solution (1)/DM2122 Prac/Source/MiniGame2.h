@@ -16,6 +16,7 @@ class MiniGame2 : public Scene
 		GEO_AXES = 0,
 		GEO_TRACK,
 		GEO_ROCK,
+		GEO_WM_CAR,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -73,8 +74,10 @@ private:
 	bool rock1End = true;
 	float distance = 0;
 	int lanes;
+	float carX = 0;
 	float StartZ = 30; //Starting Position of Z
 	float Rotate = 0;
+	float RotateCar = 0;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderTrack();
@@ -83,7 +86,7 @@ private:
 	void DistanceTravelled(double dt);
 	void LanesRandom(); // Rand() for which lane rock should be at
 	void RockGoingDown(double dt); //posZ going down
-
+	void RenderCar();
 
 	float getDistance();
 	void RenderText(Mesh* mesh, std::string text, Color color);

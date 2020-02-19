@@ -6,6 +6,7 @@
 #include "shader.hpp"
 #include "MeshBuilder.h"
 #include "Utility.h"
+#include "KeyboardController.h"
 
 #include "LoadTGA.h"
 
@@ -124,6 +125,9 @@ void MiniGame2::Init()
 	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock","OBJ//rock.obj");
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
 
+	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//WaiMen_Car.obj");
+	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
+
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -202,6 +206,49 @@ void MiniGame2::Update(double dt)
 	
 	Rotate += 50 * (float)(dt);
 
+	if (KeyboardController::GetInstance()->IsKeyDown('A'))
+	{
+
+		if (carX < 8)
+		{
+			carX += ((theCar->Get_acceleration())/5)* 8*(float)(dt);
+			if (RotateCar < 25)
+			{
+				RotateCar += ((theCar->Get_acceleration())/5)*50 * (float)(dt);
+			}
+		}
+	
+	}
+	if (KeyboardController::GetInstance()->IsKeyUp('A'))
+	{
+		if (RotateCar > 0)
+		{
+			RotateCar -= (theCar->Get_acceleration()/5)*80 * (float)(dt);
+		}
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyDown('D'))
+	{
+
+		if (carX > -8)
+		{
+			carX -= ((theCar->Get_acceleration()) / 5) * 8 * (float)(dt);
+			if (RotateCar > -25)
+			{
+				RotateCar -= ((theCar->Get_acceleration()) / 5) * 50 * (float)(dt);
+			}
+		}
+
+	}
+	if (KeyboardController::GetInstance()->IsKeyUp('D'))
+	{
+		if (RotateCar < 0 )
+		{
+			RotateCar += (theCar->Get_acceleration() / 5) * 80 * (float)(dt);
+		}
+	}
+	
+
 	LanesRandom();
 	RockGoingDown(dt);
 	NitroBoostCoolDown(dt);
@@ -260,7 +307,7 @@ void MiniGame2::Render()
 
 	RenderTrack();
 	//RenderRock(0,20);
-
+	RenderCar();
 	if (rock1End == false)
 	{
 		if (lanes == 0)
@@ -446,6 +493,17 @@ void MiniGame2::RockGoingDown(double dt)
 			StartZ = 30;
 		}
 	}
+}
+
+void MiniGame2::RenderCar()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(carX, -30, -10);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(RotateCar, 0, 1, 0);
+	modelStack.Scale(0.4f, 0.4f, 0.4f);
+	RenderMesh(meshList[GEO_WM_CAR], false);
+	modelStack.PopMatrix();
 }
 
 float MiniGame2::getDistance()
