@@ -318,6 +318,15 @@ void SceneText::Init()
 	meshList[GEO_INTERFACE_BASE] = MeshBuilder::GenerateQuad("UIBase", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_INTERFACE_BASE]->textureID = LoadTGA("Image//new_UIBase4.tga");
 
+	meshList[GEO_STATS_WM] = MeshBuilder::GenerateQuad("UIBase1", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_STATS_WM]->textureID = LoadTGA("Image//new_UIBase1.tga");
+	meshList[GEO_STATS_V] = MeshBuilder::GenerateQuad("UIBase3", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_STATS_V]->textureID = LoadTGA("Image//new_UIBase2.tga");
+	meshList[GEO_STATS_G] = MeshBuilder::GenerateQuad("UIBase2", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_STATS_G]->textureID = LoadTGA("Image//new_UIBase3.tga");
+	meshList[GEO_STATS_C] = MeshBuilder::GenerateQuad("UIBase4", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_STATS_C]->textureID = LoadTGA("Image//new_UIBase4.tga");
+
 	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//Car_WaiMen.obj");
 	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//Car_WaiMen.tga");
 
@@ -864,7 +873,26 @@ void SceneText::RenderStatsUI()
 			modelStack.Rotate(angle, 0, 1, 0); //side to side
 			modelStack.Rotate(-20, 1, 0, 0); //side to side
 			modelStack.Scale(8, CarUIHeight[i], 8);
-			RenderMesh(meshList[GEO_INTERFACE_BASE], false);
+
+			switch (i)
+			{
+			case 0:
+				RenderMesh(meshList[GEO_STATS_WM], false);
+				break;
+			case 1:
+				RenderMesh(meshList[GEO_STATS_V], false);
+				break;
+			case 2:
+				RenderMesh(meshList[GEO_STATS_G], false);
+				break;
+			case 3:
+				RenderMesh(meshList[GEO_STATS_C], false);
+				break;
+			default:
+				RenderMesh(meshList[GEO_STATS_WM], false);
+				cout << "out of scope: StatsUI" << endl;
+				break;
+			}
 			modelStack.PopMatrix();
 			glEnable(GL_CULL_FACE);
 		}
