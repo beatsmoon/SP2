@@ -414,8 +414,13 @@ void SceneText::Update(double dt)
 		else
 		{
 			light[i].power = 0;
-			CarUI[i] = false;
-			CarUIHeight[i] = 0;
+			if (CarUIHeight[i] > 0)
+				CarUIHeight[i] -= 24 * dt;
+			else
+			{
+				CarUI[i] = false;
+				CarUIHeight[i] = 0;
+			}
 		}
 	}
 
@@ -434,7 +439,7 @@ void SceneText::Update(double dt)
 	//{
 	//	RenderPauseMenu();
 	//}
-
+	//
 	//if ((((thePlayer->GetPos().x - light[0].position.x) >= -80) && ((thePlayer->GetPos().x - light[0].position.x) <= 80)) && (((thePlayer->GetPos().z - light[0].position.z) >= -50) && ((thePlayer->GetPos().z - light[0].position.z) <= 50)))
 	//{
 	//	light[0].power = 10;
@@ -443,7 +448,7 @@ void SceneText::Update(double dt)
 	//{
 	//	light[0].power = 0;
 	//}
-
+//
 	//if ((((thePlayer->GetPos().x - light[1].position.x) >= -80) && ((thePlayer->GetPos().x - light[1].position.x) <= 80)) && (((thePlayer->GetPos().z - light[1].position.z) >= -50) && ((thePlayer->GetPos().z - light[1].position.z) <= 50)))
 	//{
 	//	light[1].power = 10;
@@ -649,6 +654,8 @@ void SceneText::Render()
 	RenderWMCar();
 	modelStack.PopMatrix();
 
+	RenderStatsUI();
+
 	modelStack.PushMatrix();
 	modelStack.Translate(-84, -27.6f, 35);
 	modelStack.Rotate(90.f, 0, 1, 0);
@@ -835,20 +842,33 @@ void SceneText::RenderWMCar()
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
+}
 
-	Vector3 UIPos = Vector3(-35, -1, -35);
-	Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
-	float angle = atan2f(Dir.x, Dir.z);
-	angle = Math::RadianToDegree(angle);
-	glDisable(GL_CULL_FACE);
-	modelStack.PushMatrix();
-	modelStack.Translate(UIPos.x, -5, UIPos.z);
-	modelStack.Rotate(angle, 0, 1, 0); //side to side
-	modelStack.Rotate(-20, 1, 0, 0); //side to side
-	modelStack.Scale(8, CarUIHeight[0], 8);
-	RenderMesh(meshList[GEO_INTERFACE_BASE], false);
-	modelStack.PopMatrix();
-	glEnable(GL_CULL_FACE);
+void SceneText::RenderStatsUI()
+{
+	Vector3 UIPos[4];
+	UIPos[0] = Vector3(-35, -1, -35);
+	UIPos[1] = Vector3(-35, -1, 35);
+	UIPos[2] = Vector3(50, -1, 35);
+	UIPos[3] = Vector3(50, -1, -35);
+	for (int i = 0; i < 4; ++i)
+	{
+		if (CarUIHeight[i] > 0)
+		{
+			Vector3 Dir = (thePlayer->GetPos() - UIPos[i]).Normalized();
+			float angle = atan2f(Dir.x, Dir.z);
+			angle = Math::RadianToDegree(angle);
+			glDisable(GL_CULL_FACE);
+			modelStack.PushMatrix();
+			modelStack.Translate(UIPos[i].x, -5, UIPos[i].z);
+			modelStack.Rotate(angle, 0, 1, 0); //side to side
+			modelStack.Rotate(-20, 1, 0, 0); //side to side
+			modelStack.Scale(8, CarUIHeight[i], 8);
+			RenderMesh(meshList[GEO_INTERFACE_BASE], false);
+			modelStack.PopMatrix();
+			glEnable(GL_CULL_FACE);
+		}
+	}
 }
 
 void SceneText::RenderValCar()

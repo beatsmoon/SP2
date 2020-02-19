@@ -165,6 +165,7 @@ private:
 	void RenderPause();
 	void RenderSpaceStation();
 	void RenderWMCar();
+	void RenderStatsUI();
 	void RenderValCar();
 	void RenderGCar();
 	void RenderCCar();
