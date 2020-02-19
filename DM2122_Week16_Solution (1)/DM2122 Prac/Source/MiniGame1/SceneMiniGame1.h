@@ -17,6 +17,7 @@ class SceneMiniGame1 : public Scene
 		GEO_CAR,
 		GEO_TEXT,
 		GEO_WALL,
+		GEO_WALLTEST,
 		NUM_GEOMETRY,
 	};
 

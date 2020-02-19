@@ -6,6 +6,7 @@
 #include "../MeshBuilder.h"
 #include "../Utility.h"
 #include "../LoadTGA.h"
+#include "../../../Common/Source//KeyboardController.h"
 
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
@@ -70,9 +71,13 @@ void SceneMiniGame1::Init()
 	glEnable(GL_DEPTH_TEST);
 
 	meshList[GEO_WALL] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 0.1, 0.1), 1.f, 1.f);
+	meshList[GEO_WALLTEST] = MeshBuilder::GenerateQuad("FlappyCarBackgroundTest", Color(1, 1, 1), 1.f, 1.f);
 	
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//Background_FlappyCar1_Clement.tga");
+	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//Car_FlappyCar1_Clement.tga");
+
+	meshList[GEO_CAR] = MeshBuilder::GenerateQuad("FlappyCar", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_CAR]->textureID = LoadTGA("Image//Background_FlappyCar1_Clement.tga");
 	
 	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 
@@ -90,22 +95,22 @@ void SceneMiniGame1::Init()
 
 void SceneMiniGame1::Update(double dt)
 {
-	if (Application::IsKeyPressed(0x31))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed(0x32))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed(0x33))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	else if (Application::IsKeyPressed(0x34))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
+	//if (Application::IsKeyPressed(0x31))
+	//{
+	//	glDisable(GL_CULL_FACE);
+	//}
+	//else if (Application::IsKeyPressed(0x32))
+	//{
+	//	glEnable(GL_CULL_FACE);
+	//}
+	//else if (Application::IsKeyPressed(0x33))
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//}
+	//else if (Application::IsKeyPressed(0x34))
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//}
 	
 	CalculateFrameRate();
 	
@@ -116,14 +121,15 @@ void SceneMiniGame1::Update(double dt)
 		if (gameupdate <= GetTickCount64())
 		{
 			gameupdate = GetTickCount64() + nextupdate;
-			gamespeed -= 0.02;
+			gamespeed -= 0.1;
 
 			WallMid = WallStart;
 			while (WallMid->getnextadress() != nullptr)
 			{
 				WallMid = WallMid->getnextadress();
 			}
-			MiniGame1Obj* newwall = new MiniGame1Obj(800, 300, gamespeed-1, 0);
+			float size = (rand() % 585) + 10; //Random num from 0 - 595
+			MiniGame1Obj* newwall = new MiniGame1Obj(810, size, gamespeed-1, 0);
 			WallMid->setnextaddress(newwall);
 		}
 
@@ -140,7 +146,7 @@ void SceneMiniGame1::Update(double dt)
 		}
 
 		//Delete Wall
-		if (WallStart->returnlocationx() <= -405)
+		if (WallStart->returnlocationx() <= -20)
 		{
 			MiniGame1Obj* store = WallStart;
 			WallStart = WallStart->getnextadress();
@@ -166,7 +172,7 @@ void SceneMiniGame1::Update(double dt)
 			BackgroundMid->setnextaddress(NewBackGround);
 			
 		}
-		if (BackgroundStart->returnlocationx() <= -800)
+		if (BackgroundStart->returnlocationx() <= -400)
 		{
 			MiniGame1Obj* Store = BackgroundStart->getnextadress();
 			delete BackgroundStart;
@@ -176,12 +182,14 @@ void SceneMiniGame1::Update(double dt)
 	}
 	else
 	{
-		if (Application::IsKeyPressed(VK_RETURN))
+		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN))
 		{
 			playing = true;
 			BackgroundStart->setvelx(gamespeed);
 			gameupdate = GetTickCount64() + nextupdate;
-			WallStart = new MiniGame1Obj(800,300, gamespeed-1,0);
+			srand(time(NULL)); //Get Time seed
+			float size = (rand() % 585) + 10;
+			WallStart = new MiniGame1Obj(800,size, gamespeed-1,0);
 		}
 	}
 }
@@ -208,10 +216,26 @@ void SceneMiniGame1::Render()
 	WallMid = WallStart;
 	while (WallMid != nullptr)
 	{
-		RenderImageOnScreen(meshList[GEO_WALL], 50, 50, WallMid->returnlocationx(), WallMid->returnlocationy());
+		//Render top half
+		if (WallMid->returnlocationy() < 590)
+		{
+			float topheight = ((600 - WallMid->returnlocationy())/2) + WallMid->returnlocationy() + 30/*Gap Size*/;
+			RenderImageOnScreen(meshList[GEO_WALL], 50, ((600 - WallMid->returnlocationy())) ,WallMid->returnlocationx(), topheight);
+		}
+
+		//Render top half
+		if (WallMid->returnlocationy() > 10)
+		{
+			float botheight = ((WallMid->returnlocationy()) / 2) - 30/*Gap Size*/;
+			RenderImageOnScreen(meshList[GEO_WALL], 50, WallMid->returnlocationy(), WallMid->returnlocationx(), botheight);
+		}
+		
+		//RenderImageOnScreen(meshList[GEO_WALLTEST], 50, 50, WallMid->returnlocationx(), WallMid->returnlocationy());
 		WallMid = WallMid->getnextadress();
 	}
-		//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
+
+	std::string text = std::to_string(score);
+	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0,0,1), 50, 0, 0);
 
 }
 
@@ -346,7 +370,7 @@ void SceneMiniGame1::RenderTextOnScreen(Mesh* mesh, std::string text, Color colo
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.5f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 

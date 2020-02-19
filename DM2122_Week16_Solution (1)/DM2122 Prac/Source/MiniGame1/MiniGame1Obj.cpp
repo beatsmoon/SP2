@@ -41,6 +41,16 @@ float MiniGame1Obj::returnvelocityy()
 	return velocityy;
 }
 
+float MiniGame1Obj::returnsizex()
+{
+	return sizex;
+}
+
+float MiniGame1Obj::returnsizey()
+{
+	return sizey;
+}
+
 
 void MiniGame1Obj::setx(float newx)
 {
@@ -60,6 +70,16 @@ void MiniGame1Obj::setvelx(float newx)
 void MiniGame1Obj::setvely(float newy)
 {
 	velocityx = newy;
+}
+
+void MiniGame1Obj::setsizex(float newx)
+{
+	sizex = newx;
+}
+
+void MiniGame1Obj::setsizey(float newy)
+{
+	sizey = newy;
 }
 
 void MiniGame1Obj::movexybyvelocity()
