@@ -121,6 +121,10 @@ void MiniGame2::Init()
 	meshList[GEO_TRACK] = MeshBuilder::GenerateQuad("track", Color(1.f, 1.f, 1.f), 1.f, 1.f);
 	meshList[GEO_TRACK]->textureID = LoadTGA("Image//MiniGame2Track.tga");
 
+	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock","OBJ//rock.obj");
+	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
+
+
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -195,6 +199,8 @@ void MiniGame2::Update(double dt)
 
 	camera.Update(dt);
 	thePlayer->Update();
+	LanesRandom();
+	RockGoingDown(dt);
 	NitroBoostCoolDown(dt);
 	DistanceTravelled(dt);
 	CalculateFrameRate();
@@ -233,7 +239,6 @@ void MiniGame2::Render()
 	}
 
 
-	
 	modelStack.PushMatrix();
 	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
@@ -249,12 +254,35 @@ void MiniGame2::Render()
 
 //No transform needed
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
+
 	RenderTrack();
+	//RenderRock(0,20);
+
+	if (rock1End == false)
+	{
+		if (lanes == 0)
+		{
+			RenderRock(-13, StartZ);
+		}
+
+		if (lanes == 1)
+		{
+			RenderRock(0, StartZ);
+		}
+
+		if (lanes == 2)
+		{
+			RenderRock(13, StartZ);
+		}
+	}
+
+	
+	
 	string nitro = to_string(theCar->Get_nitro());
 	RenderTextOnScreen(meshList[GEO_TEXT], "Nitro : " + nitro, Color(0, 1, 0), 2, 0, 2);
 
 	string dis = to_string(distance);
-	RenderTextOnScreen(meshList[GEO_TEXT], "SCORE : " + dis, Color(0, 1, 0), 2, 10, 15);
+	RenderTextOnScreen(meshList[GEO_TEXT], "SCORE : " + dis, Color(0, 1, 0), 2, 12, 25);
 
 }
 
@@ -324,6 +352,18 @@ void MiniGame2::RenderTrack()
 
 }
 
+void MiniGame2::RenderRock(float posX, float posZ)
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(posX, -50, posZ);
+	modelStack.Scale(3, 3, 3);
+	RenderMesh(meshList[GEO_ROCK], false);
+	modelStack.PopMatrix();
+
+}
+
+
+
 void MiniGame2::NitroBoostCoolDown(double dt) //FOR NITROBOOST TO FILL UP AND FOR TIME USING IT
 {
 	if (NitroUsed == false)
@@ -365,8 +405,35 @@ void MiniGame2::DistanceTravelled(double dt)
 		}
 		if (NitroUsed == true)
 		{
-			distance += (2*theCar->Get_acceleration() * dt);
+			distance += ((2)*theCar->Get_acceleration() * dt);
 
+		}
+	}
+}
+
+void MiniGame2::LanesRandom()
+{
+	
+	if (rock1End == true)
+	{
+		srand(time(NULL));
+		lanes = (rand() % 3);
+		rock1End = false;
+	}
+}
+
+void MiniGame2::RockGoingDown(double dt)
+{
+	if (rock1End == false)
+	{
+		if (StartZ > -30)
+		{
+			StartZ -= (8) * (float)(dt);
+		}
+		else
+		{
+			rock1End = true;
+			StartZ = 30;
 		}
 	}
 }

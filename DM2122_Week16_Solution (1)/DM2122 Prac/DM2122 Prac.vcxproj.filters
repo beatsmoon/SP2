@@ -50,7 +50,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\MiniGame2.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>MiniGame2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,7 +112,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\MiniGame2.h">
-      <Filter>Header Files</Filter>
+      <Filter>MiniGame2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +127,9 @@
     </Filter>
     <Filter Include="Player">
       <UniqueIdentifier>{018d7e61-580e-4cd7-91ed-38cdac84c76b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MiniGame2">
+      <UniqueIdentifier>{7323ff81-16b5-491d-bbd8-b35833096763}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
