@@ -156,7 +156,9 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 	
-
+	bool test = false;
+	float testHeight = 0;
+	float pauseHeight = 0;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();

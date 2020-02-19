@@ -407,11 +407,33 @@ void SceneText::Update(double dt)
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
 		{
 			light[i].power = 10;
+			if (i == 0)
+			{
+				test = true;
+				if (testHeight < 8)
+					testHeight += 24 * dt;
+			}
 		}
 		else
 		{
 			light[i].power = 0;
+			if (i == 0)
+			{
+				test = false;
+				testHeight = 0;
+			}
 		}
+	}
+
+	if (thePlayer->GetPause())
+	{
+		if (pauseHeight < 1)
+			pauseHeight += 5 * dt;
+	}
+	else
+	{
+		if (pauseHeight > 0)
+			pauseHeight -= 5 * dt;
 	}
 
 	//if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
@@ -659,20 +681,22 @@ void SceneText::Render()
 	//modelStack.Translate(0, -3, 0);
 	//RenderMesh(meshList[GEO_DICE], true);
 	//modelStack.PopMatrix();
-
-	Vector3 UIPos = Vector3(-35, - 1, -35);
-	Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
-	float angle = atan2f(Dir.x, Dir.z);
-	angle = Math::RadianToDegree(angle);
-	glDisable(GL_CULL_FACE);
-	modelStack.PushMatrix();
-	modelStack.Translate(UIPos.x, -5, UIPos.z);
-	modelStack.Rotate(angle,0,1,0); //side to side
-	modelStack.Rotate(-20,1,0,0); //side to side
-	modelStack.Scale(8, 8, 8);
-	RenderMesh(meshList[GEO_INTERFACE_BASE], false);
-	modelStack.PopMatrix();
-	glEnable(GL_CULL_FACE);
+	if (test)
+	{
+		Vector3 UIPos = Vector3(-35, -1, -35);
+		Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
+		float angle = atan2f(Dir.x, Dir.z);
+		angle = Math::RadianToDegree(angle);
+		glDisable(GL_CULL_FACE);
+		modelStack.PushMatrix();
+		modelStack.Translate(UIPos.x, -5, UIPos.z);
+		modelStack.Rotate(angle, 0, 1, 0); //side to side
+		modelStack.Rotate(-20, 1, 0, 0); //side to side
+		modelStack.Scale(8, testHeight, 8);
+		RenderMesh(meshList[GEO_INTERFACE_BASE], false);
+		modelStack.PopMatrix();
+		glEnable(GL_CULL_FACE);
+	}
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, -10, 0);
@@ -681,8 +705,10 @@ void SceneText::Render()
 	//RenderMesh(meshList[GEO_RACETRACK], false);
 	//modelStack.PopMatrix();
 
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
+	if (thePlayer->GetPause() || pauseHeight > 0)
 		RenderPause();
+	else
+		pauseHeight = 0;
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -892,7 +918,10 @@ void SceneText::RenderCCar()
 
 void SceneText::RenderPause()
 {
+	// Find direction opposite of Player target 
 	Vector3 dir = (thePlayer->GetPos() - thePlayer->GetTarget()).Normalized();
+
+	// Find angle from 0 to dir vector
 	float angle = atan2f(dir.x, dir.z);
 	angle = Math::RadianToDegree(angle);
 	float angle2;
@@ -911,8 +940,11 @@ void SceneText::RenderPause()
 			angle2 = atan2f(dir.y, dir.x);
 	}
 	angle2 = Math::RadianToDegree(angle2);
+
+	// Get postion units away from player in direction found prevoiusly
 	Vector3 pos = thePlayer->GetPos() - 5 * dir;
 
+	// Model Stack
 	modelStack.PushMatrix();
 	modelStack.Translate(pos.x, pos.y, pos.z);
 	modelStack.Rotate(angle, 0, 1, 0); //side to side
@@ -923,7 +955,10 @@ void SceneText::RenderPause()
 	}
 	else
 		modelStack.Rotate(-angle2, 1, 0, 0); //up to down
+
+		modelStack.Rotate(10, 0, 1, 0); //up to down
 	modelStack.Translate(-0.5f, 0, 0);
+	modelStack.Scale(1, pauseHeight, 1);
 		RenderMesh(meshList[GEO_PAUSE], false);
 	modelStack.PopMatrix();
 }
