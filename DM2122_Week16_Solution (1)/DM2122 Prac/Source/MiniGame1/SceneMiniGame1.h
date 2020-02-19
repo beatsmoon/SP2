@@ -15,6 +15,8 @@ class SceneMiniGame1 : public Scene
 		GEO_AXES = 0,
 		GEO_BACKGROUND,
 		GEO_CAR,
+		GEO_TEXT,
+		GEO_WALL,
 		NUM_GEOMETRY,
 	};
 
@@ -53,12 +55,26 @@ private:
 	Camera2 camera;
 
 	MiniGame1Obj* BackgroundStart;
+	MiniGame1Obj* BackgroundMid;
 	
+	MiniGame1Obj* WallStart;
+	MiniGame1Obj* WallMid;
 
+	MiniGame1Obj* Player;
+
+	float gamespeed;
+
+	bool playing;
+
+	double gameupdate;
+	float nextupdate;
+
+	int score;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y);
 	void CalculateFrameRate();
 
 public:

@@ -5,13 +5,24 @@ class MiniGame1Obj
 private:
 	float locationx;
 	float locationy;
-
+	float velocityx;
+	float velocityy;
+	MiniGame1Obj* Next;
 public:
-	MiniGame1Obj(int initalx, int initaly);
+	MiniGame1Obj(float initalx, float initaly, float velx, float vely);
+	void setnextaddress(MiniGame1Obj* Address);
+	MiniGame1Obj* getnextadress();
+
 	float returnlocationx();
 	float returnlocationy();
-	void setx(int newx);
-	void sety(int newy);
+	float returnvelocityx();
+	float returnvelocityy();
 
+	void setx(float newx);
+	void sety(float newy);
+	void setvelx(float newx);
+	void setvely(float nety);
+
+	void movexybyvelocity();
 };
 

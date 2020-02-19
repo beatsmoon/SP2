@@ -36,7 +36,7 @@ void SceneMiniGame1::Init()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	camera.Init(Vector3(0,10,0), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0,10,1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 
 	
@@ -69,13 +69,23 @@ void SceneMiniGame1::Init()
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-
+	meshList[GEO_WALL] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 0.1, 0.1), 1.f, 1.f);
 	
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image//Background_FlappyCar1_Clement.tga");
 	
+	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 
+	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga"); \
 
+	playing = false;
+	gameupdate = GetTickCount64();
+	nextupdate = 6000;
+
+	Player = new MiniGame1Obj(400, 300, 0, 0);
+	gamespeed = -0.2;
+	score = 0;
 }
 
 void SceneMiniGame1::Update(double dt)
@@ -98,6 +108,82 @@ void SceneMiniGame1::Update(double dt)
 	}
 	
 	CalculateFrameRate();
+	
+	//Active
+	if (playing == true)
+	{
+		//Spawn New Wall + Speed Up Game
+		if (gameupdate <= GetTickCount64())
+		{
+			gameupdate = GetTickCount64() + nextupdate;
+			gamespeed -= 0.02;
+
+			WallMid = WallStart;
+			while (WallMid->getnextadress() != nullptr)
+			{
+				WallMid = WallMid->getnextadress();
+			}
+			MiniGame1Obj* newwall = new MiniGame1Obj(800, 300, gamespeed-1, 0);
+			WallMid->setnextaddress(newwall);
+		}
+
+		//Update Wall Position
+		WallMid = WallStart;
+		while (true)
+		{
+			WallMid->movexybyvelocity();
+			if (WallMid->getnextadress() == nullptr)
+			{
+				break;
+			}
+			WallMid = WallMid->getnextadress();
+		}
+
+		//Delete Wall
+		if (WallStart->returnlocationx() <= -405)
+		{
+			MiniGame1Obj* store = WallStart;
+			WallStart = WallStart->getnextadress();
+			delete store;
+			score += 100;
+		}
+
+		//Update Background
+		BackgroundMid = BackgroundStart;
+		while (true)
+		{
+			BackgroundMid->setvelx(gamespeed);
+			BackgroundMid->movexybyvelocity();
+			if (BackgroundMid->getnextadress() == nullptr)
+			{
+				break;
+			}
+			BackgroundMid = BackgroundMid->getnextadress();
+		}
+		if (BackgroundMid->returnlocationx() <= 400)
+		{
+			MiniGame1Obj* NewBackGround = new MiniGame1Obj(BackgroundMid->returnlocationx() + 798.5 ,300,BackgroundMid->returnvelocityx(),0);
+			BackgroundMid->setnextaddress(NewBackGround);
+			
+		}
+		if (BackgroundStart->returnlocationx() <= -800)
+		{
+			MiniGame1Obj* Store = BackgroundStart->getnextadress();
+			delete BackgroundStart;
+			BackgroundStart = Store;
+		}
+		
+	}
+	else
+	{
+		if (Application::IsKeyPressed(VK_RETURN))
+		{
+			playing = true;
+			BackgroundStart->setvelx(gamespeed);
+			gameupdate = GetTickCount64() + nextupdate;
+			WallStart = new MiniGame1Obj(800,300, gamespeed-1,0);
+		}
+	}
 }
 
 void SceneMiniGame1::Render()
@@ -111,25 +197,21 @@ void SceneMiniGame1::Render()
 
 	// passing the light direction if it is a direction light	
 
-	
 
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_WM_CAR], true);
-	//modelStack.PopMatrix();
+	BackgroundMid = BackgroundStart;
+	while (BackgroundMid != nullptr)
+	{
+		RenderImageOnScreen(meshList[GEO_BACKGROUND], 800, 600, BackgroundMid->returnlocationx(), BackgroundMid->returnlocationy());
+		BackgroundMid = BackgroundMid->getnextadress();
+	}
 
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_VAL_CAR], true);
-
-	//modelStack.PushMatrix();
-	////modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	//RenderMesh(meshList[GEO_VAL_CAR_WHEEL], true);
-	//modelStack.PopMatrix();
-
-	//modelStack.PopMatrix();
-
-
+	WallMid = WallStart;
+	while (WallMid != nullptr)
+	{
+		RenderImageOnScreen(meshList[GEO_WALL], 50, 50, WallMid->returnlocationx(), WallMid->returnlocationy());
+		WallMid = WallMid->getnextadress();
+	}
+		//RenderTextOnScreen(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0), 2, 0, 0);
 
 }
 
@@ -145,6 +227,24 @@ void SceneMiniGame1::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 
+	//Deleting Pointers
+	BackgroundMid = BackgroundStart;
+	while (BackgroundMid != nullptr)
+	{
+		MiniGame1Obj* Store = BackgroundMid;
+		BackgroundMid = BackgroundMid->getnextadress();
+		delete Store;
+	}	
+	
+
+	WallMid = WallStart;
+	while (WallMid != nullptr)
+	{
+		MiniGame1Obj* Store = WallMid;
+		WallMid = WallMid->getnextadress();
+		delete Store;
+	}
+	delete Player;
 }
 
 void SceneMiniGame1::RenderMesh(Mesh* mesh, bool enableLight)
@@ -226,7 +326,7 @@ void SceneMiniGame1::RenderTextOnScreen(Mesh* mesh, std::string text, Color colo
 	glDisable(GL_DEPTH_TEST);
 
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 800, 0, 600, -10, 10); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
@@ -266,7 +366,7 @@ void SceneMiniGame1::CalculateFrameRate()
 	static float framesPerSecond = 0.0f;
 	static int fps;
 	static float lastTime = 0.0f;
-	float currentTime = GetTickCount() * 0.001f;
+	float currentTime = GetTickCount64() * 0.001f;
 	++framesPerSecond;
 	//printf("Current Frames Per Second: %d\n\n", fps);
 	if (currentTime - lastTime > 1.0f)
@@ -275,4 +375,31 @@ void SceneMiniGame1::CalculateFrameRate()
 		fps = (int)framesPerSecond;
 		framesPerSecond = 0;
 	}
+}
+
+void SceneMiniGame1::RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y)
+{
+
+	glDisable(GL_DEPTH_TEST);
+
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 800, 0, 600, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(sizex, sizey, 1);
+
+	RenderMesh(mesh, false);
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	projectionStack.PopMatrix();
+
+
+	glEnable(GL_DEPTH_TEST);
+
 }

@@ -120,6 +120,7 @@ void Application::Run()
 	//Minigame1 Add
 	Scene* mainscene= scene;
 	Scene* minigame1 = new SceneMiniGame1();
+	minigame1->Init();
 
 	scene->Init();
 
@@ -153,6 +154,8 @@ void Application::Run()
 		PostInputUpdate();
 	} //Check if the ESC key had been pressed or if the window had been closed
 	scene->Exit();
+
+
 	delete scene;
 }
 
