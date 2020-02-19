@@ -7,6 +7,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "../../Common/Source/KeyboardController.h"
+#include "../../Common/Source/MouseController.h"
 
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
@@ -990,7 +991,16 @@ void SceneText::RenderPause()
 		RenderMesh(meshList[GEO_PAUSE], false);
 
 		modelStack.PushMatrix();
-		modelStack.Translate(-1.5f, 0.f, 0.1f);
+		float x, y;
+		MouseController::GetInstance()->GetMousePosition(x, y);
+		cout << y << endl;
+		modelStack.Translate(-1.5f, 0.5f, 0.1f);
+		if (y > 240)
+		{
+				modelStack.Translate(0.f, -0.5f, 0.f);
+			if (y > 320)
+				modelStack.Translate(0.f, -0.4f, 0.f);
+		}
 		modelStack.Scale(0.2f, 0.2f, 0.2f);
 		RenderMesh(meshList[GEO_INDICATOR], false);
 		modelStack.PopMatrix();
