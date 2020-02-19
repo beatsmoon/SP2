@@ -692,6 +692,7 @@ void SceneText::Render()
 	else
 		pauseHeight = 0;
 
+
 	modelStack.PushMatrix();
 	//scale, translate, rotate
 	RenderText(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f));
@@ -988,6 +989,13 @@ void SceneText::RenderPause()
 	modelStack.Translate(-0.5f, 0, 0);
 	modelStack.Scale(1, pauseHeight, 1);
 		RenderMesh(meshList[GEO_PAUSE], false);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0.f, 0.f, 0.1f);
+		modelStack.Scale(0.2f, 0.2f, 0.2f);
+		RenderMesh(meshList[GEO_INDICATOR], false);
+		modelStack.PopMatrix();
+
 	modelStack.PopMatrix();
 }
 
