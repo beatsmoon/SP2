@@ -774,14 +774,6 @@ void SceneText::Render()
 	//RenderCCar();
 	//modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	//scale, translate, rotate
-	RenderText(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f));
-	modelStack.PopMatrix();
-	string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
-	//No transform needed
-	RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
-	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
 	//
 	//
 	////modelStack.PushMatrix();
