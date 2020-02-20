@@ -169,15 +169,15 @@ private:
 	CPlayerInfo* thePlayer;
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
-<<<<<<< HEAD
+
 	
 	bool CarUI[4] = { false, };
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
-=======
+
 	int renderingState = STATE_SELECTION_SCREEN;
 
->>>>>>> rendering-state
+
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();

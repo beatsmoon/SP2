@@ -417,16 +417,16 @@ void SceneText::Update(double dt)
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
 		{
 			light[i].power = 10;
-<<<<<<< HEAD
+
 			CarUI[i] = true;
 				if (CarUIHeight[i] < 8)
 					CarUIHeight[i] += 24 * dt;
-=======
+
 			if (Application::IsKeyPressed('Z'))
 			{
 				renderingState = STATE_TEST_DRIVE;
 			}
->>>>>>> rendering-state
+
 		}
 		else
 		{
@@ -672,7 +672,7 @@ void SceneText::Render()
 		RenderWMCar();
 		modelStack.PopMatrix();
 
-<<<<<<< HEAD
+
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-84, -27.6f, 35);
@@ -680,8 +680,7 @@ void SceneText::Render()
 	modelStack.Scale(35, 35, 35);
 	RenderValCar();
 	modelStack.PopMatrix();
-=======
->>>>>>> rendering-state
+
 
 
 		modelStack.PushMatrix();
@@ -731,7 +730,7 @@ void SceneText::Render()
 	}
 	//RenderSkybox();
 
-<<<<<<< HEAD
+
 
 	RenderStatsUI();
 
@@ -739,7 +738,7 @@ void SceneText::Render()
 		RenderPause();
 	else
 		pauseHeight = 0;
-=======
+
 	//modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	//RenderMesh(meshList[GEO_LIGHTSPHERE], false);
@@ -759,7 +758,7 @@ void SceneText::Render()
 	//modelStack.Scale(35, 35, 35);
 	//RenderValCar();
 	//modelStack.PopMatrix();
->>>>>>> rendering-state
+
 
 	//modelStack.PushMatrix();
 	//modelStack.Translate(105, -27.6f, 30);
