@@ -85,6 +85,7 @@ void SceneMiniGame1::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga"); 
 
 	playing = false;
+	lost = false;
 	gameupdate = GetTickCount64();
 	nextupdate = 5000;
 
@@ -117,7 +118,7 @@ void SceneMiniGame1::Update(double dt)
 	CalculateFrameRate();
 	
 	//Active
-	if (playing == true)
+	if (playing == true && lost == false)
 	{
 		//Spawn New Wall + Speed Up Game
 		if (gameupdate <= GetTickCount64())
@@ -146,6 +147,7 @@ void SceneMiniGame1::Update(double dt)
 			else
 			{
 				WallMid->setnextaddress(newwall);
+
 			}
 		}
 
@@ -154,6 +156,46 @@ void SceneMiniGame1::Update(double dt)
 		while (WallMid != nullptr)
 		{
 			WallMid->movexybyvelocity();
+
+			//AABB collision check
+			//Player x position check (front half or back half hit
+			if ((Player->returnlocationx() + 25 >= WallMid->returnlocationx() - 25 && Player->returnlocationx() + 25 <= WallMid->returnlocationx() + 25) || /*Front half*/
+				(Player->returnlocationx() - 25 >= WallMid->returnlocationx() - 25 && Player->returnlocationx() - 25 <= WallMid->returnlocationx() + 25) /*Back half*/)
+			{
+				bool Topactive = true;
+				bool Bottomactive = true;
+				//Check if at top
+				if (WallMid->returnlocationy() > 590) //At top
+				{
+					Topactive = false;
+					//Check player y location
+					if (Player->returnlocationy()-25 <= (WallMid->returnlocationy()) - gapsize)
+					{
+						lost = true;
+					}
+
+				}
+				//Check if at bottom
+				if (WallMid->returnlocationy() < 10) //At Bottom
+				{
+					Bottomactive = false;
+					//Check Player y location
+					if (Player->returnlocationy() + 25 >= WallMid->returnlocationy() + gapsize)
+					{
+						lost = true;
+					}
+				}
+				if (Topactive == true && Bottomactive == true)
+				{
+					//Check Player y location
+					if (((Player->returnlocationy() + 25 <= WallMid->returnlocationy() - (gapsize/2) || Player->returnlocationy() + 25  >= WallMid->returnlocationy() + (gapsize / 2)) ||
+						Player->returnlocationy() - 25 <= WallMid->returnlocationy() - (gapsize / 2) || Player->returnlocationy() - 25 >= WallMid->returnlocationy() + (gapsize / 2)))
+					{
+						lost = true;
+					}
+				}
+				
+			}
 			if (WallMid->getnextadress() == nullptr)
 			{
 				break;
@@ -217,6 +259,37 @@ void SceneMiniGame1::Update(double dt)
 			Player->sety(575);
 		}
 	}
+	else if (lost == true)
+	{
+		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN))
+		{
+			//Deleting Pointers
+			BackgroundMid = BackgroundStart;
+			BackgroundStart = nullptr;
+			while (BackgroundMid != nullptr)
+			{
+				MiniGame1Obj* Store = BackgroundMid->getnextadress();
+				delete BackgroundMid;
+				BackgroundMid = Store;
+			}
+
+
+			WallMid = WallStart;
+			WallStart = nullptr;
+			while (WallMid != nullptr)
+			{
+				MiniGame1Obj* Store = WallMid->getnextadress();
+				delete WallMid;
+				WallMid = Store;
+			}
+
+			delete Player;
+
+			Init();
+			
+
+		}
+	}
 	else
 	{
 		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN))
@@ -224,7 +297,7 @@ void SceneMiniGame1::Update(double dt)
 			playing = true;
 			BackgroundStart->setvelx(gamespeed);
 			gameupdate = GetTickCount64() + nextupdate;
-			srand(time(NULL)); //Get Time seed
+			srand(time(nullptr)); //Get Time seed
 			float size = (rand() % 580) + 10;
 			WallStart = new MiniGame1Obj(800,size, gamespeed-1,0);
 			Player->setvely(0);
@@ -274,7 +347,7 @@ void SceneMiniGame1::Render()
 			//Render Top Half
 			float topheight = ((600 - WallMid->returnlocationy()) / 2) + WallMid->returnlocationy() + gapsize;
 			RenderImageOnScreen(meshList[GEO_WALL], 50, ((600 - WallMid->returnlocationy())), WallMid->returnlocationx(), topheight);
-		}
+		}	
 		
 		if (Topactive == true && Bottomactive == true)
 		{
@@ -289,8 +362,28 @@ void SceneMiniGame1::Render()
 		WallMid = WallMid->getnextadress();
 	}
 
-	std::string text = std::to_string(score);
-	RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0,0,1), 50, 0, 0);
+	std::string text;
+
+	if (lost == true)
+	{
+		text = "Game Over!";
+		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 50, 5, 6.5);
+		text = "Score: " + std::to_string(score);
+		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 40, 7, 6.5);
+
+	}
+	else if (playing == false)
+	{
+		text = "Flappy Car!";
+		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(1, 1, 0), 50, 5, 6.5);
+
+
+	}
+	else
+	{
+		text = "Score: " + std::to_string(score);
+		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 35, 0, 0);
+	}
 
 }
 
@@ -425,7 +518,7 @@ void SceneMiniGame1::RenderTextOnScreen(Mesh* mesh, std::string text, Color colo
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 0.5f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.7f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 

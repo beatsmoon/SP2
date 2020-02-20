@@ -66,6 +66,7 @@ private:
 	float gamespeed;
 
 	bool playing;
+	bool lost;
 
 	double gameupdate;
 	double nextupdate;
