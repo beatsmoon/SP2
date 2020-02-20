@@ -17,6 +17,9 @@ class MiniGame2 : public Scene
 		GEO_TRACK,
 		GEO_ROCK,
 		GEO_WM_CAR,
+		GEO_VAL_CAR,
+		GEO_G_CAR,
+		GEO_C_CAR,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -90,7 +93,8 @@ private:
 
 	bool collisionWithRock();
 	bool collision = false;
-	void CollisionUpdate();
+	void CollisionUpdate(double dt);
+	bool hit = false;
 	float getDistance();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

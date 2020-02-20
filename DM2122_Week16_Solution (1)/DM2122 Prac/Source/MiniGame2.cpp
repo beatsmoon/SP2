@@ -125,8 +125,18 @@ void MiniGame2::Init()
 	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock","OBJ//rock.obj");
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
 
-	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//WaiMen_Car.obj");
+	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("WMCar", "OBJ//WaiMen_Car.obj");
 	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
+
+	meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("ValCar", "OBJ//Car_ValTay.obj");
+	meshList[GEO_VAL_CAR]->textureID = LoadTGA("Image//Car_Val.tga");
+
+	meshList[GEO_G_CAR] = MeshBuilder::GenerateOBJ("ValCar", "OBJ//Car_glenda.obj");
+	meshList[GEO_G_CAR]->textureID = LoadTGA("Image//Car_glenda.tga");
+
+	meshList[GEO_C_CAR] = MeshBuilder::GenerateOBJ("ValCar", "OBJ//Car_Clement.obj");
+	meshList[GEO_C_CAR]->textureID = LoadTGA("Image//Car_Clement.tga");
+
 
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
@@ -251,7 +261,7 @@ void MiniGame2::Update(double dt)
 	RockGoingDown(dt);
 	NitroBoostCoolDown(dt);
 	DistanceTravelled(dt);
-	CollisionUpdate();
+	CollisionUpdate(dt);
 	CalculateFrameRate();
 }
 
@@ -401,13 +411,40 @@ void MiniGame2::RenderTrack()
 
 }
 void MiniGame2::RenderCar()
-{
-	modelStack.PushMatrix();
+{  // WMCAR
+	/*modelStack.PushMatrix();
 	modelStack.Translate(carX, -30, -10);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(RotateCar, 0, 1, 0);
 	modelStack.Scale(0.5f, 0.5f, 0.5f);
 	RenderMesh(meshList[GEO_WM_CAR], false);
+	modelStack.PopMatrix();*/
+
+	//VAL CAR
+
+	/*modelStack.PushMatrix();
+	modelStack.Translate(carX, -30, -10);
+	modelStack.Rotate(RotateCar, 0, 1, 0);
+	modelStack.Scale(7.f, 7.f, 7.f);
+	RenderMesh(meshList[GEO_VAL_CAR], false);
+	modelStack.PopMatrix();*/
+	
+	//G CAR
+	/*modelStack.PushMatrix();
+	modelStack.Translate(-1 + carX, -30, -10);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(RotateCar, 0, 1, 0);
+	modelStack.Scale(2.f, 2.f, 2.f);
+	RenderMesh(meshList[GEO_G_CAR], false);
+	modelStack.PopMatrix();*/
+
+	//C CAR
+	modelStack.PushMatrix();
+	modelStack.Translate(carX, -30, -10);
+	modelStack.Rotate(90, 0, 1, 0);
+	modelStack.Rotate(RotateCar, 0, 1, 0);
+	modelStack.Scale(10.f, 10.f, 10.f);
+	RenderMesh(meshList[GEO_C_CAR], false);
 	modelStack.PopMatrix();
 }
 void MiniGame2::RenderRock(float posX, float posZ)
@@ -464,7 +501,7 @@ void MiniGame2::DistanceTravelled(double dt)
 		}
 		if (NitroUsed == true)
 		{
-			distance += ((2)*theCar->Get_acceleration() * dt);
+			distance += ((3)*theCar->Get_acceleration() * dt);
 
 		}
 	}
@@ -482,17 +519,17 @@ void MiniGame2::LanesRandom()
 
 void MiniGame2::RockGoingDown(double dt)
 {
-	if (rock1End == false)
+	if (rock1End == false && hit == false)
 	{
 		if (StartZ > -30)
 		{
 			if (NitroUsed == false)
 			{
-				StartZ -= (theCar->Get_acceleration() / 100 * (getDistance() / 100)) + (8) * (float)(dt);
+				StartZ -= (theCar->Get_acceleration() / 100 * (getDistance() / 100)) + (10) * (float)(dt) * 2;
 			}
 			else if (NitroUsed == true)
 			{
-				StartZ -= ((theCar->Get_acceleration() / 100 * (getDistance() / 100)) + (8) * (float)(dt)) * 2;
+				StartZ -= ((theCar->Get_acceleration() / 100 * (getDistance() / 100)) + (10) * (float)(dt)) * 3;
 			}
 		}
 		else
@@ -543,14 +580,28 @@ bool MiniGame2::collisionWithRock()
 	return CollisionLane && CollisionDistance;
 }
 
-void MiniGame2::CollisionUpdate()
+void MiniGame2::CollisionUpdate(double dt)
 {
 	if ((collisionWithRock() == true && true))
 	{
 		if (NitroUsed == true)
 		{
+			hit = true;
+			
+		}
+	}
+
+	if (hit == true)
+	{
+		if (StartZ < 30)
+		{
+			StartZ += (50) * (float)(dt) * 3;
+		}
+		else
+		{
+			hit = false;
 			rock1End = true;
-			StartZ = 30;
+
 		}
 	}
 }
