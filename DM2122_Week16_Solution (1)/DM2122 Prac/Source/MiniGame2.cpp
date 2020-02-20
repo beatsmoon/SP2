@@ -209,7 +209,7 @@ void MiniGame2::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyDown('A'))
 	{
 
-		if (carX < 8)
+		if (carX < 10)
 		{
 			carX += ((theCar->Get_acceleration())/5)* 8*(float)(dt);
 			if (RotateCar < 25)
@@ -230,7 +230,7 @@ void MiniGame2::Update(double dt)
 	if (KeyboardController::GetInstance()->IsKeyDown('D'))
 	{
 
-		if (carX > -8)
+		if (carX > -10)
 		{
 			carX -= ((theCar->Get_acceleration()) / 5) * 8 * (float)(dt);
 			if (RotateCar > -25)
@@ -247,12 +247,11 @@ void MiniGame2::Update(double dt)
 			RotateCar += (theCar->Get_acceleration() / 5) * 80 * (float)(dt);
 		}
 	}
-	
-
 	LanesRandom();
 	RockGoingDown(dt);
 	NitroBoostCoolDown(dt);
 	DistanceTravelled(dt);
+	CollisionUpdate();
 	CalculateFrameRate();
 }
 
@@ -312,7 +311,7 @@ void MiniGame2::Render()
 	{
 		if (lanes == 0)
 		{
-			RenderRock(-13, StartZ);
+			RenderRock(-17, StartZ);
 		}
 
 		if (lanes == 1)
@@ -322,17 +321,17 @@ void MiniGame2::Render()
 
 		if (lanes == 2)
 		{
-			RenderRock(13, StartZ);
+			RenderRock(17, StartZ);
 		}
 	}
 
 	
 	
 	string nitro = to_string(theCar->Get_nitro());
-	RenderTextOnScreen(meshList[GEO_TEXT], "Nitro : " + nitro, Color(0, 1, 0), 2, 0, 2);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Nitro : " + nitro, Color(0, 1, 0), 3, 0, 2);
 
 	string dis = to_string(distance);
-	RenderTextOnScreen(meshList[GEO_TEXT], "SCORE : " + dis, Color(0, 1, 0), 2, 12, 25);
+	RenderTextOnScreen(meshList[GEO_TEXT], "SCORE : " + dis, Color(0, 1, 0), 3, 15, 19);
 
 }
 
@@ -396,18 +395,27 @@ void MiniGame2::RenderTrack()
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Scale(55, 55, 55);
+	modelStack.Scale(70, 70, 70);
 	RenderMesh(meshList[GEO_TRACK], false);
 	modelStack.PopMatrix();
 
 }
-
+void MiniGame2::RenderCar()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(carX, -30, -10);
+	modelStack.Rotate(-90, 0, 1, 0);
+	modelStack.Rotate(RotateCar, 0, 1, 0);
+	modelStack.Scale(0.5f, 0.5f, 0.5f);
+	RenderMesh(meshList[GEO_WM_CAR], false);
+	modelStack.PopMatrix();
+}
 void MiniGame2::RenderRock(float posX, float posZ)
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(posX, -50, posZ);
 	modelStack.Rotate(-Rotate, 1, 0, 0);
-	modelStack.Scale(3, 3, 3);
+	modelStack.Scale(5, 5, 5);
 	RenderMesh(meshList[GEO_ROCK], false);
 	modelStack.PopMatrix();
 
@@ -495,15 +503,56 @@ void MiniGame2::RockGoingDown(double dt)
 	}
 }
 
-void MiniGame2::RenderCar()
+
+
+bool MiniGame2::collisionWithRock()
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(carX, -30, -10);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Rotate(RotateCar, 0, 1, 0);
-	modelStack.Scale(0.4f, 0.4f, 0.4f);
-	RenderMesh(meshList[GEO_WM_CAR], false);
-	modelStack.PopMatrix();
+	//By Lanes 1st
+	bool CollisionLane = false;
+	if (lanes == 0) // CarX < 8 
+	{
+		if ((carX >= -12.5f) && carX <= -6.5f)
+		{
+			CollisionLane = true;
+			//printf("XXX");
+		}
+	}
+	if (lanes == 1) // X = 0
+	{
+		if ((carX <= 3.5f) && carX >= -3.5f)
+		{
+			CollisionLane = true;
+			//printf("XXX");
+		}
+	}
+	if (lanes == 2) 
+	{
+		if ((carX >= 6.5f ) && (carX <= 12.5f))
+		{
+			CollisionLane = true;
+			//printf("XXX");
+		}
+	}
+	//By Distance Axis Z
+	bool CollisionDistance = false;
+	if (StartZ <= -5)
+	{
+		CollisionDistance = true;
+		//printf("YYY");
+	}
+	return CollisionLane && CollisionDistance;
+}
+
+void MiniGame2::CollisionUpdate()
+{
+	if ((collisionWithRock() == true && true))
+	{
+		if (NitroUsed == true)
+		{
+			rock1End = true;
+			StartZ = 30;
+		}
+	}
 }
 
 float MiniGame2::getDistance()
@@ -597,3 +646,4 @@ void MiniGame2::CalculateFrameRate()
 		framesPerSecond = 0;
 	}
 }
+

@@ -88,10 +88,14 @@ private:
 	void RockGoingDown(double dt); //posZ going down
 	void RenderCar();
 
+	bool collisionWithRock();
+	bool collision = false;
+	void CollisionUpdate();
 	float getDistance();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
+
 
 public:
 	MiniGame2();
