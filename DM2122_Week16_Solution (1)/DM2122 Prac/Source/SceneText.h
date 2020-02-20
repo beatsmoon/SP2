@@ -3,6 +3,8 @@
 
 #include "Scene.h"
 #include <MatrixStack.h>
+#include <fstream>
+#include <iostream>
 #include "Camera2.h"
 #include "Mesh.h"
 #include "Light.h"
@@ -174,6 +176,9 @@ private:
 	bool CarUI[4] = { false, };
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
+	string HighScore_MiniGame1[5] = { "" };
+	string HighScore_MiniGame2[5] = { "" };
+
 
 	int renderingState = STATE_SELECTION_SCREEN;
 
@@ -192,6 +197,8 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
+	void ReadHighScore_minigame1();
+	void ReadHighScore_minigame2();
 
 public:
 	SceneText();

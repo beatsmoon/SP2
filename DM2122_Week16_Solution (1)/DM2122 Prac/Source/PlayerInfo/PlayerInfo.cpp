@@ -11,6 +11,7 @@
 //#include "GraphicsManager.h"
 //#include "MeshBuilder.h"
 #include "../Application.h"
+#include "../../Source/SceneText.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.
@@ -53,7 +54,10 @@ void CPlayerInfo::Init(void)
 	maxBoundary.Set(spaceStationWidth,1, spaceStationWidth);
 	minBoundary.Set(-spaceStationWidth, -1, -spaceStationWidth);
 
+
 	//this->SetAABB(Vector3(1,1,1),Vector3(-1,-1,-1));
+
+	
 }
 
 

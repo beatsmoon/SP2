@@ -2,6 +2,8 @@
 #include "GL\glew.h"
 #include "Application.h"
 #include <Mtx44.h>
+#include <fstream>
+#include <iostream>
 #include "shader.hpp"
 #include "MeshBuilder.h"
 #include "Utility.h"
@@ -674,12 +676,12 @@ void SceneText::Render()
 
 
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-84, -27.6f, 35);
-	modelStack.Rotate(90.f, 0, 1, 0);
-	modelStack.Scale(35, 35, 35);
-	RenderValCar();
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(-84, -27.6f, 35);
+		modelStack.Rotate(90.f, 0, 1, 0);
+		modelStack.Scale(35, 35, 35);
+		RenderValCar();
+		modelStack.PopMatrix();
 
 
 
@@ -707,8 +709,13 @@ void SceneText::Render()
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
 			RenderPause();
 
+		//ReadHighScore_minigame1();
+
 		break;
 	case STATE_TEST_DRIVE:
+
+	
+
 		modelStack.PushMatrix();
 		//modelStack.Scale(10, 10, 10);
 		RenderSkybox();
@@ -1205,3 +1212,51 @@ void SceneText::CalculateFrameRate()
 		framesPerSecond = 0;
 	}
 }
+
+void SceneText::ReadHighScore_minigame1()
+{
+	ifstream myfile("Highscore//minigame1.txt");
+	if (myfile.is_open())
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			getline(myfile, HighScore_MiniGame1[i]);
+				
+			cout << HighScore_MiniGame1[i] << '\n';
+			
+		}
+	
+		
+		myfile.close();
+	}
+
+	else
+	{
+		cout << "Unable to open file";
+	}
+}
+
+void SceneText::ReadHighScore_minigame2()
+{
+
+	ifstream myfile("Highscore//minigame2.txt");
+	if (myfile.is_open())
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			getline(myfile, HighScore_MiniGame2[i]);
+
+			cout << HighScore_MiniGame2[i] << '\n';
+
+		}
+
+
+		myfile.close();
+	}
+
+	else
+	{
+		cout << "Unable to open file";
+	}
+}
+
