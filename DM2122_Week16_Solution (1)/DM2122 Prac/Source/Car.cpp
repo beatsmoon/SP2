@@ -10,6 +10,10 @@ Car::Car(string name, float top_speed, float handling, float acceleration, float
 	this->Nitro = nitro;
 }
 
+Car::~Car()
+{
+}
+
 void Car::Set_pos(Position pos)
 {
 	this->Pos = pos;

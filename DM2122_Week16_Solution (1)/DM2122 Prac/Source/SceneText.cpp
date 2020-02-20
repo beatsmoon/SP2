@@ -208,7 +208,7 @@ void SceneText::Init()
 	light[4].type = Light::LIGHT_POINT;
 	light[4].position.Set(0, 20, -60);
 	light[4].color.Set(0.5f, 0.5f, 0.5f);
-	light[4].power = 10;
+	light[4].power = 0;
 	light[4].kC = 1.f;
 	light[4].kL = 0.01f;
 	light[4].kQ = 0.001f;
@@ -217,10 +217,10 @@ void SceneText::Init()
 	light[4].exponent = 3.f;
 	light[4].spotDirection.Set(0.f, 1.f, 0.f);
 
-	light[5].type = Light::LIGHT_POINT;
-	light[5].position.Set(0, 20, 60);
+	light[5].type = Light::LIGHT_DIRECTIONAL;
+	light[5].position.Set(0, 20, 0);
 	light[5].color.Set(0.5f, 0.5f, 0.5f);
-	light[5].power = 10;
+	light[5].power = 2;
 	light[5].kC = 1.f;
 	light[5].kL = 0.01f;
 	light[5].kQ = 0.001f;
@@ -417,9 +417,16 @@ void SceneText::Update(double dt)
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
 		{
 			light[i].power = 10;
+<<<<<<< HEAD
 			CarUI[i] = true;
 				if (CarUIHeight[i] < 8)
 					CarUIHeight[i] += 24 * dt;
+=======
+			if (Application::IsKeyPressed('Z'))
+			{
+				renderingState = STATE_TEST_DRIVE;
+			}
+>>>>>>> rendering-state
 		}
 		else
 		{
@@ -649,21 +656,23 @@ void SceneText::Render()
 
 	}
 
-	RenderSkybox();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTSPHERE], false);
-	modelStack.PopMatrix();
+	switch (renderingState)
+	{
+	case STATE_START_MENU:
+		break;
+	case STATE_SELECTION_SCREEN:
+		RenderSkybox();
+		RenderSpaceStation();
 
-	RenderSpaceStation();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(-84, -15.6f, -38);
-	modelStack.Scale(3, 3, 3);
-	RenderWMCar();
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(-84, -15.6f, -38);
+		modelStack.Scale(3, 3, 3);
+		RenderWMCar();
+		modelStack.PopMatrix();
 
+<<<<<<< HEAD
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-84, -27.6f, 35);
@@ -671,20 +680,58 @@ void SceneText::Render()
 	modelStack.Scale(35, 35, 35);
 	RenderValCar();
 	modelStack.PopMatrix();
+=======
+>>>>>>> rendering-state
 
-	modelStack.PushMatrix();
-	modelStack.Translate(105, -27.6f, 30);
-	modelStack.Rotate(180.f, 0, 1, 0);
-	modelStack.Scale(10, 10, 10);
-	RenderGCar();
-	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(95, -20.6f, -39);
-	modelStack.Scale(37, 37, 37);
-	RenderCCar();
-	modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(-84, -27.6f, 35);
+		modelStack.Rotate(90.f, 0, 1, 0);
+		modelStack.Scale(35, 35, 35);
+		RenderValCar();
+		modelStack.PopMatrix();
 
+
+		modelStack.PushMatrix();
+		modelStack.Translate(105, -27.6f, 30);
+		modelStack.Rotate(180.f, 0, 1, 0);
+		modelStack.Scale(10, 10, 10);
+		RenderGCar();
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(95, -20.6f, -39);
+		modelStack.Scale(37, 37, 37);
+		RenderCCar();
+		modelStack.PopMatrix();
+
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
+			RenderPause();
+
+		break;
+	case STATE_TEST_DRIVE:
+		modelStack.PushMatrix();
+		//modelStack.Scale(10, 10, 10);
+		RenderSkybox();
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, -20, 0);
+		modelStack.Scale(16, 16, 16);
+		RenderMesh(meshList[GEO_RACETRACK], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(-110, -13.6f, -38);
+		modelStack.Rotate(90, 0, 1, 0);
+		//modelStack.Scale(3, 3, 3);
+		RenderWMCar();
+		modelStack.PopMatrix();
+		break;
+	}
+	//RenderSkybox();
+
+<<<<<<< HEAD
 
 	RenderStatsUI();
 
@@ -692,6 +739,40 @@ void SceneText::Render()
 		RenderPause();
 	else
 		pauseHeight = 0;
+=======
+	//modelStack.PushMatrix();
+	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
+	//RenderMesh(meshList[GEO_LIGHTSPHERE], false);
+	//modelStack.PopMatrix();
+
+	//RenderSpaceStation();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-84, -15.6f, -38);
+	//modelStack.Scale(3, 3, 3);
+	//RenderWMCar();
+	//modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(-84, -27.6f, 35);
+	//modelStack.Rotate(90.f, 0, 1, 0);
+	//modelStack.Scale(35, 35, 35);
+	//RenderValCar();
+	//modelStack.PopMatrix();
+>>>>>>> rendering-state
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(105, -27.6f, 30);
+	//modelStack.Rotate(180.f, 0, 1, 0);
+	//modelStack.Scale(10, 10, 10);
+	//RenderGCar();
+	//modelStack.PopMatrix();
+
+	//modelStack.PushMatrix();
+	//modelStack.Translate(95, -20.6f, -39);
+	//modelStack.Scale(37, 37, 37);
+	//RenderCCar();
+	//modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	//scale, translate, rotate
@@ -701,6 +782,45 @@ void SceneText::Render()
 	//No transform needed
 	RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
 	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
+	//
+	//
+	////modelStack.PushMatrix();
+	////modelStack.Translate(0, -3, 0);
+	////RenderMesh(meshList[GEO_DICE], true);
+	////modelStack.PopMatrix();
+
+	//Vector3 UIPos = Vector3(-35, - 1, -35);
+	//Vector3 Dir = (thePlayer->GetPos() - UIPos).Normalized();
+	//float angle = atan2f(Dir.x, Dir.z);
+	//angle = Math::RadianToDegree(angle);
+	//glDisable(GL_CULL_FACE);
+	//modelStack.PushMatrix();
+	//modelStack.Translate(UIPos.x, -5, UIPos.z);
+	//modelStack.Rotate(angle,0,1,0); //side to side
+	//modelStack.Rotate(-20,1,0,0); //side to side
+	//modelStack.Scale(8, 8, 8);
+	//RenderMesh(meshList[GEO_INTERFACE_BASE], false);
+	//modelStack.PopMatrix();
+	//glEnable(GL_CULL_FACE);
+
+	////modelStack.PushMatrix();
+	////modelStack.Translate(0, -10, 0);
+	////modelStack.Translate(UIPos.x, 0, UIPos.z);
+	////modelStack.Scale(0.2f, 0.2f, 0.2f);
+	////RenderMesh(meshList[GEO_RACETRACK], false);
+	////modelStack.PopMatrix();
+
+	//if (KeyboardController::GetInstance()->IsKeyDown(VK_CONTROL))
+	//	RenderPause();
+
+	//modelStack.PushMatrix();
+	////scale, translate, rotate
+	//RenderText(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f));
+	//modelStack.PopMatrix();
+	//string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
+	////No transform needed
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
+	//RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
 
 }
 
@@ -820,7 +940,7 @@ void SceneText::RenderSpaceStation()
 
 	modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_SPACESTATION_WALL], true);
+	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
