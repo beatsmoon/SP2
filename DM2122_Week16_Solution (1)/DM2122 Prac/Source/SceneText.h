@@ -144,6 +144,16 @@ class SceneText : public Scene
 		U_TOTAL,
 	};
 
+	enum STATE
+	{
+		STATE_START_MENU,
+		STATE_SELECTION_SCREEN,
+		STATE_TEST_DRIVE,
+		STATE_MINI_GAME1,
+		STATE_MINI_GAME2,
+		STATE_TOTAL
+	};
+
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -159,10 +169,15 @@ private:
 	CPlayerInfo* thePlayer;
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
+<<<<<<< HEAD
 	
 	bool CarUI[4] = { false, };
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
+=======
+	int renderingState = STATE_SELECTION_SCREEN;
+
+>>>>>>> rendering-state
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
