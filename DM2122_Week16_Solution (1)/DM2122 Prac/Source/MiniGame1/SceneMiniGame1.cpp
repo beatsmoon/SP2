@@ -150,6 +150,88 @@ void SceneMiniGame1::Update(double dt)
 
 			}
 		}
+		//if (nextpowerspawn <= GetTickCount64())
+		//{
+		//	nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
+		//	Powerup = new MiniGame1Obj(810, 300, gamespeed-1, 0);
+		//	int type = rand() % 4; //nunmber from 0 - 3
+		//	//0 - Slowdown
+		//	//1 - Destroy Wall
+		//	//2 - Gain Score
+		//	//3 - Random
+		//	Powerup->settype(type);
+		//}
+		//if (Powerup != nullptr)
+		//{
+		//	Powerup->movexybyvelocity();
+		//	if (Powerup->returnlocationx() < -30)
+		//	{
+		//		delete Powerup;
+		//		Powerup = nullptr;
+		//	}
+		//	//Check x location
+		//	else if ((Player->returnlocationx() + 25 >= Powerup->returnlocationx() - 20 && Player->returnlocationx() + 25 <= Powerup->returnlocationx() + 20) || /*Front half*/
+		//		(Player->returnlocationx() - 25 >= Powerup->returnlocationx() - 20 && Player->returnlocationx() - 25 <= Powerup->returnlocationx() + 20) /*Back half*/)
+		//	{
+		//		if (((Player->returnlocationy() + 25 <= Powerup->returnlocationy() - 20 || Player->returnlocationy() + 25 >= Powerup->returnlocationy() + 20 ||
+		//			Player->returnlocationy() - 25 <= Powerup->returnlocationy() - 20 || Player->returnlocationy() - 25 >= Powerup->returnlocationy() + 20)))
+		//		{
+		//			//0 - Slowdown
+		//			//1 - Destroy Wall
+		//			//2 - Gain Score
+		//			//3 - Random
+		//			switch (Powerup->returntype())
+		//			{
+		//			case 0:
+		//				gamespeed += 1;
+		//				gapsize -= 4;
+		//				break;
+		//
+		//			case 1:
+		//				walldestroy = true;
+		//				break;
+		//
+		//			case 2:
+		//				score += 100;
+		//				break;
+		//
+		//			case 3:
+		//				int type = rand() % 3; //Random number from 0 - 2
+		//				switch (type)
+		//				{
+		//				case 0:
+		//					gamespeed += 1;
+		//					gapsize -= 4;
+		//					break;
+		//
+		//				case 1:
+		//					walldestroy = true;
+		//					break;
+		//
+		//				case 2:
+		//					score += 100;
+		//					break;
+		//				}
+		//				break;
+		//			}
+		//			delete Powerup;
+		//			Powerup = nullptr;
+		//		}
+		//	}
+		//
+		//}
+
+		//Destroy Wall button
+		//if (KeyboardController::GetInstance()->IsKeyDown(VK_RETURN) && walldestroy == true)
+		//{
+		//	WallMid = WallStart;
+		//	MiniGame1Obj* Prev;
+		//	Prev = WallStart;
+		//	if (WallMid->returnlocationx() > Player->returnlocationx())
+		//	{
+		//		
+		//	}
+		//}
 
 		//Update Wall Position
 		WallMid = WallStart;
@@ -282,7 +364,11 @@ void SceneMiniGame1::Update(double dt)
 				delete WallMid;
 				WallMid = Store;
 			}
-
+			if (Powerup != nullptr)
+			{
+				delete Powerup;
+				Powerup = nullptr;
+			}
 			delete Player;
 
 			Init();
@@ -301,6 +387,7 @@ void SceneMiniGame1::Update(double dt)
 			float size = (rand() % 580) + 10;
 			WallStart = new MiniGame1Obj(800,size, gamespeed-1,0);
 			Player->setvely(0);
+			nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
 		}
 	}
 }
@@ -415,6 +502,11 @@ void SceneMiniGame1::Exit()
 		MiniGame1Obj* Store = WallMid;
 		WallMid = WallMid->getnextadress();
 		delete Store;
+	}
+
+	if (Powerup != nullptr)
+	{
+		delete Powerup;
 	}
 	delete Player;
 }

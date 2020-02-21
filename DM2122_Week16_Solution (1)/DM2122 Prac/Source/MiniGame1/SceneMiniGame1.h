@@ -8,6 +8,7 @@
 #include "../Light.h"
 #include "MiniGame1Obj.h"
 
+
 class SceneMiniGame1 : public Scene
 {
 	enum GEOMETRY_TYPE
@@ -42,6 +43,7 @@ class SceneMiniGame1 : public Scene
 		U_TOTAL,
 	};
 
+
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -63,6 +65,9 @@ private:
 
 	MiniGame1Obj* Player;
 
+	MiniGame1Obj* Powerup;
+
+
 	float gamespeed;
 
 	bool playing;
@@ -71,11 +76,16 @@ private:
 	double gameupdate;
 	double nextupdate;
 
+	double nextpowerspawn;
+
+	bool walldestroy;
+
 	double animationtime;
 	double nextanimation;
 
 	int score;
 	float gapsize;
+
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);

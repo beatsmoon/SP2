@@ -7,11 +7,19 @@ private:
 	float locationy;
 	float velocityx;
 	float velocityy;
-	float sizex;
-	float sizey;
+
+	//For Powerups
+	//0 - Slowdown
+	//1 - Destroy Wall
+	//2 - Gain Score
+	//3 - Random
+	int type;
+
 	MiniGame1Obj* Next;
 public:
+	MiniGame1Obj();
 	MiniGame1Obj(float initalx, float initaly, float velx, float vely);
+	
 	void setnextaddress(MiniGame1Obj* Address);
 	MiniGame1Obj* getnextadress();
 
@@ -19,16 +27,14 @@ public:
 	float returnlocationy();
 	float returnvelocityx();
 	float returnvelocityy();
-	float returnsizex();
-	float returnsizey();
+	int returntype();
 
 
 	void setx(float newx);
 	void sety(float newy);
 	void setvelx(float newx);
 	void setvely(float nety);
-	void setsizex(float newx);
-	void setsizey(float newy);
+	void settype(int newtype);
 
 	void movexybyvelocity();
 };

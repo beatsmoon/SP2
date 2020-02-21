@@ -1,5 +1,10 @@
 #include "MiniGame1Obj.h"
 
+MiniGame1Obj::MiniGame1Obj()
+{
+
+}
+
 MiniGame1Obj::MiniGame1Obj(float initalx, float initaly, float velx, float vely)
 {
 	locationx = initalx;
@@ -41,16 +46,10 @@ float MiniGame1Obj::returnvelocityy()
 	return velocityy;
 }
 
-float MiniGame1Obj::returnsizex()
+int MiniGame1Obj::returntype()
 {
-	return sizex;
+	return type;
 }
-
-float MiniGame1Obj::returnsizey()
-{
-	return sizey;
-}
-
 
 void MiniGame1Obj::setx(float newx)
 {
@@ -72,14 +71,9 @@ void MiniGame1Obj::setvely(float newy)
 	velocityy = newy;
 }
 
-void MiniGame1Obj::setsizex(float newx)
+void MiniGame1Obj::settype(int newtype)
 {
-	sizex = newx;
-}
-
-void MiniGame1Obj::setsizey(float newy)
-{
-	sizey = newy;
+	type = newtype;
 }
 
 void MiniGame1Obj::movexybyvelocity()
