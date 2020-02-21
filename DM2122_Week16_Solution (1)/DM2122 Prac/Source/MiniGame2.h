@@ -20,6 +20,7 @@ class MiniGame2 : public Scene
 		GEO_VAL_CAR,
 		GEO_G_CAR,
 		GEO_C_CAR,
+		GEO_DEATHMENU,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -81,6 +82,7 @@ private:
 	float StartZ = 30; //Starting Position of Z
 	float Rotate = 0;
 	float RotateCar = 0;
+	string HighScore_MiniGame2[5] = { "" };
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderTrack();
@@ -90,11 +92,14 @@ private:
 	void LanesRandom(); // Rand() for which lane rock should be at
 	void RockGoingDown(double dt); //posZ going down
 	void RenderCar();
+	void RenderDeathMenu();
+	void reset();
 
 	bool collisionWithRock();
 	bool collision = false;
 	void CollisionUpdate(double dt);
 	bool hit = false;
+	void ReadHighScore_minigame2();
 	float getDistance();
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
