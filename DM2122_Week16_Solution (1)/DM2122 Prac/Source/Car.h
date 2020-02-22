@@ -1,6 +1,6 @@
 #pragma once
 
-#include"Vertex.h"
+#include <Vector3.h>
 #include <string.h>
 
 using namespace std;
@@ -8,7 +8,9 @@ using namespace std;
 class Car
 {
 private:
-	Position Pos;
+	Vector3 Pos;
+	Vector3 Velocity;
+	Vector3 Direction;
 	string Name;
 	float Top_speed;
 	float Handling;
@@ -16,18 +18,22 @@ private:
 	float Nitro;
 
 public:
-	Car(string name, float top_speed, float handling, float acceleration, float nitro, Position pos);
+	Car(string name, float top_speed, float handling, float acceleration, float nitro);
 	~Car();
 
 	// Getters and Setters
-	void Set_pos(Position);
+	void SetPos(Vector3);
+	void SetVelocity(Vector3);
+	void SetDirection(Vector3);
 	void Set_name(string);
 	void Set_top_speed(float);
 	void Set_handling(float);
 	void Set_acceleration(float);
 	void Set_nitro(float);
 
-	Position Get_pos();
+	Vector3 GetPos();
+	Vector3 GetVelocity();
+	Vector3 GetDirection();
 	string Get_name();
 	float Get_top_speed();
 	float Get_handling();
@@ -35,6 +41,10 @@ public:
 	float Get_nitro();
 
 	// Functions
+	void Accelerate(bool direction, double dt);
+	void Turn(bool direction, double dt);
+
+	void update(double dt);
 
 };
 

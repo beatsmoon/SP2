@@ -3,6 +3,7 @@
 //#include "../FPSCamera.h"
 
 #include "../Camera2.h"
+#include "../Car.h"
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -65,7 +66,8 @@ public:
 	bool Look_LeftRight(const float deltaTime, const bool direction);
 	bool Look_UpDown(const float deltaTime, const bool direction, double mouse_diff_y);
 	bool Look_LeftRight(const float deltaTime, const bool direction, double mouse_diff_x);
-	bool Toggle_Pause();
+	void Toggle_Pause();
+	void Toggle_TestDrive();
 
 	// Get position
 	Vector3 GetPos(void) const;
@@ -95,12 +97,15 @@ public:
 	void AttachCamera(Camera2* _cameraPtr);
 	void DetachCamera();
 
+	// Handling Camera
+	void SelectCar(Car* _carPTR);
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 position, target, up;
 	Vector3 maxBoundary, minBoundary;
 	//GroundEntity* m_pTerrain;
-	Vector3 Velocity;
+	Vector3 velocity;
 	double m_dSpeed;
 	double m_dAcceleration;
 
@@ -112,7 +117,9 @@ private:
 
 	double m_dElapsedTime;
 
-	Camera2* attachedCamera;
-
 	bool m_bPause;
+	bool m_bCar;
+
+	Camera2* attachedCamera;
+	Car* selectedCar;
 };

@@ -166,11 +166,12 @@ private:
 	Light light[6];
 
 	Camera2 camera;
+	Camera2 cameraCar;
 	CPlayerInfo* thePlayer;
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 
-	
+	Car* CarWM; //TODO change this into an array
 	bool CarUI[4] = { false, };
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;

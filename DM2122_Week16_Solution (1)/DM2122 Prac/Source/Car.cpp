@@ -1,23 +1,35 @@
 #include "Car.h"
 
-Car::Car(string name, float top_speed, float handling, float acceleration, float nitro, Position pos)
+Car::Car(string _name, float _topSpeed, float _handling, float _acceleration, float _nitro)
+	:Name(_name),
+	Top_speed(_topSpeed),
+	Handling(_handling),
+	Acceleration(_acceleration),
+	Nitro(_nitro)
 {
-	this->Name = name;
-	this->Pos = pos;
-	this->Top_speed = top_speed;
-	this->Acceleration = acceleration;
-	this->Handling = handling;
-	this->Nitro = nitro;
+	Pos = Vector3(0, 0, 0);
+	Velocity = Vector3(0, 0, 0);
+	Direction = Vector3(1, 0, 0);
 }
 
 Car::~Car()
 {
 }
 
-void Car::Set_pos(Position pos)
+void Car::SetPos(Vector3 pos)
 {
 	this->Pos = pos;
 
+}
+
+void Car::SetVelocity(Vector3 _vel)
+{
+	Velocity = _vel;
+}
+
+void Car::SetDirection(Vector3 _dir)
+{
+	Direction = _dir;
 }
 
 void Car::Set_name(string name)
@@ -48,9 +60,19 @@ void Car::Set_nitro(float nitro)
 
 }
 
-Position Car::Get_pos()
+Vector3 Car::GetPos()
 {
 	return Pos;
+}
+
+Vector3 Car::GetVelocity()
+{
+	return Velocity;
+}
+
+Vector3 Car::GetDirection()
+{
+	return Direction;
 }
 
 string Car::Get_name()
@@ -76,4 +98,48 @@ float Car::Get_acceleration()
 float Car::Get_nitro()
 {
 	return Nitro;
+}
+
+void Car::Accelerate(bool _direction, double dt)
+{
+	// Find the direction car is facing
+	Vector3 dirVec = Direction;
+
+	// Car Velocity += acceleration towards the faced-direction
+	if (_direction)
+		Velocity += dirVec * Acceleration * dt;
+	else
+		Velocity -= dirVec * Acceleration * dt;
+
+	// TODO: Change vel to single axis and towards car target in upate
+}
+
+void Car::Turn(bool _direction, double dt)
+{
+	//TODO: Inertia towards target instead of direction or multiply by length of velocity
+	float handling = -Handling;
+	handling *= dt;
+	handling = Math::DegreeToRadian(handling);
+	if (!_direction)
+		handling = -handling;
+	// Find the direction car is facing
+	Vector3 dirVec = Direction;
+
+	// rotate direction in xz plane
+	dirVec.x = (dirVec.x * cos(handling)) - (dirVec.z * sin(handling));
+	dirVec.z = (dirVec.z * cos(handling)) + (dirVec.x * sin(handling));
+	// Set Car Target in that direction
+	Direction = dirVec;
+
+	//selectedCar->Target = dirVec * distVec.Length() + selectedCar->GetPos();
+}
+
+void Car::update(double dt)
+{
+	Pos += Velocity * dt;
+	//TODO Dissapate Velocity
+	Vector3 Friction;
+	if (!Velocity.IsZero())
+		Friction = Velocity.Normalized();
+	Velocity -= Friction * 2.f * dt;
 }

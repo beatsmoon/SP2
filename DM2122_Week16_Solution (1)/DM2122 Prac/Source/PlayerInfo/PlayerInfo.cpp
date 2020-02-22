@@ -26,6 +26,8 @@ CPlayerInfo::CPlayerInfo(void)
 	, m_dElapsedTime(0.0)
 	, attachedCamera(NULL)
 	, m_bPause(false)
+	, m_bCar(false)
+	, selectedCar(false)
 {
 }
 
@@ -108,49 +110,63 @@ void CPlayerInfo::SetBoundary(Vector3 max, Vector3 min)
 bool CPlayerInfo::Move_FrontBack(const float dt, const bool direction, const float speedMultiplier)
 {
 	//cout << position << endl;
-	Vector3 viewVector = target - position;
-	Vector3 rightUV;
-	Vector3 temp;
-	temp = viewVector;
-	temp.y = 0;
-	temp.Normalized();
-	if (direction)
+	if (!m_bCar)
 	{
-		position += temp * (float)m_dSpeed * (float)dt;
-		target = position + viewVector;
-		//cout << position << endl;
-		return true;
+		Vector3 viewVector = target - position;
+		Vector3 rightUV;
+		Vector3 temp;
+		temp = viewVector;
+		temp.y = 0;
+		temp.Normalized(); //TODO Create Exception Handling to ensure no crashes
+		if (direction)
+		{
+			position += temp * (float)m_dSpeed * (float)dt;
+			target = position + viewVector;
+			//cout << position << endl;
+			return true;
+		}
+		else
+		{
+			position -= temp * (float)m_dSpeed * (float)dt;
+			target = position + viewVector;
+			return true;
+		}
 	}
 	else
 	{
-		position -= temp * (float)m_dSpeed * (float)dt;
-		target = position + viewVector;
-		return true;
+		selectedCar->Accelerate(direction, dt);
 	}
 	return false;
 }
 
 bool CPlayerInfo::Move_LeftRight(const float dt, const bool direction)
 {
-	Vector3 viewVector = target - position;
-	Vector3 rightUV;
-	if (direction)
+	if (!m_bCar)
 	{
-		rightUV = (viewVector.Normalized()).Cross(up);
-		rightUV.y = 0;
-		rightUV.Normalize();
-		position -= rightUV * (float)m_dSpeed * (float)dt;
-		target = position + viewVector;
-		return true;
+		Vector3 viewVector = target - position;
+		Vector3 rightUV;
+		if (direction)
+		{
+			rightUV = (viewVector.Normalized()).Cross(up);
+			rightUV.y = 0;
+			rightUV.Normalize();
+			position -= rightUV * (float)m_dSpeed * (float)dt;
+			target = position + viewVector;
+			return true;
+		}
+		else
+		{
+			rightUV = (viewVector.Normalized()).Cross(up);
+			rightUV.y = 0;
+			rightUV.Normalize();
+			position += rightUV * (float)m_dSpeed * (float)dt;
+			target = position + viewVector;
+			return true;
+		}
 	}
 	else
 	{
-		rightUV = (viewVector.Normalized()).Cross(up);
-		rightUV.y = 0;
-		rightUV.Normalize();
-		position += rightUV * (float)m_dSpeed * (float)dt;
-		target = position + viewVector;
-		return true;
+		selectedCar->Turn(direction, dt);
 	}
 	return false;
 }
@@ -164,7 +180,7 @@ bool CPlayerInfo::Move_Jump()
 	//}
 	if (position.y <= 0)
 	{
-		Velocity.y = m_dJumpSpeed;
+		velocity.y = m_dJumpSpeed;
 	}
 	return false;
 }
@@ -275,7 +291,7 @@ bool CPlayerInfo::Look_LeftRight(const float dt, const bool direction, double mo
 	return true;
 }
 
-bool CPlayerInfo::Toggle_Pause()
+void CPlayerInfo::Toggle_Pause()
 {
 	m_bPause = !m_bPause;
 	if (m_bPause)
@@ -288,8 +304,11 @@ bool CPlayerInfo::Toggle_Pause()
 	}
 
 	Application::ToggleCursor();
+}
 
-	return true;
+void CPlayerInfo::Toggle_TestDrive()
+{
+	m_bCar = !m_bCar;
 }
 
 
@@ -337,23 +356,49 @@ bool CPlayerInfo::GetPause()
  ********************************************************************************/
 void CPlayerInfo::Update(double dt)
 {
-	Vector3 viewVector = target - position;
-	viewVector.y = Math::Clamp(viewVector.y, -0.8f, 0.8f);
-	Vector3 viewUV = (viewVector).Normalized();
-
-	position += Velocity * dt;
-	if (position.y > 0)
-		Velocity.y -= 10 * dt;
-	else if (Velocity.y < 0)
+	if (!m_bCar)
 	{
-		position.y = 0;
-		Velocity.y = 0;
+		Vector3 viewVector = target - position;
+		viewVector.y = Math::Clamp(viewVector.y, -0.8f, 0.8f);
+		Vector3 viewUV = (viewVector).Normalized();
+
+		position += velocity * dt;
+		if (position.y > 0)
+			velocity.y -= 10 * dt;
+		else if (velocity.y < 0)
+		{
+			position.y = 0;
+			velocity.y = 0;
+		}
+
+		Constrain();
+		target = position + viewVector;
+		// if Mouse Buttons were activated, then act on them
 	}
+	else
+	{
+		selectedCar->update(dt);
 
-	Constrain();
-	target = position + viewVector;
-	// if Mouse Buttons were activated, then act on them
+		Vector3 pPos = selectedCar->GetPos() - (selectedCar->GetDirection() * 40);
+		pPos.y = 30;
+		position = pPos;
+		//target = selectedCar->GetPos() + (selectedCar->GetDirection() * 10);
 
+
+		Vector3 viewUV = ((selectedCar->GetPos() + (selectedCar->GetDirection() * 10)) - position).Normalized();
+		Vector3 rightUV;
+		//float yaw = (float)angle * (float)dt;
+		//Mtx44 rotation;
+		//rotation.SetToRotation(yaw, 0, 1, 0);
+		//viewUV = rotation * viewUV;
+		target = position + viewUV;
+		rightUV = viewUV.Cross(up);
+		rightUV.y = 0;
+		rightUV.Normalize();
+
+		up = rightUV.Cross(viewUV).Normalized();
+
+	}
 
 	// If a camera is attached to this playerInfo class, then update it
 	if (attachedCamera)
@@ -391,4 +436,9 @@ void CPlayerInfo::AttachCamera(Camera2* _cameraPtr)
 void CPlayerInfo::DetachCamera()
 {
 	attachedCamera = nullptr;
+}
+
+void CPlayerInfo::SelectCar(Car* _carPTR)
+{
+	selectedCar = _carPTR;
 }
