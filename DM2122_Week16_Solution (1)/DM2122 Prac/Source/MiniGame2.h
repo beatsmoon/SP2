@@ -21,6 +21,7 @@ class MiniGame2 : public Scene
 		GEO_G_CAR,
 		GEO_C_CAR,
 		GEO_DEATHMENU,
+		GEO_INDICATOR,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,

@@ -7,7 +7,7 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "KeyboardController.h"
-
+#include "MouseController.h"
 #include "LoadTGA.h"
 
 #define ROT_LIMIT 45.f;
@@ -139,6 +139,9 @@ void MiniGame2::Init()
 
 	meshList[GEO_DEATHMENU] = MeshBuilder::GenerateQuad("DeathMenu", Color(1, 1, 1), 1, 1);
 	meshList[GEO_DEATHMENU]->textureID = LoadTGA("Image//deathmenu.tga");
+
+	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("arrow", Color(1, 1, 1), 1, 1);
+	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//indicator.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
@@ -351,7 +354,6 @@ void MiniGame2::Render()
 	}
 
 	
-	
 	string nitro = to_string(theCar->Get_nitro());
 	RenderTextOnScreen(meshList[GEO_TEXT], "Nitro : " + nitro, Color(0, 1, 0), 3, 0, 2);
 
@@ -438,12 +440,12 @@ void MiniGame2::RenderCar()
 
 	//VAL CAR
 
-	modelStack.PushMatrix();
+	/*modelStack.PushMatrix();
 	modelStack.Translate(carX, -40, -10);
 	modelStack.Rotate(RotateCar, 0, 1, 0);
 	modelStack.Scale(7.f, 7.f, 7.f);
 	RenderMesh(meshList[GEO_VAL_CAR], false);
-	modelStack.PopMatrix();
+	modelStack.PopMatrix();*/
 	
 	//G CAR
 	//modelStack.PushMatrix();
@@ -455,13 +457,13 @@ void MiniGame2::RenderCar()
 	//modelStack.PopMatrix();
 
 	//C CAR
-	/*modelStack.PushMatrix();
+	modelStack.PushMatrix();
 	modelStack.Translate(carX, -40, -10);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(RotateCar, 0, 1, 0);
 	modelStack.Scale(10.f, 10.f, 10.f);
 	RenderMesh(meshList[GEO_C_CAR], false);
-	modelStack.PopMatrix();*/
+	modelStack.PopMatrix();
 }
 void MiniGame2::RenderDeathMenu()
 {
@@ -474,6 +476,22 @@ void MiniGame2::RenderDeathMenu()
 		modelStack.Rotate(90, 0, 0, 1);
 		modelStack.Scale(30, 30, 30);
 		RenderMesh(meshList[GEO_DEATHMENU], false);
+		
+		modelStack.PushMatrix();
+		float x,y;
+		MouseController::GetInstance()->GetMousePosition(x, y);
+		cout << y << endl;
+		modelStack.Translate(0.f, -20.f, -10.f);
+		if (y > 240)
+		{
+			modelStack.Translate(0.f, -30.f, 0.f);
+			if (y > 300)
+				modelStack.Translate(0.f, -20, -20.f);
+		}
+		modelStack.Scale(10.f,10.f, 10.f);
+		RenderMesh(meshList[GEO_INDICATOR], false);
+		modelStack.PopMatrix();
+
 		modelStack.PopMatrix();
 	}
 }
