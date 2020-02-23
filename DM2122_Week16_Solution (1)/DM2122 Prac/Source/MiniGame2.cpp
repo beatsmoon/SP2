@@ -483,13 +483,9 @@ void MiniGame2::RenderDeathMenu()
 		modelStack.Translate(3.6f, 0.f, -3.2f);
 		if (y > 240)
 		{
-			{
-				printf("A");
-				modelStack.Translate(0,-10,0);
-			}
+			modelStack.Translate(0,-10,0);
 			if (y > 320)
 			{
-				printf("B");
 				modelStack.Translate(0.f, 0.f, -0.8f);
 			}
 		}
