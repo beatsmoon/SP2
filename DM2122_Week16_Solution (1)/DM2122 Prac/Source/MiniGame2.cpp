@@ -512,6 +512,7 @@ void MiniGame2::reset()
 	collision = false;
 	hit = false;
 	theCar->Set_nitro(0);
+	MouseController::GetInstance()->SetKeepMouseCentered(true);
 }
 
 void MiniGame2::RenderRock(float posX, float posZ)
@@ -660,6 +661,7 @@ void MiniGame2::CollisionUpdate(double dt)
 		else if (NitroUsed == false)
 		{
 			gameEnd = true;
+			MouseController::GetInstance()->SetKeepMouseCentered(false);
 		}
 	}
 
