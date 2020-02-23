@@ -267,13 +267,6 @@ void MiniGame2::Update(double dt)
 		NitroBoostCoolDown(dt);
 		DistanceTravelled(dt);
 	}
-	if (gameEnd == true)
-	{
-		if (KeyboardController::GetInstance()->IsKeyPressed(VK_SPACE))
-		{
-			reset();
-		}
-	}
 
 
 
@@ -484,9 +477,18 @@ void MiniGame2::RenderDeathMenu()
 		if (y > 240)
 		{
 			modelStack.Translate(0,-10,0);
+			
 			if (y > 320)
 			{
 				modelStack.Translate(0.f, 0.f, -0.8f);
+				if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
+				{
+					//reset();
+				}
+			}
+			else if(MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
+			{
+				reset();
 			}
 		}
 		modelStack.Rotate(-90, 1, 0, 0);
