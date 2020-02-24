@@ -13,6 +13,11 @@ private:
 	//1 - Destroy Wall
 	//2 - Gain Score
 	//3 - Random
+	//For Player
+	//0 - Sprite 1
+	//1 - Sprite 2
+	//2 - Sprite 3
+	//3 - Sprite 4
 	int type;
 
 	MiniGame1Obj* Next;

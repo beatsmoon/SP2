@@ -91,6 +91,8 @@ private:
 	double animationtime;
 	double nextanimation;
 
+	bool wingsgoingup;
+
 	int score;
 	float gapsize;
 
@@ -99,7 +101,7 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y);
-	void RenderAnimationOnScreen(Mesh* mesh, Color color, unsigned offset, int count, float size, float x, float y);
+	void RenderAnimationOnScreen(Mesh* mesh, int count, float size, float x, float y);
 	void CalculateFrameRate();
 
 public:

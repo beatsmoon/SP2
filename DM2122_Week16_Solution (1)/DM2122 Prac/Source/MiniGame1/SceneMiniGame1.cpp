@@ -80,7 +80,7 @@ void SceneMiniGame1::Init()
 	meshList[GEO_CAR] = MeshBuilder::GenerateText("FlappyCar", 2, 2);
 	meshList[GEO_CAR]->textureID = LoadTGA("Image//Car_FlappyCar1_Clement.tga");	
 	
-	meshList[GEO_POWERUP] = MeshBuilder::GenerateQuad("Powerup", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_POWERUP] = MeshBuilder::GenerateText("Powerup", 2, 2);
 	meshList[GEO_POWERUP]->textureID = LoadTGA("Image//PowerUp_FlappyCar1_Clement.tga");	
 	
 	meshList[GEO_SCORE] = MeshBuilder::GenerateQuad("Score", Color(1, 1, 1), 1.f, 1.f);
@@ -97,6 +97,10 @@ void SceneMiniGame1::Init()
 	nextupdate = 5000;
 
 	Player = new MiniGame1Obj(400, 300, 0, 0);
+	Player->settype(0);
+	wingsgoingup = false;
+
+
 	gamespeed = -0.4;
 	score = 0;
 	nextanimation = 250;
@@ -108,6 +112,7 @@ void SceneMiniGame1::Init()
 
 	bouncetime = GetTickCount64();
 	scoremenu = false;
+
 }
 
 void SceneMiniGame1::Update(double dt)
@@ -164,6 +169,8 @@ void SceneMiniGame1::Update(double dt)
 
 			}
 		}
+
+		//Spawn Powerup
 		if (nextpowerspawn <= GetTickCount64())
 		{
 			nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
@@ -175,6 +182,38 @@ void SceneMiniGame1::Update(double dt)
 			//3 - Random
 			Powerup->settype(type);
 		}
+
+		//Update Animations
+		if (animationtime <= GetTickCount64())
+		{
+			animationtime = GetTickCount64() + nextanimation;
+			//For Player
+			//0 - Sprite 1
+			//1 - Sprite 2
+			//2 - Sprite 3
+			//3 - Sprite 4
+			int type = Player->returntype();
+			if (wingsgoingup == true)
+			{
+				type++;
+				if (type >= 4)
+				{
+					wingsgoingup = false;
+					type = 4;
+				}
+			}
+			else
+			{
+				type--;
+				if (type <= -1)
+				{
+					wingsgoingup = true;
+					type = 0;
+				}
+			}
+			Player->settype(type);
+		}
+
 		if (Powerup != nullptr)
 		{
 			Powerup->movexybyvelocity();
@@ -420,19 +459,19 @@ void SceneMiniGame1::Update(double dt)
 		{
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP) && bouncetime <= GetTickCount64())
 			{
-				cursor++;
-				if (cursor >= 4)
+				cursor--;
+				if (cursor <= -1)
 				{
-					cursor = 0;
+					cursor = 3;
 				}
 				bouncetime = GetTickCount64() + 250;
 			}
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN) && bouncetime <= GetTickCount64())
 			{
-				cursor--;
-				if (cursor <= -1)
+				cursor++;
+				if (cursor >= 4)
 				{
-					cursor = 3;
+					cursor = 0;
 				}
 				bouncetime = GetTickCount64() + 250;
 			}
@@ -501,13 +540,72 @@ void SceneMiniGame1::Render()
 		BackgroundMid = BackgroundMid->getnextadress();
 	}
 	//Render Car
-	RenderAnimationOnScreen(meshList[GEO_CAR], Color(1, 1, 1),	1, 1, 50, Player->returnlocationx(), Player->returnlocationy());
+	switch (Player->returntype())
+	{
+	case 0: //Sprite 1
+	{
+		RenderAnimationOnScreen(meshList[GEO_CAR], 6, 50, Player->returnlocationx() - 25, Player->returnlocationy()-25);
+		break;
+	}
+	case 1: //Sprite 2
+	{
+		RenderAnimationOnScreen(meshList[GEO_CAR], 12, 50, Player->returnlocationx() - 25, Player->returnlocationy() - 25);
+		break;
+	}	
+	case 2: //Sprite 3
+	{
+		RenderAnimationOnScreen(meshList[GEO_CAR], 20, 50, Player->returnlocationx() - 25, Player->returnlocationy() - 25);
+		break;
+	}	
+	case 3: //Sprite 4
+	{
+		RenderAnimationOnScreen(meshList[GEO_CAR], 26, 50, Player->returnlocationx() - 25, Player->returnlocationy() - 25);
+		break;
+	}
+	default:
+	{
+		RenderAnimationOnScreen(meshList[GEO_CAR], 26, 50, Player->returnlocationx() - 25, Player->returnlocationy() - 25);
+		break;
+	}
+	}
 	//RenderTextOnScreen(meshList[GEO_CAR], "j", Color(1, 1, 1), 50, Player->returnlocationx() - 25, Player->returnlocationy() - 25);
 	//RenderImageOnScreen(meshList[GEO_CAR], 50, 50, Player->returnlocationx()-25, Player->returnlocationy()-25);
 
 	if (Powerup != nullptr)
 	{
-		RenderImageOnScreen(meshList[GEO_POWERUP], 20, 20, Powerup->returnlocationx(), Powerup->returnlocationy());
+		//0 - Slowdown
+		//1 - Destroy Wall
+		//2 - Gain Score
+		//3 - Random
+		switch (Powerup->returntype())
+		{
+		case 0: //Slowdown
+		{
+			RenderAnimationOnScreen(meshList[GEO_POWERUP], 6, 50, Powerup->returnlocationx() - 25, Powerup->returnlocationy() - 25);
+			break;							 
+		}									 
+		case 1: //Destory Wall				 
+		{									 
+			RenderAnimationOnScreen(meshList[GEO_POWERUP], 12, 50, Powerup->returnlocationx() - 25, Powerup->returnlocationy() - 25);
+			break;							
+		}									
+		case 2: //Gain Score				
+		{									
+			RenderAnimationOnScreen(meshList[GEO_POWERUP], 20, 50, Powerup->returnlocationx() - 25, Powerup->returnlocationy() - 25);
+			break;							 
+		}									 
+		case 3: //Random					 
+		{									 
+			RenderAnimationOnScreen(meshList[GEO_POWERUP], 26, 50, Powerup->returnlocationx() - 25, Powerup->returnlocationy() - 25);
+			break;							 
+		}									 
+		default:							 
+		{									 
+			RenderAnimationOnScreen(meshList[GEO_POWERUP], 26, 50, Powerup->returnlocationx() - 25, Powerup->returnlocationy() - 25);
+			break;
+		}
+		}
+		//RenderImageOnScreen(meshList[GEO_POWERUP], 20, 20, Powerup->returnlocationx(), Powerup->returnlocationy());
 	}
 	//Render Wallks
 	WallMid = WallStart;
@@ -558,7 +656,7 @@ void SceneMiniGame1::Render()
 	{
 		if (scoremenu == true)
 		{
-			RenderImageOnScreen(meshList[GEO_SCORE], 100, 100, 400,300);
+			RenderImageOnScreen(meshList[GEO_SCORE], 600, 600, 400,300);
 		}
 		else
 		{
@@ -775,7 +873,7 @@ void SceneMiniGame1::RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, f
 
 }
 
-void SceneMiniGame1::RenderAnimationOnScreen(Mesh* mesh, Color color, unsigned offset, int count, float size, float x, float y)
+void SceneMiniGame1::RenderAnimationOnScreen(Mesh* mesh, int count, float size, float x, float y)
 {
 
 	glDisable(GL_DEPTH_TEST);
@@ -812,10 +910,11 @@ void SceneMiniGame1::RenderAnimationOnScreen(Mesh* mesh, Color color, unsigned o
 		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
 	}
 
+	//0,6 1st
 	//0,10 2nd
 	//0,20 3nd
 	//0,30 4th
-	mesh->Render(10,4);
+	mesh->Render(0,count);
 	//RenderMesh(mesh, false);
 
 	projectionStack.PopMatrix();
