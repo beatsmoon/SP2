@@ -38,6 +38,7 @@ class SceneText : public Scene
 		GEO_STATS_G,
 		GEO_STATS_C,
 		GEO_PAUSE,
+		GEO_HIGHSCOREBOARD,
 		GEO_INDICATOR,
 		GEO_RACETRACK,
 		GEO_LIGHTSPHERE,
@@ -154,6 +155,15 @@ class SceneText : public Scene
 		STATE_TOTAL
 	};
 
+	enum MENU_CHOICE
+	{
+		CHOICE_NONE,
+		CHOICE_RESUME,
+		CHOICE_HIGHSCORE,
+		CHOICE_EXIT,
+		CHOICE_BACK,
+	};
+
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -178,6 +188,10 @@ private:
 
 	int renderingState = STATE_SELECTION_SCREEN;
 
+	bool highScoreBoard = false;
+	int pauseMenuSelection = CHOICE_NONE;
+	float moveIndicator = 0;
+	int moveDirection = 1;
 
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
@@ -189,10 +203,13 @@ private:
 	void RenderValCar();
 	void RenderGCar();
 	void RenderCCar();
+	void RenderIndicator();
+	void RenderHighscore();
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
+	
 
 public:
 	SceneText();

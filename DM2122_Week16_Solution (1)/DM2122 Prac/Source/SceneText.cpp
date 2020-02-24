@@ -371,6 +371,9 @@ void SceneText::Init()
 	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("pause", Color(1, 1, 1), 4, 4);
 	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//indicator.tga");
 
+	meshList[GEO_HIGHSCOREBOARD] = MeshBuilder::GenerateQuad("highscore", Color(1, 1, 1), 4, 4);
+	meshList[GEO_HIGHSCOREBOARD]->textureID = LoadTGA("Image//highscoreboard.tga");
+
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -459,6 +462,40 @@ void SceneText::Update(double dt)
 	{
 		if (pauseHeight > 0)
 			pauseHeight -= 5 * dt;
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed('E'))
+	{
+		if (pauseMenuSelection == CHOICE_RESUME)
+		{
+			thePlayer->Toggle_Pause();
+		}
+		else if (pauseMenuSelection == CHOICE_HIGHSCORE)
+		{
+			highScoreBoard = true;
+		}
+		else if (pauseMenuSelection == CHOICE_BACK)
+		{
+			highScoreBoard = false;
+		}
+		else if(pauseMenuSelection == CHOICE_EXIT)
+		{
+			// exit the program here
+		}
+
+	}
+
+	if (pauseMenuSelection == CHOICE_BACK)
+	{
+		moveIndicator += moveDirection * 0.3 * dt;
+		if (moveIndicator > 0.13)
+		{
+			moveDirection = -1;
+		}
+		else if(moveIndicator < -0.05)
+		{
+			moveDirection = 1;
+		}
 	}
 
 	//if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
@@ -740,7 +777,10 @@ void SceneText::Render()
 	}
 
 	if (thePlayer->GetPause() || pauseHeight > 0)
-		RenderPause();
+		if (highScoreBoard)
+			RenderHighscore();
+		else
+			RenderPause();
 	else
 		pauseHeight = 0;
 
@@ -1001,6 +1041,78 @@ void SceneText::RenderCCar()
 	modelStack.PopMatrix();
 }
 
+void SceneText::RenderIndicator()
+{
+	modelStack.PushMatrix();
+	modelStack.Scale(0.2f, 0.2f, 0.2f);
+	RenderMesh(meshList[GEO_INDICATOR], false);
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderHighscore()
+{
+	// Find direction opposite of Player target 
+	Vector3 dir = (thePlayer->GetPos() - thePlayer->GetTarget()).Normalized();
+
+	// Find angle from 0 to dir vector
+	float angle = atan2f(dir.x, dir.z);
+	angle = Math::RadianToDegree(angle);
+	float angle2;
+	if (angle > 0)
+	{
+		if ((angle < 45) || (angle > 135))
+			angle2 = atan2f(dir.y, dir.z);
+		else
+			angle2 = atan2f(dir.y, dir.x);
+	}
+	else
+	{
+		if ((angle > -45) || (angle < -135))
+			angle2 = atan2f(dir.y, dir.z);
+		else
+			angle2 = atan2f(dir.y, dir.x);
+	}
+	angle2 = Math::RadianToDegree(angle2);
+
+	// Get postion units away from player in direction found prevoiusly
+	Vector3 pos = thePlayer->GetPos() - 5 * dir;
+
+	// Model Stack
+	modelStack.PushMatrix();
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(angle, 0, 1, 0); //side to side
+	if (angle > 135 || angle < -45)
+	{
+		modelStack.Rotate(180, 1, 0, 0);
+		modelStack.Rotate(angle2, 1, 0, 0); //up to down
+	}
+	else
+		modelStack.Rotate(-angle2, 1, 0, 0); //up to down
+
+	modelStack.Rotate(10, 0, 1, 0); //up to down
+	modelStack.Translate(-0.5f, 0, 0);
+	modelStack.Scale(1, pauseHeight, 1);
+	RenderMesh(meshList[GEO_HIGHSCOREBOARD], false);
+
+	modelStack.PushMatrix();
+
+	float x, y;
+	MouseController::GetInstance()->GetMousePosition(x, y);
+	cout << y << endl;
+	modelStack.Translate(-1.6f, 1.6f, 0.1f);
+	if (y < 240)
+	{
+		pauseMenuSelection = CHOICE_BACK;
+		modelStack.Translate(moveIndicator, 0, 0);
+	}
+
+	RenderIndicator();
+
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+}
+
 void SceneText::RenderPause()
 {
 	// Find direction opposite of Player target 
@@ -1041,25 +1153,34 @@ void SceneText::RenderPause()
 	else
 		modelStack.Rotate(-angle2, 1, 0, 0); //up to down
 
-		modelStack.Rotate(10, 0, 1, 0); //up to down
+	modelStack.Rotate(10, 0, 1, 0); //up to down
 	modelStack.Translate(-0.5f, 0, 0);
 	modelStack.Scale(1, pauseHeight, 1);
-		RenderMesh(meshList[GEO_PAUSE], false);
+	RenderMesh(meshList[GEO_PAUSE], false);
 
-		modelStack.PushMatrix();
-		float x, y;
-		MouseController::GetInstance()->GetMousePosition(x, y);
-		cout << y << endl;
-		modelStack.Translate(-1.5f, 0.5f, 0.1f);
-		if (y > 240)
+	modelStack.PushMatrix();
+	float x, y;
+	MouseController::GetInstance()->GetMousePosition(x, y);
+	cout << y << endl;
+	modelStack.Translate(-1.5f, 0.5f, 0.1f);
+	if (y < 240)
+	{
+		pauseMenuSelection = CHOICE_RESUME;
+	}
+	else if (y > 240)
+	{
+		modelStack.Translate(0.f, -0.5f, 0.f);
+		pauseMenuSelection = CHOICE_HIGHSCORE;
+
+		if (y > 320)
 		{
-				modelStack.Translate(0.f, -0.5f, 0.f);
-			if (y > 320)
-				modelStack.Translate(0.f, -0.4f, 0.f);
+			modelStack.Translate(0.f, -0.4f, 0.f);
+			pauseMenuSelection = CHOICE_EXIT;
+
 		}
-		modelStack.Scale(0.2f, 0.2f, 0.2f);
-		RenderMesh(meshList[GEO_INDICATOR], false);
-		modelStack.PopMatrix();
+	}
+	RenderIndicator();
+	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
 }
