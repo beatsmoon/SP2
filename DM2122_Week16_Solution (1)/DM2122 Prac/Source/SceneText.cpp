@@ -890,7 +890,7 @@ void SceneText::RenderSkybox()
 		modelStack.Translate(0.f, -0.5f, 0.f);
 		modelStack.Rotate(-90.f, 1.f, 0.f, 0.f);
 		modelStack.PushMatrix();
-		modelStack.Rotate(0.f, 0.f, 0.f, 1.f);
+		modelStack.Rotate(90.f, 0.f, 0.f, 1.f);
 		RenderMesh(meshList[GEO_BOTTOM], false);
 		modelStack.PopMatrix();
 		modelStack.PopMatrix();
