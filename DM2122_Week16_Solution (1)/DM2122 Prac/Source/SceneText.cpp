@@ -2,6 +2,7 @@
 #include "GL\glew.h"
 #include "Application.h"
 #include <Mtx44.h>
+#include <cmath>
 #include "shader.hpp"
 #include "MeshBuilder.h"
 #include "Utility.h"
@@ -498,6 +499,28 @@ void SceneText::Update(double dt)
 		}
 	}
 
+	if (renderingState == STATE_TEST_DRIVE && isOnGround == true)
+	{
+		//cout << pow((pow((CarWM->GetPos().x - 110), 2) + pow((CarWM->GetPos().z - 38), 2)), 0.5) << endl;
+
+		if (pow((pow((CarWM->GetPos().x - 110), 2)+ pow((CarWM->GetPos().z - 38), 2)),0.5) <= 109)
+		{
+			isOnGround = false;
+		}
+
+		if (pow((pow((CarWM->GetPos().x - 110), 2) + pow((CarWM->GetPos().z - 38), 2)), 0.5) >= 159)
+		{
+			isOnGround = false;
+		}
+		
+	}
+	else
+	{
+		CarWM->SetPos(Vector3(0, 0, 0));
+		
+		isOnGround == true;
+	}
+
 	//if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
 	//{
 	//	RenderPauseMenu();
@@ -749,9 +772,12 @@ void SceneText::Render()
 		modelStack.Scale(37, 37, 37);
 		RenderCCar();
 		modelStack.PopMatrix();
+
+		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
 	}
 		break;
 	case STATE_TEST_DRIVE:
+
 		modelStack.PushMatrix();
 		//modelStack.Scale(10, 10, 10);
 		RenderSkybox();
@@ -759,13 +785,14 @@ void SceneText::Render()
 
 		modelStack.PushMatrix();
 		modelStack.Translate(110, -7, 38);
-		modelStack.Scale(16, 16, 16);
+		modelStack.Scale(18, 18, 18);
 		RenderMesh(meshList[GEO_RACETRACK], false);
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 0, 0);
 		modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
+		//modelStack.Scale(Scaling, Scaling, Scaling);
 		float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
 		angle = Math::RadianToDegree(angle);
 		modelStack.Rotate(angle, 0, 1, 0);
@@ -773,6 +800,30 @@ void SceneText::Render()
 		//modelStack.Scale(3, 3, 3);
 		RenderWMCar();
 		modelStack.PopMatrix();
+
+		//if (isOnGround == true)
+		//{
+		//	
+		//}
+		//else
+		//{
+		//	//cout << isOnGround << endl;
+		//	modelStack.PushMatrix();
+		//	modelStack.Translate(0, 0, 0);
+		//	modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
+		//	//modelStack.Scale(Scaling, Scaling, Scaling);
+		//	float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
+		//	angle = Math::RadianToDegree(angle);
+		//	modelStack.Rotate(angle, 0, 1, 0);
+		//	modelStack.Rotate(-90, 0, 1, 0);
+		//	//modelStack.Scale(3, 3, 3);
+		//	RenderWMCar();
+		//	modelStack.PopMatrix();
+		//}
+
+		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(CarWM->GetPos().x) + ", " + to_string(CarWM->GetPos().y) + ", " + to_string(CarWM->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
+
+
 		break;
 	}
 
@@ -784,19 +835,11 @@ void SceneText::Render()
 	else
 		pauseHeight = 0;
 
-	////modelStack.PushMatrix();
-	////modelStack.Translate(0, -3, 0);
-	////RenderMesh(meshList[GEO_DICE], true);
-	////modelStack.PopMatrix();
 
-	//modelStack.PushMatrix();
-	////scale, translate, rotate
-	//RenderText(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f));
-	//modelStack.PopMatrix();
-	string pos = "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]";
+	
 	//No transform needed
+	
 	RenderTextOnScreen(meshList[GEO_TEXT], "Re:Pink", Color(1, 0.7f, 0.8f), 3, 0, 0);
-	RenderTextOnScreen(meshList[GEO_TEXT], pos, Color(0, 1, 0), 2, 0, 2);
 
 }
 
