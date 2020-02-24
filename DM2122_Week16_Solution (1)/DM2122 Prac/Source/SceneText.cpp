@@ -517,7 +517,7 @@ void SceneText::Update(double dt)
 	}
 	else
 	{
-		CarWM->SetPos(Vector3(0, 0, 0));
+		CarWM->Reset();
 		
 		isOnGround == true;
 	}

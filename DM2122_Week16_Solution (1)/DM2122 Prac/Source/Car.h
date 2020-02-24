@@ -45,6 +45,7 @@ public:
 	void Turn(bool direction, double dt);
 
 	void update(double dt);
+	void Reset();
 
 };
 

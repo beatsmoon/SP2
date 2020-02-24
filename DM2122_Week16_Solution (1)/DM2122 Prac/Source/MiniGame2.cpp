@@ -164,7 +164,7 @@ void MiniGame2::Init()
 	Position temp;
 	temp.Set(0,0,0);
 	//string name, float top_speed, float handling, float acceleration, float nitro, Position pos
-	theCar = new Car("MiniGame2Car",100.f,10.f,10.f,0.f,temp);
+	theCar = new Car("MiniGame2Car",100.f,10.f,10.f,0.f);
 }
 
 void MiniGame2::Update(double dt)
