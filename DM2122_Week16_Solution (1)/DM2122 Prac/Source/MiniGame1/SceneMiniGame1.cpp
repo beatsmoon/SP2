@@ -113,6 +113,8 @@ void SceneMiniGame1::Init()
 	bouncetime = GetTickCount64();
 	scoremenu = false;
 
+
+
 }
 
 void SceneMiniGame1::Update(double dt)
@@ -223,12 +225,12 @@ void SceneMiniGame1::Update(double dt)
 				Powerup = nullptr;
 			}
 			//Check x location
-			else if ((Player->returnlocationx() + 25 >= Powerup->returnlocationx() - 10 && Player->returnlocationx() + 25 <= Powerup->returnlocationx() + 10) || /*Front half*/
-				(Player->returnlocationx() - 25 >= Powerup->returnlocationx() - 10 && Player->returnlocationx() - 25 <= Powerup->returnlocationx() + 10) /*Back half*/)
+			else if ((Player->returnlocationx() + 25 >= Powerup->returnlocationx() - 25 && Player->returnlocationx() + 25 <= Powerup->returnlocationx() + 25) || /*Front half*/
+				(Player->returnlocationx() - 25 >= Powerup->returnlocationx() - 25 && Player->returnlocationx() - 25 <= Powerup->returnlocationx() + 25) /*Back half*/)
 			{
 				//Check y - location
-				if (((Player->returnlocationy() + 25 >= Powerup->returnlocationy() - 10 && Player->returnlocationy() + 25 <= Powerup->returnlocationy() + 10 ||
-					Player->returnlocationy() - 25 >= Powerup->returnlocationy() - 10 && Player->returnlocationy() - 25 <= Powerup->returnlocationy() + 10)))
+				if (((Player->returnlocationy() + 25 >= Powerup->returnlocationy() - 25 && Player->returnlocationy() + 25 <= Powerup->returnlocationy() + 25 ||
+					Player->returnlocationy() - 25 >= Powerup->returnlocationy() - 25 && Player->returnlocationy() - 25 <= Powerup->returnlocationy() + 25)))
 				{
 					//0 - Slowdown
 					//1 - Destroy Wall
@@ -415,6 +417,47 @@ void SceneMiniGame1::Update(double dt)
 		else if (Player->returnlocationy() > 575)
 		{
 			Player->sety(575);
+		}
+
+		//Player just lost
+		if (lost == true)
+		{
+			int x = 0;
+			std::string line;
+			std::ifstream scorefile("MiniGame1Highscore.txt");
+			if (scorefile.is_open())
+			{
+				while (getline(scorefile, line))
+				{
+					Highscores[x] = stoi(line); //Convert string to int
+					x++;
+				}
+			scorefile.close();
+			}
+
+			for (int x = 0; x < 5; x++)
+			{
+				if (score >= Highscores[x])
+				{
+					int store = score;
+					for (; x < 5; x++)
+					{
+						int store2 = Highscores[x];
+						Highscores[x] = store;
+						store = store2;
+					}
+				}
+			}
+
+			ofstream scorefiles("MiniGame1Highscore.txt");
+			if (scorefiles.is_open())
+			{
+				for (int x = 0; x < 5; x++)
+				{
+					scorefiles << (Highscores[x]) << "\n";
+				}
+				scorefiles.close();
+			}
 		}
 	}
 	//After losing
@@ -911,9 +954,9 @@ void SceneMiniGame1::RenderAnimationOnScreen(Mesh* mesh, int count, float size, 
 	}
 
 	//0,6 1st
-	//0,10 2nd
+	//0,12 2nd
 	//0,20 3nd
-	//0,30 4th
+	//0,26 4th
 	mesh->Render(0,count);
 	//RenderMesh(mesh, false);
 
