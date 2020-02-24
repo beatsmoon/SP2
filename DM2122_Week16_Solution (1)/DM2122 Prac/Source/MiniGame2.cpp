@@ -737,68 +737,61 @@ void MiniGame2::CollisionUpdate(double dt)
 }
 void MiniGame2::ReadHighScore_minigame2()
 {
-
-	
-	
-		if (gameEnd == true)
+	if (gameEnd == true)
+	{
+		int x = 0;
+		int store = distance;
+		std::string line;
+		std::ifstream scorefile("Highscore//minigame2.txt");
+		if (scorefile.is_open())
 		{
-			int x = 0;
-			std::string line;
-			std::ifstream scorefile("Highscore//minigame2.txt");
-			if (scorefile.is_open())
+			while (getline(scorefile, line))
 			{
-				while (getline(scorefile, line))
-				{
-					Highscores[x] = stoi(line); //Convert string to int
-					x++;
-				}
-				scorefile.close();
+				Highscores[x] = stoi(line); //Convert string to int
+				x++;
 			}
+			scorefile.close();
+		}
+		
+		for (int x = 0; x < 5; x++)
+		{
+			if (distance >= Highscores[x])
+			{
+				for (; x < 5; x++)
+				{
+					int store2 = Highscores[x];
+					Highscores[x] = store;
+					store = store2;
+				}
+			}
+		}
 
+		ofstream scorefiles("Highscore//minigame2.txt");
+		if (scorefiles.is_open())
+		{
 			for (int x = 0; x < 5; x++)
 			{
-				if (distance >= Highscores[x])
-				{
-					int store = distance;
-					for (; x < 5; x++)
-					{
-						int store2 = Highscores[x];
-						Highscores[x] = store;
-						store = store2;
-					}
-				}
+				scorefiles << (Highscores[x]) << "\n";
 			}
-
-			ofstream scorefiles("Highscore//minigame2.txt");
-			if (scorefiles.is_open())
-			{
-				for (int x = 0; x < 5; x++)
-				{
-					scorefiles << (Highscores[x]) << "\n";
-				}
-				scorefiles.close();
-			}
-
-
-			//Print Score
-			for (int i = 0; i < 5; i++)
-			{
-				std::string line;
-				std::ifstream scorefile("Highscore//minigame2.txt");
-				while (getline(scorefile, line))
-				{
-					RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[i]), Color(0.98f, 0.41f, 1.f), 5, 7, 3.2f + (1.4 * i));
-				}
-			}
-			
+			scorefiles.close();
 		}
-	
 
-	
+		//Print Score
+		for (int i = 0; i < 5; i++)
+		{
+			std::string line;
+			std::ifstream scorefile("Highscore//minigame2.txt");
+			while (getline(scorefile, line))
+			{
+				RenderTextOnScreen(meshList[GEO_TEXT], line, Color(0.98f, 0.41f, 1.f), 5, 7, 3.2f + (1.4 * i));
+			}
 
+		}
+
+	}
 	else
 	{
-		 printf("Unable to open file");
+		printf("Unable to open file");
 	}
 }
 
