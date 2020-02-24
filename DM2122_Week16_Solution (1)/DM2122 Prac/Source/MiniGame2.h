@@ -55,6 +55,8 @@ class MiniGame2 : public Scene
 		U_COLOR_TEXTURE,
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
+		U_IS_ROAD,
+		U_ROAD_OFFSET,
 		U_TOTAL,
 	};
 
@@ -85,7 +87,10 @@ private:
 	float RotateCar = 0;
 	string HighScore_MiniGame2[5] = { "" };
 
+	float offset_Y = 0;
+
 	void RenderMesh(Mesh* mesh, bool enableLight);
+	void RenderRoadMesh(Mesh* mesh);
 	void RenderTrack();
 	void RenderRock(float posX, float posZ);
 	void NitroBoostCoolDown(double dt);

@@ -80,6 +80,8 @@ void MiniGame2::Init()
 	m_parameters[U_LIGHT0_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[0].cosCutoff");
 	m_parameters[U_LIGHT0_COSINNER] = glGetUniformLocation(m_programID, "lights[0].cosInner");
 	m_parameters[U_LIGHT0_EXPONENT] = glGetUniformLocation(m_programID, "lights[0].exponent");
+	m_parameters[U_IS_ROAD] = glGetUniformLocation(m_programID, "isRoad");
+	m_parameters[U_ROAD_OFFSET] = glGetUniformLocation(m_programID, "roadOffset");
 
 	//Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
@@ -268,6 +270,17 @@ void MiniGame2::Update(double dt)
 		DistanceTravelled(dt);
 	}
 
+	if (NitroUsed)
+	{
+		offset_Y += 1.f * dt;
+	}
+	else
+	{
+		offset_Y += 0.5f * dt;
+	}
+	//Math::Wrap(offset_Y, 0.f, 1.f);
+	if (offset_Y >= 1)
+		offset_Y -= 1;
 
 
 	
@@ -396,6 +409,7 @@ void MiniGame2::RenderMesh(Mesh* mesh, bool enableLight)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
+		glUniform1i(m_parameters[U_IS_ROAD], 0);
 
 	if(mesh->textureID > 0){ 
 		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
@@ -410,13 +424,44 @@ void MiniGame2::RenderMesh(Mesh* mesh, bool enableLight)
 	if(mesh->textureID > 0) glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void MiniGame2::RenderRoadMesh(Mesh* mesh)
+{
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	glUniform1f(m_parameters[U_ROAD_OFFSET], offset_Y);
+	glUniform1i(m_parameters[U_IS_ROAD], 1);
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+
+	if (mesh->textureID > 0) {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	mesh->Render(); //this line should only be called once in the whole function
+
+	if (mesh->textureID > 0) glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void MiniGame2::RenderTrack()
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Scale(70, 70, 70);
-	RenderMesh(meshList[GEO_TRACK], false);
+	RenderRoadMesh(meshList[GEO_TRACK]);
 	modelStack.PopMatrix();
 
 }
@@ -726,17 +771,17 @@ void MiniGame2::ReadHighScore_minigame2()
 				}
 				
 			}
-			if (HighScore == true)
-			{
-				for (change < 5; change++;)
-				{
-					if (change < 4)
-					{
-						temp = HighScore_MiniGame2[change];
-						HighScore_MiniGame2[change + 1] = temp;
-					}
-				}
-			}
+			//if (HighScore == true)
+			//{
+			//	for (change < 5; change++;)
+			//	{
+			//		if (change < 4)
+			//		{
+			//			temp = HighScore_MiniGame2[change];
+			//			HighScore_MiniGame2[change + 1] = temp;
+			//		}
+			//	}
+			//}
 
 			//Print Score
 			for (int i = 0; i < 5; i++)

@@ -17,6 +17,8 @@ uniform mat4 MVP;
 uniform mat4 MV;
 uniform mat4 MV_inverse_transpose;
 uniform bool lightEnabled;
+uniform bool isRoad;
+uniform float roadOffset;
 
 void main(){
 	// Output position of the vertex, in clip space : MVP * position
@@ -35,5 +37,9 @@ void main(){
 	fragmentColor = vertexColor;
 	// A simple pass through. The texCoord of each fragment will be interpolated from texCoord of each vertex
 	texCoord = vertexTexCoord;
+	if (isRoad == true)
+	{
+		texCoord.y -= roadOffset;
+	}
 }
 
