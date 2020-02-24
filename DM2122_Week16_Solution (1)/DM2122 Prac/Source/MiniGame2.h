@@ -108,6 +108,7 @@ private:
 	bool HighScore = false;
 	void ReadHighScore_minigame2();
 	float getDistance();
+	bool changeScore = false;
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
