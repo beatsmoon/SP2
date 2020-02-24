@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\Controllers\Mouse.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Controllers\Controller.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Controllers\Keyboard.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -19,11 +10,11 @@
     <ClCompile Include="Source\Camera2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LoadOBJ.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\Controllers\Controller.cpp">
+      <Filter>Hardware Abstraction</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LoadTGA.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\Controllers\Keyboard.cpp">
+      <Filter>Hardware Abstraction</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
@@ -34,40 +25,41 @@
     <ClCompile Include="Source\MeshBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MiniGame2.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MiniGame1\SceneMiniGame1.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
     <ClCompile Include="Source\SceneText.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MiniGame1\MiniGame1Obj.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Controllers\Mouse.cpp">
+      <Filter>Hardware Abstraction</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utility.cpp">
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadOBJ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp">
-      <Filter>Player</Filter>
+      <Filter>InfoPlayer</Filter>
     </ClCompile>
     <ClCompile Include="Source\Car.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MiniGame1\SceneMiniGame1.cpp">
-      <Filter>MiniGame1</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MiniGame1\MiniGame1Obj.cpp">
-      <Filter>MiniGame1</Filter>
-    <ClCompile Include="Source\MiniGame2.cpp">
-      <Filter>MiniGame2</Filter>
+      <Filter>InfoPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Controllers\Mouse.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Controllers\Controller.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Controllers\Keyboard.h">
-      <Filter>Controller</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -80,7 +72,13 @@
     <ClInclude Include="Source\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LoadOBJ.h">
+    <ClInclude Include="Source\Controllers\Controller.h">
+      <Filter>Hardware Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Controllers\Keyboard.h">
+      <Filter>Hardware Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\LoadTGA.h">
@@ -89,59 +87,61 @@
     <ClInclude Include="Source\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Mesh.h">
+    <ClInclude Include="Source\LoadOBJ.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\MeshBuilder.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\MiniGame2.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\MiniGame1\SceneMiniGame1.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneText.h">
-      <Filter>Header Files</Filter>
+      <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\shader.hpp">
+    <ClInclude Include="Source\MiniGame1\MiniGame1Obj.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Controllers\Mouse.h">
+      <Filter>Hardware Abstraction</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Vertex.h">
+    <ClInclude Include="Source\shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h">
-      <Filter>Player</Filter>
+      <Filter>InfoPlayer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Car.h">
+      <Filter>InfoPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MiniGame1\SceneMiniGame1.h">
-      <Filter>MiniGame1</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MiniGame1\MiniGame1Obj.h">
-      <Filter>MiniGame1</Filter>
-    <ClInclude Include="Source\MiniGame2.h">
-      <Filter>MiniGame2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Controller">
-      <UniqueIdentifier>{9176e0e3-1a41-466b-9351-15f19107ddd8}</UniqueIdentifier>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{96716251-1a3c-4ff7-a914-57ff44fb1d1d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{7a4f8148-8273-4b94-b222-7612e9203f69}</UniqueIdentifier>
+      <UniqueIdentifier>{4fd6a949-2038-4ec5-8e0e-11f9ac8b88e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{943d150e-fe7e-45a8-b4fc-de6e974ea7be}</UniqueIdentifier>
+    <Filter Include="Hardware Abstraction">
+      <UniqueIdentifier>{e42bb1a1-77af-4e38-b93a-fd77c5df5509}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Player">
-      <UniqueIdentifier>{018d7e61-580e-4cd7-91ed-38cdac84c76b}</UniqueIdentifier>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{3cccf94a-f6d3-4987-b848-f3728b1ead5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MiniGame1">
-      <UniqueIdentifier>{30f15168-3a50-4414-a6dd-790df983b108}</UniqueIdentifier>
-    <Filter Include="MiniGame2">
-      <UniqueIdentifier>{7323ff81-16b5-491d-bbd8-b35833096763}</UniqueIdentifier>
+    <Filter Include="InfoPlayer">
+      <UniqueIdentifier>{f88cd441-5a21-4617-b986-4b8fd7b664b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
