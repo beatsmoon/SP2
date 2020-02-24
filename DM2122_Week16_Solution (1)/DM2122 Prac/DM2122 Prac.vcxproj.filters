@@ -54,6 +54,8 @@
     </ClCompile>
     <ClCompile Include="Source\MiniGame1\MiniGame1Obj.cpp">
       <Filter>MiniGame1</Filter>
+    <ClCompile Include="Source\MiniGame2.cpp">
+      <Filter>MiniGame2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +121,8 @@
     </ClInclude>
     <ClInclude Include="Source\MiniGame1\MiniGame1Obj.h">
       <Filter>MiniGame1</Filter>
+    <ClInclude Include="Source\MiniGame2.h">
+      <Filter>MiniGame2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +140,8 @@
     </Filter>
     <Filter Include="MiniGame1">
       <UniqueIdentifier>{30f15168-3a50-4414-a6dd-790df983b108}</UniqueIdentifier>
+    <Filter Include="MiniGame2">
+      <UniqueIdentifier>{7323ff81-16b5-491d-bbd8-b35833096763}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

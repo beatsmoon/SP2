@@ -9,6 +9,7 @@
 #include "LoadTGA.h"
 #include "../../Common/Source/KeyboardController.h"
 #include "../../Common/Source/MouseController.h"
+#include "MiniGame2.h"
 
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
@@ -520,45 +521,6 @@ void SceneText::Update(double dt)
 		
 		isOnGround == true;
 	}
-
-	//if (Application::/*IsKeyPressed(VK_ESCAPE)*/IsKeyPressed('E'))
-	//{
-	//	RenderPauseMenu();
-	//}
-	//
-	//if ((((thePlayer->GetPos().x - light[0].position.x) >= -80) && ((thePlayer->GetPos().x - light[0].position.x) <= 80)) && (((thePlayer->GetPos().z - light[0].position.z) >= -50) && ((thePlayer->GetPos().z - light[0].position.z) <= 50)))
-	//{
-	//	light[0].power = 10;
-	//}
-	//else
-	//{
-	//	light[0].power = 0;
-	//}
-//
-	//if ((((thePlayer->GetPos().x - light[1].position.x) >= -80) && ((thePlayer->GetPos().x - light[1].position.x) <= 80)) && (((thePlayer->GetPos().z - light[1].position.z) >= -50) && ((thePlayer->GetPos().z - light[1].position.z) <= 50)))
-	//{
-	//	light[1].power = 10;
-	//}
-	//else
-	//{
-	//	light[1].power = 0;
-	//}
-	//if (Application::IsKeyPressed('Q'))
-	//{
-	//	//to do: switch light type to POINT and pass the information to
-	//	light[0].type = Light::LIGHT_POINT;
-	//}
-	//else if (Application::IsKeyPressed('W'))
-	//{
-	//	//to do: switch light type to DIRECTIONAL and pass the
-	//	light[0].type = Light::LIGHT_DIRECTIONAL;
-	//}
-	//else if (Application::IsKeyPressed('E'))
-	//{
-	//	//to do: switch light type to SPOT and pass the information to
-	//	light[0].type = Light::LIGHT_SPOT;
-	//}
-
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
