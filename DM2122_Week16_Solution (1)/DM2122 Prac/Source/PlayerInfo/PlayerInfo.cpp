@@ -442,3 +442,9 @@ void CPlayerInfo::SelectCar(Car* _carPTR)
 {
 	selectedCar = _carPTR;
 }
+
+Car CPlayerInfo::GetSelectedCar()
+{
+	return *selectedCar;
+}
+

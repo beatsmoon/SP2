@@ -99,6 +99,9 @@ public:
 
 	// Handling Camera
 	void SelectCar(Car* _carPTR);
+	Car GetSelectedCar();
+	
+	
 
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;

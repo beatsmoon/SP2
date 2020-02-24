@@ -176,6 +176,7 @@ private:
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
 	bool isOnGround = true;
+	//int Scaling = 1;
 
 	int renderingState = STATE_SELECTION_SCREEN;
 

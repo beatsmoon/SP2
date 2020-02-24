@@ -479,11 +479,9 @@ void SceneText::Update(double dt)
 	}
 	else
 	{
-		CarWM->SetPos(Vector3(0, 5, 0));
-		for (int i = 0; i < 30; i++)
-		{
-
-		}
+		CarWM->SetPos(Vector3(0, 0, 0));
+		
+		isOnGround == true;
 	}
 	
 
@@ -755,34 +753,37 @@ void SceneText::Render()
 		RenderMesh(meshList[GEO_RACETRACK], false);
 		modelStack.PopMatrix();
 
-		if (isOnGround == true)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(0, 0, 0);
-			modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
-			float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
-			angle = Math::RadianToDegree(angle);
-			modelStack.Rotate(angle, 0, 1, 0);
-			modelStack.Rotate(-90, 0, 1, 0);
-			//modelStack.Scale(3, 3, 3);
-			RenderWMCar();
-			modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, 0);
+		modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
+		//modelStack.Scale(Scaling, Scaling, Scaling);
+		float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
+		angle = Math::RadianToDegree(angle);
+		modelStack.Rotate(angle, 0, 1, 0);
+		modelStack.Rotate(-90, 0, 1, 0);
+		//modelStack.Scale(3, 3, 3);
+		RenderWMCar();
+		modelStack.PopMatrix();
 
-		}
-		else
-		{
-			//cout << isOnGround << endl;
-			modelStack.PushMatrix();
-			modelStack.Translate(0, 0, 0);
-			modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
-			float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
-			angle = Math::RadianToDegree(angle);
-			modelStack.Rotate(angle, 0, 1, 0);
-			modelStack.Rotate(-90, 0, 1, 0);
-			//modelStack.Scale(3, 3, 3);
-			RenderWMCar();
-			modelStack.PopMatrix();
-		}
+		//if (isOnGround == true)
+		//{
+		//	
+		//}
+		//else
+		//{
+		//	//cout << isOnGround << endl;
+		//	modelStack.PushMatrix();
+		//	modelStack.Translate(0, 0, 0);
+		//	modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
+		//	//modelStack.Scale(Scaling, Scaling, Scaling);
+		//	float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
+		//	angle = Math::RadianToDegree(angle);
+		//	modelStack.Rotate(angle, 0, 1, 0);
+		//	modelStack.Rotate(-90, 0, 1, 0);
+		//	//modelStack.Scale(3, 3, 3);
+		//	RenderWMCar();
+		//	modelStack.PopMatrix();
+		//}
 
 		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(CarWM->GetPos().x) + ", " + to_string(CarWM->GetPos().y) + ", " + to_string(CarWM->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
 
