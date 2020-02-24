@@ -738,62 +738,63 @@ void MiniGame2::CollisionUpdate(double dt)
 void MiniGame2::ReadHighScore_minigame2()
 {
 
-	ifstream myfile("Highscore//minigame2.txt");
-	if (myfile.is_open())
-	{
+	
+	
 		if (gameEnd == true)
 		{
-			int change;
-			string temp;
-			//Checking if its a new high score
-			for (int i = 0; i < 5; i++)
+			int x = 0;
+			std::string line;
+			std::ifstream scorefile("Highscore//minigame2.txt");
+			if (scorefile.is_open())
 			{
-				
-				getline(myfile, HighScore_MiniGame2[i]);
-				if (HighScore == false)
+				while (getline(scorefile, line))
 				{
-					float number;
-					
-					std::stringstream ss;
-					ss << HighScore_MiniGame2[i];
-					ss >> number;
-					if (distance > number)
+					Highscores[x] = stoi(line); //Convert string to int
+					x++;
+				}
+				scorefile.close();
+			}
+
+			for (int x = 0; x < 5; x++)
+			{
+				if (distance >= Highscores[x])
+				{
+					int store = distance;
+					for (; x < 5; x++)
 					{
-						if (i < 4)
-						{
-							temp = HighScore_MiniGame2[i];
-							HighScore_MiniGame2[i + 1] = temp;
-						}
-						HighScore_MiniGame2[i] = to_string(distance);
-						change = i + 1;
-						HighScore = true;
+						int store2 = Highscores[x];
+						Highscores[x] = store;
+						store = store2;
 					}
 				}
-				
 			}
-			//if (HighScore == true)
-			//{
-			//	for (change < 5; change++;)
-			//	{
-			//		if (change < 4)
-			//		{
-			//			temp = HighScore_MiniGame2[change];
-			//			HighScore_MiniGame2[change + 1] = temp;
-			//		}
-			//	}
-			//}
+
+			ofstream scorefiles("Highscore//minigame2.txt");
+			if (scorefiles.is_open())
+			{
+				for (int x = 0; x < 5; x++)
+				{
+					scorefiles << (Highscores[x]) << "\n";
+				}
+				scorefiles.close();
+			}
+
 
 			//Print Score
 			for (int i = 0; i < 5; i++)
 			{
-				getline(myfile, HighScore_MiniGame2[i]);
-				RenderTextOnScreen(meshList[GEO_TEXT], HighScore_MiniGame2[i], Color(0.98f, 0.41f, 1.f), 5, 7, 3.2f + (1.4 * i));
+				std::string line;
+				std::ifstream scorefile("Highscore//minigame2.txt");
+				while (getline(scorefile, line))
+				{
+					RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[i]), Color(0.98f, 0.41f, 1.f), 5, 7, 3.2f + (1.4 * i));
+				}
 			}
 			
 		}
 	
-		myfile.close();
-	}
+
+	
 
 	else
 	{

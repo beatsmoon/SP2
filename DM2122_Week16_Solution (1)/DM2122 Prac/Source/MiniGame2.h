@@ -85,7 +85,7 @@ private:
 	float StartZ = 30; //Starting Position of Z
 	float Rotate = 0;
 	float RotateCar = 0;
-	string HighScore_MiniGame2[5] = { "" };
+	float Highscores[5];
 
 	float offset_Y = 0;
 
