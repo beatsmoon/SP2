@@ -19,6 +19,8 @@ class SceneMiniGame1 : public Scene
 		GEO_TEXT,
 		GEO_WALL,
 		GEO_WALLTEST,
+		GEO_POWERUP,
+		GEO_SCORE,
 		NUM_GEOMETRY,
 	};
 
@@ -67,6 +69,7 @@ private:
 
 	MiniGame1Obj* Powerup;
 
+	int cursor;
 
 	float gamespeed;
 
@@ -77,6 +80,11 @@ private:
 	double nextupdate;
 
 	double nextpowerspawn;
+
+	double bouncetime;
+
+	bool scoremenu;
+
 
 	bool walldestroy;
 
@@ -91,6 +99,7 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y);
+	void RenderAnimationOnScreen(Mesh* mesh, Color color, unsigned offset, int count, float size, float x, float y);
 	void CalculateFrameRate();
 
 public:

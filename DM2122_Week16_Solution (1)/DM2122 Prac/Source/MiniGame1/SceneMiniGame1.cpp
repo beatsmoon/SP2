@@ -76,8 +76,15 @@ void SceneMiniGame1::Init()
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image/Background_FlappyCar1_Clement.tga");
 
-	meshList[GEO_CAR] = MeshBuilder::GenerateQuad("FlappyCar", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_CAR]->textureID = LoadTGA("Image//Car_FlappyCar1_Clement.tga");
+	//meshList[GEO_CAR] = MeshBuilder::GenerateQuad("FlappyCar", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_CAR] = MeshBuilder::GenerateText("FlappyCar", 2, 2);
+	meshList[GEO_CAR]->textureID = LoadTGA("Image//Car_FlappyCar1_Clement.tga");	
+	
+	meshList[GEO_POWERUP] = MeshBuilder::GenerateQuad("Powerup", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_POWERUP]->textureID = LoadTGA("Image//PowerUp_FlappyCar1_Clement.tga");	
+	
+	meshList[GEO_SCORE] = MeshBuilder::GenerateQuad("Score", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_SCORE]->textureID = LoadTGA("Image//Highscore_FlappyCar1_Clement.tga");
 	
 	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 
@@ -94,26 +101,33 @@ void SceneMiniGame1::Init()
 	score = 0;
 	nextanimation = 250;
 	gapsize = 80;
+
+	walldestroy = false;
+
+	cursor = 0;
+
+	bouncetime = GetTickCount64();
+	scoremenu = false;
 }
 
 void SceneMiniGame1::Update(double dt)
 {
-	//if (Application::IsKeyPressed(0x31))
-	//{
-	//	glDisable(GL_CULL_FACE);
-	//}
-	//else if (Application::IsKeyPressed(0x32))
-	//{
-	//	glEnable(GL_CULL_FACE);
-	//}
-	//else if (Application::IsKeyPressed(0x33))
-	//{
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//}
-	//else if (Application::IsKeyPressed(0x34))
-	//{
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//}
+	if (Application::IsKeyPressed(0x31))
+	{
+		glDisable(GL_CULL_FACE);
+	}
+	else if (Application::IsKeyPressed(0x32))
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	else if (Application::IsKeyPressed(0x33))
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	else if (Application::IsKeyPressed(0x34))
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
 	
 	CalculateFrameRate();
 	
@@ -132,14 +146,14 @@ void SceneMiniGame1::Update(double dt)
 
 			WallMid = WallStart;
 			if (WallStart != nullptr)
-			{ 
+			{
 				while (WallMid->getnextadress() != nullptr)
 				{
 					WallMid = WallMid->getnextadress();
 				}
 			}
 			float size = (rand() % 580) + 10; //Random num from 0 - 595
-			MiniGame1Obj* newwall = new MiniGame1Obj(810, size, gamespeed-1, 0);
+			MiniGame1Obj* newwall = new MiniGame1Obj(810, size, gamespeed - 1, 0);
 			if (WallStart == nullptr)
 			{
 				WallStart = newwall;
@@ -150,88 +164,111 @@ void SceneMiniGame1::Update(double dt)
 
 			}
 		}
-		//if (nextpowerspawn <= GetTickCount64())
-		//{
-		//	nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
-		//	Powerup = new MiniGame1Obj(810, 300, gamespeed-1, 0);
-		//	int type = rand() % 4; //nunmber from 0 - 3
-		//	//0 - Slowdown
-		//	//1 - Destroy Wall
-		//	//2 - Gain Score
-		//	//3 - Random
-		//	Powerup->settype(type);
-		//}
-		//if (Powerup != nullptr)
-		//{
-		//	Powerup->movexybyvelocity();
-		//	if (Powerup->returnlocationx() < -30)
-		//	{
-		//		delete Powerup;
-		//		Powerup = nullptr;
-		//	}
-		//	//Check x location
-		//	else if ((Player->returnlocationx() + 25 >= Powerup->returnlocationx() - 20 && Player->returnlocationx() + 25 <= Powerup->returnlocationx() + 20) || /*Front half*/
-		//		(Player->returnlocationx() - 25 >= Powerup->returnlocationx() - 20 && Player->returnlocationx() - 25 <= Powerup->returnlocationx() + 20) /*Back half*/)
-		//	{
-		//		if (((Player->returnlocationy() + 25 <= Powerup->returnlocationy() - 20 || Player->returnlocationy() + 25 >= Powerup->returnlocationy() + 20 ||
-		//			Player->returnlocationy() - 25 <= Powerup->returnlocationy() - 20 || Player->returnlocationy() - 25 >= Powerup->returnlocationy() + 20)))
-		//		{
-		//			//0 - Slowdown
-		//			//1 - Destroy Wall
-		//			//2 - Gain Score
-		//			//3 - Random
-		//			switch (Powerup->returntype())
-		//			{
-		//			case 0:
-		//				gamespeed += 1;
-		//				gapsize -= 4;
-		//				break;
-		//
-		//			case 1:
-		//				walldestroy = true;
-		//				break;
-		//
-		//			case 2:
-		//				score += 100;
-		//				break;
-		//
-		//			case 3:
-		//				int type = rand() % 3; //Random number from 0 - 2
-		//				switch (type)
-		//				{
-		//				case 0:
-		//					gamespeed += 1;
-		//					gapsize -= 4;
-		//					break;
-		//
-		//				case 1:
-		//					walldestroy = true;
-		//					break;
-		//
-		//				case 2:
-		//					score += 100;
-		//					break;
-		//				}
-		//				break;
-		//			}
-		//			delete Powerup;
-		//			Powerup = nullptr;
-		//		}
-		//	}
-		//
-		//}
+		if (nextpowerspawn <= GetTickCount64())
+		{
+			nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
+			Powerup = new MiniGame1Obj(810, 300, gamespeed - 1, 0);
+			int type = rand() % 4; //nunmber from 0 - 3
+			//0 - Slowdown
+			//1 - Destroy Wall
+			//2 - Gain Score
+			//3 - Random
+			Powerup->settype(type);
+		}
+		if (Powerup != nullptr)
+		{
+			Powerup->movexybyvelocity();
+			if (Powerup->returnlocationx() < -30)
+			{
+				delete Powerup;
+				Powerup = nullptr;
+			}
+			//Check x location
+			else if ((Player->returnlocationx() + 25 >= Powerup->returnlocationx() - 10 && Player->returnlocationx() + 25 <= Powerup->returnlocationx() + 10) || /*Front half*/
+				(Player->returnlocationx() - 25 >= Powerup->returnlocationx() - 10 && Player->returnlocationx() - 25 <= Powerup->returnlocationx() + 10) /*Back half*/)
+			{
+				//Check y - location
+				if (((Player->returnlocationy() + 25 >= Powerup->returnlocationy() - 10 && Player->returnlocationy() + 25 <= Powerup->returnlocationy() + 10 ||
+					Player->returnlocationy() - 25 >= Powerup->returnlocationy() - 10 && Player->returnlocationy() - 25 <= Powerup->returnlocationy() + 10)))
+				{
+					//0 - Slowdown
+					//1 - Destroy Wall
+					//2 - Gain Score
+					//3 - Random
+					switch (Powerup->returntype())
+					{
+					case 0:
+						gamespeed += 1;
+						gapsize -= 4;
+						break;
+
+					case 1:
+						walldestroy = true;
+						break;
+
+					case 2:
+						score += 100;
+						break;
+
+					case 3:
+						int type = rand() % 3; //Random number from 0 - 2
+						switch (type)
+						{
+						case 0:
+							gamespeed += 1;
+							gapsize -= 4;
+							break;
+
+						case 1:
+							walldestroy = true;
+							break;
+
+						case 2:
+							score += 100;
+							break;
+						}
+						break;
+					}
+					delete Powerup;
+					Powerup = nullptr;
+				}
+			}
+
+		}
 
 		//Destroy Wall button
-		//if (KeyboardController::GetInstance()->IsKeyDown(VK_RETURN) && walldestroy == true)
-		//{
-		//	WallMid = WallStart;
-		//	MiniGame1Obj* Prev;
-		//	Prev = WallStart;
-		//	if (WallMid->returnlocationx() > Player->returnlocationx())
-		//	{
-		//		
-		//	}
-		//}
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && walldestroy == true)
+		{
+			WallMid = WallStart;
+			MiniGame1Obj* Prev;
+			Prev = WallStart;
+			while (WallMid != nullptr)
+			{
+				if (WallMid->returnlocationx() > Player->returnlocationx())
+				{
+					if (WallMid == WallStart) //First Wall
+					{
+						WallStart = WallMid->getnextadress();
+						delete WallMid;
+						WallMid = nullptr;
+					}
+					else
+					{
+						Prev->setnextaddress(WallMid->getnextadress());
+						delete WallMid;
+						WallMid = nullptr;
+					}
+					walldestroy = false;
+					break;
+				}
+				else
+				{
+					Prev = WallMid;
+					WallMid = WallMid->getnextadress();
+				}
+				
+			}
+		}
 
 		//Update Wall Position
 		WallMid = WallStart;
@@ -341,6 +378,7 @@ void SceneMiniGame1::Update(double dt)
 			Player->sety(575);
 		}
 	}
+	//After losing
 	else if (lost == true)
 	{
 		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN))
@@ -376,18 +414,70 @@ void SceneMiniGame1::Update(double dt)
 
 		}
 	}
-	else
+	else //Havnt started
 	{
-		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN))
+		if (scoremenu == false)
 		{
-			playing = true;
-			BackgroundStart->setvelx(gamespeed);
-			gameupdate = GetTickCount64() + nextupdate;
-			srand(time(nullptr)); //Get Time seed
-			float size = (rand() % 580) + 10;
-			WallStart = new MiniGame1Obj(800,size, gamespeed-1,0);
-			Player->setvely(0);
-			nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP) && bouncetime <= GetTickCount64())
+			{
+				cursor++;
+				if (cursor >= 4)
+				{
+					cursor = 0;
+				}
+				bouncetime = GetTickCount64() + 250;
+			}
+			if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN) && bouncetime <= GetTickCount64())
+			{
+				cursor--;
+				if (cursor <= -1)
+				{
+					cursor = 3;
+				}
+				bouncetime = GetTickCount64() + 250;
+			}
+			//Start Game
+			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
+			{
+				bouncetime = GetTickCount64() + 250;
+				switch (cursor)
+				{
+					//Start Game
+				case 0:
+				{
+					playing = true;
+					BackgroundStart->setvelx(gamespeed);
+					gameupdate = GetTickCount64() + nextupdate;
+					srand(time(nullptr)); //Get Time seed
+					float size = (rand() % 580) + 10;
+					WallStart = new MiniGame1Obj(800, size, gamespeed - 1, 0);
+					Player->setvely(0);
+					nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
+					break;
+				}
+				//Highscores
+				case 1:
+				{
+					scoremenu = true;
+					break;
+				}
+
+				//Exit to mainm
+				case 2:
+				{
+
+					break;
+				}
+				}
+			}
+		}
+		else //scoremenu
+		{
+			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
+			{
+				bouncetime = GetTickCount64() + 250;
+				scoremenu = false;
+			}
 		}
 	}
 }
@@ -411,8 +501,14 @@ void SceneMiniGame1::Render()
 		BackgroundMid = BackgroundMid->getnextadress();
 	}
 	//Render Car
-	RenderImageOnScreen(meshList[GEO_CAR], 50, 50, Player->returnlocationx(), Player->returnlocationy());
+	RenderAnimationOnScreen(meshList[GEO_CAR], Color(1, 1, 1),	1, 1, 50, Player->returnlocationx(), Player->returnlocationy());
+	//RenderTextOnScreen(meshList[GEO_CAR], "j", Color(1, 1, 1), 50, Player->returnlocationx() - 25, Player->returnlocationy() - 25);
+	//RenderImageOnScreen(meshList[GEO_CAR], 50, 50, Player->returnlocationx()-25, Player->returnlocationy()-25);
 
+	if (Powerup != nullptr)
+	{
+		RenderImageOnScreen(meshList[GEO_POWERUP], 20, 20, Powerup->returnlocationx(), Powerup->returnlocationy());
+	}
 	//Render Wallks
 	WallMid = WallStart;
 	while (WallMid != nullptr)
@@ -434,8 +530,8 @@ void SceneMiniGame1::Render()
 			//Render Top Half
 			float topheight = ((600 - WallMid->returnlocationy()) / 2) + WallMid->returnlocationy() + gapsize;
 			RenderImageOnScreen(meshList[GEO_WALL], 50, ((600 - WallMid->returnlocationy())), WallMid->returnlocationx(), topheight);
-		}	
-		
+		}
+
 		if (Topactive == true && Bottomactive == true)
 		{
 			float topheight = ((600 - WallMid->returnlocationy()) / 2) + WallMid->returnlocationy() + (gapsize / 2)/*Gap Size*/;
@@ -444,13 +540,12 @@ void SceneMiniGame1::Render()
 			float botheight = ((WallMid->returnlocationy()) / 2) - (gapsize / 2)/*Gap Size*/;
 			RenderImageOnScreen(meshList[GEO_WALL], 50, WallMid->returnlocationy(), WallMid->returnlocationx(), botheight);
 		}
-		
+
 		//RenderImageOnScreen(meshList[GEO_WALLTEST], 50, 50, WallMid->returnlocationx(), WallMid->returnlocationy());
 		WallMid = WallMid->getnextadress();
 	}
 
 	std::string text;
-
 	if (lost == true)
 	{
 		text = "Game Over!";
@@ -461,15 +556,27 @@ void SceneMiniGame1::Render()
 	}
 	else if (playing == false)
 	{
-		text = "Flappy Car!";
-		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(1, 1, 0), 50, 5, 6.5);
-
+		if (scoremenu == true)
+		{
+			RenderImageOnScreen(meshList[GEO_SCORE], 100, 100, 400,300);
+		}
+		else
+		{
+			text = "Flappy Car!";
+			RenderTextOnScreen(meshList[GEO_TEXT], text, Color(1, 1, 0), 50, 5, 6.5);
+		}
 
 	}
 	else
 	{
 		text = "Score: " + std::to_string(score);
 		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 35, 0, 0);
+
+		if (walldestroy == true)
+		{
+			text = "Wall Destroyer";
+			RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 35, 0, 2);
+		}
 	}
 
 }
@@ -610,7 +717,7 @@ void SceneMiniGame1::RenderTextOnScreen(Mesh* mesh, std::string text, Color colo
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 0.7f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.7f, 0, 0); //0.7f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -665,5 +772,58 @@ void SceneMiniGame1::RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, f
 
 
 	glEnable(GL_DEPTH_TEST);
+
+}
+
+void SceneMiniGame1::RenderAnimationOnScreen(Mesh* mesh, Color color, unsigned offset, int count, float size, float x, float y)
+{
+
+	glDisable(GL_DEPTH_TEST);
+
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 800, 0, 600, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
+
+	
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+
+	if (mesh->textureID > 0) {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+
+	//0,10 2nd
+	//0,20 3nd
+	//0,30 4th
+	mesh->Render(10,4);
+	//RenderMesh(mesh, false);
+
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+
+	glEnable(GL_DEPTH_TEST);
+
+
 
 }
