@@ -100,6 +100,7 @@ private:
 	bool collision = false;
 	void CollisionUpdate(double dt);
 	bool hit = false;
+	bool HighScore = false;
 	void ReadHighScore_minigame2();
 	float getDistance();
 	void RenderText(Mesh* mesh, std::string text, Color color);

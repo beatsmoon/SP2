@@ -473,10 +473,10 @@ void MiniGame2::RenderDeathMenu()
 		float x,y;
 		MouseController::GetInstance()->GetMousePosition(x, y);
 		cout << y << endl;
-		modelStack.Translate(3.6f, 0.f, -3.2f);
+		modelStack.Translate(3.6f, -10.f, -3.2f);
 		if (y > 240)
 		{
-			modelStack.Translate(0,-10,0);
+			modelStack.Translate(0,0,0);
 			
 			if (y > 320)
 			{
@@ -498,8 +498,10 @@ void MiniGame2::RenderDeathMenu()
 		
 
 		modelStack.PopMatrix();
+		ReadHighScore_minigame2();
 	}
 }
+
 
 void MiniGame2::reset()
 {
@@ -513,6 +515,7 @@ void MiniGame2::reset()
 	RotateCar = 0;
 	collision = false;
 	hit = false;
+	HighScore = false;
 	theCar->Set_nitro(0);
 	MouseController::GetInstance()->SetKeepMouseCentered(true);
 }
@@ -693,21 +696,63 @@ void MiniGame2::ReadHighScore_minigame2()
 	ifstream myfile("Highscore//minigame2.txt");
 	if (myfile.is_open())
 	{
-		for (int i = 0; i < 5; i++)
+		if (gameEnd == true)
 		{
-			getline(myfile, HighScore_MiniGame2[i]);
+			int change;
+			string temp;
+			//Checking if its a new high score
+			for (int i = 0; i < 5; i++)
+			{
+				
+				getline(myfile, HighScore_MiniGame2[i]);
+				if (HighScore == false)
+				{
+					float number;
+					
+					std::stringstream ss;
+					ss << HighScore_MiniGame2[i];
+					ss >> number;
+					if (distance > number)
+					{
+						if (i < 4)
+						{
+							temp = HighScore_MiniGame2[i];
+							HighScore_MiniGame2[i + 1] = temp;
+						}
+						HighScore_MiniGame2[i] = to_string(distance);
+						change = i + 1;
+						HighScore = true;
+					}
+				}
+				
+			}
+			if (HighScore == true)
+			{
+				for (change < 5; change++;)
+				{
+					if (change < 4)
+					{
+						temp = HighScore_MiniGame2[change];
+						HighScore_MiniGame2[change + 1] = temp;
+					}
+				}
+			}
 
-			cout << HighScore_MiniGame2[i] << '\n';
-
+			//Print Score
+			for (int i = 0; i < 5; i++)
+			{
+				getline(myfile, HighScore_MiniGame2[i]);
+				RenderTextOnScreen(meshList[GEO_TEXT], HighScore_MiniGame2[i], Color(0.98f, 0.41f, 1.f), 5, 7, 3.2f + (1.4 * i));
+			}
+			
 		}
-
-
+	
 		myfile.close();
 	}
 
 	else
 	{
-		cout << "Unable to open file";
+		 printf("Unable to open file");
 	}
 }
 
