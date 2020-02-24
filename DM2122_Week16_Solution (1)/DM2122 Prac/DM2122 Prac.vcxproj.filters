@@ -49,6 +49,12 @@
     <ClCompile Include="Source\Car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MiniGame1\SceneMiniGame1.cpp">
+      <Filter>MiniGame1</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MiniGame1\MiniGame1Obj.cpp">
+      <Filter>MiniGame1</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Controllers\Mouse.h">
@@ -108,6 +114,12 @@
     <ClInclude Include="Source\Car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\MiniGame1\SceneMiniGame1.h">
+      <Filter>MiniGame1</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MiniGame1\MiniGame1Obj.h">
+      <Filter>MiniGame1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Controller">
@@ -121,6 +133,9 @@
     </Filter>
     <Filter Include="Player">
       <UniqueIdentifier>{018d7e61-580e-4cd7-91ed-38cdac84c76b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MiniGame1">
+      <UniqueIdentifier>{30f15168-3a50-4414-a6dd-790df983b108}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
