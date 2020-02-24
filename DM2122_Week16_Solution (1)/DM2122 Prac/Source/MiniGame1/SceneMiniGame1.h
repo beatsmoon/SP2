@@ -7,7 +7,10 @@
 #include "../Mesh.h"
 #include "../Light.h"
 #include "MiniGame1Obj.h"
+#include <fstream>
+#include <iostream>
 
+using namespace std;
 
 class SceneMiniGame1 : public Scene
 {
@@ -21,6 +24,8 @@ class SceneMiniGame1 : public Scene
 		GEO_WALLTEST,
 		GEO_POWERUP,
 		GEO_SCORE,
+		GEO_LOST,
+		GEO_MAIN,
 		NUM_GEOMETRY,
 	};
 
@@ -95,6 +100,8 @@ private:
 
 	int score;
 	float gapsize;
+
+	int Highscores[5];
 
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
