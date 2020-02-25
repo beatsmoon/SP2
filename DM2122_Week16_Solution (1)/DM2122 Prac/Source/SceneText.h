@@ -105,6 +105,20 @@ class SceneText : public Scene
 		U_LIGHT5_KL,
 		U_LIGHT5_KQ,
 
+		U_LIGHT6_POSITION,
+		U_LIGHT6_COLOR,
+		U_LIGHT6_POWER,
+		U_LIGHT6_KC,
+		U_LIGHT6_KL,
+		U_LIGHT6_KQ,
+
+		U_LIGHT7_POSITION,
+		U_LIGHT7_COLOR,
+		U_LIGHT7_POWER,
+		U_LIGHT7_KC,
+		U_LIGHT7_KL,
+		U_LIGHT7_KQ,
+
 		U_LIGHTENABLED,
 		//add these enum in UNIFORM_TYPE before U_TOTAL
 		U_LIGHT0_TYPE,
@@ -143,6 +157,20 @@ class SceneText : public Scene
 		U_LIGHT5_COSINNER,
 		U_LIGHT5_EXPONENT,
 
+		U_LIGHT6_TYPE,
+		U_LIGHT6_SPOTDIRECTION,
+		U_LIGHT6_COSCUTOFF,
+		U_LIGHT6_COSINNER,
+		U_LIGHT6_EXPONENT,
+
+		U_LIGHT7_TYPE,
+		U_LIGHT7_SPOTDIRECTION,
+		U_LIGHT7_COSCUTOFF,
+		U_LIGHT7_COSINNER,
+		U_LIGHT7_EXPONENT,
+
+		
+
 		U_NUMLIGHTS,
 		// add these enum for texture
 		U_COLOR_TEXTURE_ENABLED,
@@ -180,7 +208,7 @@ private:
 	unsigned m_parameters[U_TOTAL];
 
 	MS modelStack, viewStack, projectionStack;
-	Light light[6];
+	Light light[8];
 
 	Camera2 camera;
 	Camera2 cameraCar;

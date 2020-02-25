@@ -150,6 +150,30 @@ void SceneText::Init()
 	m_parameters[U_LIGHT5_KL] = glGetUniformLocation(m_programID, "lights[5].kL");
 	m_parameters[U_LIGHT5_KQ] = glGetUniformLocation(m_programID, "lights[5].kQ");
 
+	m_parameters[U_LIGHT6_TYPE] = glGetUniformLocation(m_programID, "lights[6].type");
+	m_parameters[U_LIGHT6_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[6].spotDirection");
+	m_parameters[U_LIGHT6_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[6].cosCutoff");
+	m_parameters[U_LIGHT6_COSINNER] = glGetUniformLocation(m_programID, "lights[6].cosInner");
+	m_parameters[U_LIGHT6_EXPONENT] = glGetUniformLocation(m_programID, "lights[6].exponent");
+	m_parameters[U_LIGHT6_POSITION] = glGetUniformLocation(m_programID, "lights[6].position_cameraspace");
+	m_parameters[U_LIGHT6_COLOR] = glGetUniformLocation(m_programID, "lights[6].color");
+	m_parameters[U_LIGHT6_POWER] = glGetUniformLocation(m_programID, "lights[6].power");
+	m_parameters[U_LIGHT6_KC] = glGetUniformLocation(m_programID, "lights[6].kC");
+	m_parameters[U_LIGHT6_KL] = glGetUniformLocation(m_programID, "lights[6].kL");
+	m_parameters[U_LIGHT6_KQ] = glGetUniformLocation(m_programID, "lights[6].kQ");
+
+	m_parameters[U_LIGHT7_TYPE] = glGetUniformLocation(m_programID, "lights[7].type");
+	m_parameters[U_LIGHT7_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[7].spotDirection");
+	m_parameters[U_LIGHT7_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[7].cosCutoff");
+	m_parameters[U_LIGHT7_COSINNER] = glGetUniformLocation(m_programID, "lights[7].cosInner");
+	m_parameters[U_LIGHT7_EXPONENT] = glGetUniformLocation(m_programID, "lights[7].exponent");
+	m_parameters[U_LIGHT7_POSITION] = glGetUniformLocation(m_programID, "lights[7].position_cameraspace");
+	m_parameters[U_LIGHT7_COLOR] = glGetUniformLocation(m_programID, "lights[7].color");
+	m_parameters[U_LIGHT7_POWER] = glGetUniformLocation(m_programID, "lights[7].power");
+	m_parameters[U_LIGHT7_KC] = glGetUniformLocation(m_programID, "lights[7].kC");
+	m_parameters[U_LIGHT7_KL] = glGetUniformLocation(m_programID, "lights[7].kL");
+	m_parameters[U_LIGHT7_KQ] = glGetUniformLocation(m_programID, "lights[7].kQ");
+
 	//Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -211,9 +235,9 @@ void SceneText::Init()
 	light[3].spotDirection.Set(0.f, 1.f, 0.f);
 
 	light[4].type = Light::LIGHT_POINT;
-	light[4].position.Set(0, 20, -60);
+	light[4].position.Set(60, 10, -50);
 	light[4].color.Set(0.5f, 0.5f, 0.5f);
-	light[4].power = 0;
+	light[4].power = 10;
 	light[4].kC = 1.f;
 	light[4].kL = 0.01f;
 	light[4].kQ = 0.001f;
@@ -222,10 +246,10 @@ void SceneText::Init()
 	light[4].exponent = 3.f;
 	light[4].spotDirection.Set(0.f, 1.f, 0.f);
 
-	light[5].type = Light::LIGHT_DIRECTIONAL;
-	light[5].position.Set(0, 20, 0);
+	light[5].type = Light::LIGHT_POINT;
+	light[5].position.Set(-60, 10, -50);
 	light[5].color.Set(0.5f, 0.5f, 0.5f);
-	light[5].power = 2;
+	light[5].power = 10;
 	light[5].kC = 1.f;
 	light[5].kL = 0.01f;
 	light[5].kQ = 0.001f;
@@ -233,6 +257,30 @@ void SceneText::Init()
 	light[5].cosInner = cos(Math::DegreeToRadian(30));
 	light[5].exponent = 3.f;
 	light[5].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[6].type = Light::LIGHT_POINT;
+	light[6].position.Set(-60, 10, 50);
+	light[6].color.Set(0.5f, 0.5f, 0.5f);
+	light[6].power = 10;
+	light[6].kC = 1.f;
+	light[6].kL = 0.01f;
+	light[6].kQ = 0.001f;
+	light[6].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[6].cosInner = cos(Math::DegreeToRadian(30));
+	light[6].exponent = 3.f;
+	light[6].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[7].type = Light::LIGHT_POINT;
+	light[7].position.Set(60, 10, 50);
+	light[7].color.Set(0.5f, 0.5f, 0.5f);
+	light[7].power = 10;
+	light[7].kC = 1.f;
+	light[7].kL = 0.01f;
+	light[7].kQ = 0.001f;
+	light[7].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[7].cosInner = cos(Math::DegreeToRadian(30));
+	light[7].exponent = 3.f;
+	light[7].spotDirection.Set(0.f, 1.f, 0.f);
 
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
@@ -300,8 +348,29 @@ void SceneText::Init()
 	glUniform1f(m_parameters[U_LIGHT5_COSINNER], light[5].cosInner);
 	glUniform1f(m_parameters[U_LIGHT5_EXPONENT], light[5].exponent);
 
-	
-	glUniform1i(m_parameters[U_NUMLIGHTS], 6); 
+	glUniform1i(m_parameters[U_LIGHT6_TYPE], light[6].type);
+	glUniform3fv(m_parameters[U_LIGHT6_COLOR], 1, &light[6].color.r);
+	glUniform1f(m_parameters[U_LIGHT6_POWER], light[6].power);
+	glUniform1f(m_parameters[U_LIGHT6_KC], light[6].kC);
+	glUniform1f(m_parameters[U_LIGHT6_KL], light[6].kL);
+	glUniform1f(m_parameters[U_LIGHT6_KQ], light[6].kQ);
+	glUniform3fv(m_parameters[U_LIGHT6_SPOTDIRECTION], 1, &light[6].spotDirection.x);
+	glUniform1f(m_parameters[U_LIGHT6_COSCUTOFF], light[6].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT6_COSINNER], light[6].cosInner);
+	glUniform1f(m_parameters[U_LIGHT6_EXPONENT], light[6].exponent);
+
+	glUniform1i(m_parameters[U_LIGHT7_TYPE], light[7].type);
+	glUniform3fv(m_parameters[U_LIGHT7_COLOR], 1, &light[7].color.r);
+	glUniform1f(m_parameters[U_LIGHT7_POWER], light[7].power);
+	glUniform1f(m_parameters[U_LIGHT7_KC], light[7].kC);
+	glUniform1f(m_parameters[U_LIGHT7_KL], light[7].kL);
+	glUniform1f(m_parameters[U_LIGHT7_KQ], light[7].kQ);
+	glUniform3fv(m_parameters[U_LIGHT7_SPOTDIRECTION], 1, &light[7].spotDirection.x);
+	glUniform1f(m_parameters[U_LIGHT7_COSCUTOFF], light[7].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT7_COSINNER], light[7].cosInner);
+	glUniform1f(m_parameters[U_LIGHT7_EXPONENT], light[7].exponent);
+
+	glUniform1i(m_parameters[U_NUMLIGHTS], 8); 
 	}
 
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f, 1.f);
@@ -710,6 +779,54 @@ void SceneText::Render()
 			glUniform1f(m_parameters[U_LIGHT5_POWER], light[5].power);
 		}
 
+		if (light[6].type == Light::LIGHT_DIRECTIONAL)
+		{
+			Vector3 lightDir(light[6].position.x, light[6].position.y, light[6].position.z);
+			Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+			glUniform3fv(m_parameters[U_LIGHT6_POSITION], 1, &lightDirection_cameraspace.x);
+			glUniform1f(m_parameters[U_LIGHT6_POWER], light[6].power);
+		}
+		// if it is spot light, pass in position and direction 
+		else if (light[6].type == Light::LIGHT_SPOT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[6].position;
+			glUniform3fv(m_parameters[U_LIGHT6_POSITION], 1, &lightPosition_cameraspace.x);
+			Vector3 spotDirection_cameraspace = viewStack.Top() * light[6].spotDirection;
+			glUniform3fv(m_parameters[U_LIGHT6_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+			glUniform1f(m_parameters[U_LIGHT6_POWER], light[6].power);
+		}
+		else
+		{
+			// default is point light (only position since point light is 366 degrees)
+			Position lightPosition_cameraspace = viewStack.Top() * light[6].position;
+			glUniform3fv(m_parameters[U_LIGHT6_POSITION], 1, &lightPosition_cameraspace.x);
+			glUniform1f(m_parameters[U_LIGHT6_POWER], light[6].power);
+		}
+
+		if (light[7].type == Light::LIGHT_DIRECTIONAL)
+		{
+			Vector3 lightDir(light[7].position.x, light[7].position.y, light[7].position.z);
+			Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+			glUniform3fv(m_parameters[U_LIGHT7_POSITION], 1, &lightDirection_cameraspace.x);
+			glUniform1f(m_parameters[U_LIGHT7_POWER], light[7].power);
+		}
+		// if it is spot light, pass in position and direction 
+		else if (light[7].type == Light::LIGHT_SPOT)
+		{
+			Position lightPosition_cameraspace = viewStack.Top() * light[7].position;
+			glUniform3fv(m_parameters[U_LIGHT7_POSITION], 1, &lightPosition_cameraspace.x);
+			Vector3 spotDirection_cameraspace = viewStack.Top() * light[7].spotDirection;
+			glUniform3fv(m_parameters[U_LIGHT7_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+			glUniform1f(m_parameters[U_LIGHT7_POWER], light[7].power);
+		}
+		else
+		{
+			// default is point light (only position since point light is 367 degrees)
+			Position lightPosition_cameraspace = viewStack.Top() * light[7].position;
+			glUniform3fv(m_parameters[U_LIGHT7_POSITION], 1, &lightPosition_cameraspace.x);
+			glUniform1f(m_parameters[U_LIGHT7_POWER], light[7].power);
+		}
+
 	}
 
 
@@ -950,7 +1067,7 @@ void SceneText::RenderSpaceStation()
 
 	modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_SPACESTATION_WALL], false);
+	RenderMesh(meshList[GEO_SPACESTATION_WALL], true);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
