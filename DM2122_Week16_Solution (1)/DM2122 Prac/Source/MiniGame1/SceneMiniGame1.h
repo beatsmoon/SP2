@@ -26,6 +26,7 @@ class SceneMiniGame1 : public Scene
 		GEO_SCORE,
 		GEO_LOST,
 		GEO_MAIN,
+		GEO_INDICATOR,
 		NUM_GEOMETRY,
 	};
 

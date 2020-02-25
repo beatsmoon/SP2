@@ -86,6 +86,12 @@ void SceneMiniGame1::Init()
 	meshList[GEO_SCORE] = MeshBuilder::GenerateQuad("Score", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_SCORE]->textureID = LoadTGA("Image//Highscore_FlappyCar1_Clement.tga");
 	
+	meshList[GEO_MAIN] = MeshBuilder::GenerateQuad("Main", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_MAIN]->textureID = LoadTGA("Image//MainMenu_FlappyCar1_Clement.tga");	
+	
+	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("Indicator", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//Indicator_FlappyCar1_Clement.tga");
+	
 	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -424,7 +430,7 @@ void SceneMiniGame1::Update(double dt)
 		{
 			int x = 0;
 			std::string line;
-			std::ifstream scorefile("MiniGame1Highscore.txt");
+			std::ifstream scorefile("Highscore//MiniGame1Highscore.txt");
 			if (scorefile.is_open())
 			{
 				while (getline(scorefile, line))
@@ -449,7 +455,7 @@ void SceneMiniGame1::Update(double dt)
 				}
 			}
 
-			ofstream scorefiles("MiniGame1Highscore.txt");
+			ofstream scorefiles("Highscore//MiniGame1Highscore.txt");
 			if (scorefiles.is_open())
 			{
 				for (int x = 0; x < 5; x++)
@@ -505,9 +511,9 @@ void SceneMiniGame1::Update(double dt)
 				cursor--;
 				if (cursor <= -1)
 				{
-					cursor = 3;
+					cursor = 4;
 				}
-				bouncetime = GetTickCount64() + 250;
+				bouncetime = GetTickCount64() + 100;
 			}
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN) && bouncetime <= GetTickCount64())
 			{
@@ -516,7 +522,7 @@ void SceneMiniGame1::Update(double dt)
 				{
 					cursor = 0;
 				}
-				bouncetime = GetTickCount64() + 250;
+				bouncetime = GetTickCount64() + 100;
 			}
 			//Start Game
 			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
@@ -699,12 +705,36 @@ void SceneMiniGame1::Render()
 	{
 		if (scoremenu == true)
 		{
-			RenderImageOnScreen(meshList[GEO_SCORE], 600, 600, 400,300);
+			RenderImageOnScreen(meshList[GEO_SCORE], 500, 500, 400,300);
 		}
 		else
 		{
-			text = "Flappy Car!";
-			RenderTextOnScreen(meshList[GEO_TEXT], text, Color(1, 1, 0), 50, 5, 6.5);
+			RenderImageOnScreen(meshList[GEO_MAIN], 600, 600, 400, 300);
+			//0 - Start
+			//1 - Highscores
+			//2 - Controls
+			//3 - Back to main
+			switch (cursor)
+			{
+			case 0:
+				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 330);
+				break;
+			
+			case 1:
+				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 260);
+				break;
+
+			case 2:
+				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 190);
+				break;
+
+			case 3:
+				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 120);
+				break;
+			default:
+
+				break;
+			}
 		}
 
 	}
