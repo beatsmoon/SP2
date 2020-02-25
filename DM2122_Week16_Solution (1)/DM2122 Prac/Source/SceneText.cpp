@@ -542,6 +542,7 @@ void SceneText::Update(double dt)
 
 		cout << "hello" << endl;
 		CarWM->Reset();
+		Scaling  = 0;
 		
 		isOnGround = true;
 	}
@@ -778,14 +779,16 @@ void SceneText::Render()
 		modelStack.PopMatrix();
 
 		modelStack.PushMatrix();
+		//
 		modelStack.Translate(0, 0, 0);
 		modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
-		//modelStack.Scale(Scaling, Scaling, Scaling);
+		
 		float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
 		angle = Math::RadianToDegree(angle);
 		modelStack.Rotate(angle, 0, 1, 0);
 		modelStack.Rotate(-90, 0, 1, 0);
 		//modelStack.Scale(3, 3, 3);
+		//modelStack.Scale(Scaling, Scaling, Scaling);
 		RenderWMCar();
 		modelStack.PopMatrix();
 
