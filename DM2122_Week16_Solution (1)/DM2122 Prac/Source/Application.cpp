@@ -119,10 +119,12 @@ void Application::Run()
 	//Main Loop
 	
 	Scene* scene = new SceneText();
-	//Minigame1 Add
 	Scene* mainscene= scene;
+	//Minigame1 Add
 	Scene* minigame1 = new SceneMiniGame1();
 	minigame1->Init();
+	Scene* minigame2 = new MiniGame2();
+	minigame2->Init();
 
 	scene->Init();
 
@@ -145,7 +147,12 @@ void Application::Run()
 			}
 			else if (CurrentScene == MINIGAME1)
 			{
-				CurrentScene = MAIN;
+				CurrentScene = MINIGAME2;
+				scene = minigame2;
+			}
+			else if (CurrentScene == MINIGAME1)
+			{
+				CurrentScene = MINIGAME2;
 				scene = mainscene;
 			}
 		}
