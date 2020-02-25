@@ -148,7 +148,7 @@ void MiniGame2::Init()
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->textureID = LoadTGA("image//calibri.tga");
 
 
 	// Hardware Abstraction
@@ -794,10 +794,6 @@ void MiniGame2::ReadHighScore_minigame2()
 				RenderTextOnScreen(meshList[GEO_TEXT],to_string( Highscores[i]), Color(0.98f, 0.41f, 1.f), 5, 5, 8.8f + (-1.4 * i));
 		}
 
-	}
-	else
-	{
-		printf("Unable to open file");
 	}
 }
 
