@@ -41,6 +41,13 @@ class SceneText : public Scene
 		GEO_HIGHSCOREBOARD,
 		GEO_INDICATOR,
 		GEO_RACETRACK,
+		GEO_MINIGAME_BOOTH,
+		GEO_HOLOGRAM,
+		GEO_MINI_CAR_BODY,
+		GEO_MINI_CAR_WHEELS,
+		GEO_CARSURFER_ROCK,
+		GEO_CARSURFER_ROAD,
+		GEO_FLAPPYCAR_ENVIRONMENT,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -207,6 +214,9 @@ private:
 	void RenderCCar();
 	void RenderIndicator();
 	void RenderHighscore();
+	void RenderMiniDisplayCar();
+	void RenderFlappyCarBooth();
+	void RenderCarSurfersBooth();
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
