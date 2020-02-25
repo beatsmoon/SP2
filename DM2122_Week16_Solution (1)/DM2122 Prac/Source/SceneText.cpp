@@ -374,6 +374,27 @@ void SceneText::Init()
 	meshList[GEO_HIGHSCOREBOARD] = MeshBuilder::GenerateQuad("highscore", Color(1, 1, 1), 4, 4);
 	meshList[GEO_HIGHSCOREBOARD]->textureID = LoadTGA("Image//highscoreboard.tga");
 
+	meshList[GEO_MINIGAME_BOOTH] = MeshBuilder::GenerateOBJ("booth1", "OBJ//minigamebase.obj");
+	meshList[GEO_MINIGAME_BOOTH]->textureID = LoadTGA("Image//minigamebaseUV.tga");
+
+	meshList[GEO_MINI_CAR_BODY] = MeshBuilder::GenerateOBJ("minicar", "OBJ//minibody.obj");
+	meshList[GEO_MINI_CAR_BODY]->textureID = LoadTGA("Image//minibodyUV.tga");
+
+	meshList[GEO_MINI_CAR_WHEELS] = MeshBuilder::GenerateOBJ("minicar", "OBJ//miniwheels.obj");
+	meshList[GEO_MINI_CAR_WHEELS]->textureID = LoadTGA("Image//miniwheelsUV.tga");
+
+	meshList[GEO_CARSURFER_ROCK] = MeshBuilder::GenerateOBJ("rock", "OBJ//rock.obj");
+	meshList[GEO_CARSURFER_ROCK]->textureID = LoadTGA("Image//rockUV.tga");
+
+	meshList[GEO_HOLOGRAM] = MeshBuilder::GenerateOBJ("booth_hologram", "OBJ//hologram.obj");
+	meshList[GEO_HOLOGRAM]->textureID = LoadTGA("Image//hologramUV.tga");
+
+	meshList[GEO_CARSURFER_ROAD] = MeshBuilder::GenerateOBJ("miniroad", "OBJ//miniroad.obj");
+	meshList[GEO_CARSURFER_ROAD]->textureID = LoadTGA("Image//miniroadUV.tga");
+
+	meshList[GEO_FLAPPYCAR_ENVIRONMENT] = MeshBuilder::GenerateOBJ("wall", "OBJ//miniwalls.obj");
+	meshList[GEO_FLAPPYCAR_ENVIRONMENT]->textureID = LoadTGA("Image//miniwallUV.tga");
+
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -749,8 +770,12 @@ void SceneText::Render()
 		modelStack.Scale(37, 37, 37);
 		RenderCCar();
 		modelStack.PopMatrix();
-	}
+
+		RenderCarSurfersBooth();
+		RenderFlappyCarBooth();
+
 		break;
+	}
 	case STATE_TEST_DRIVE:
 		modelStack.PushMatrix();
 		//modelStack.Scale(10, 10, 10);
@@ -783,6 +808,7 @@ void SceneText::Render()
 			RenderPause();
 	else
 		pauseHeight = 0;
+
 
 	////modelStack.PushMatrix();
 	////modelStack.Translate(0, -3, 0);
@@ -1109,6 +1135,77 @@ void SceneText::RenderHighscore()
 	RenderIndicator();
 
 	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderMiniDisplayCar()
+{
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_MINI_CAR_BODY], false);
+	
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_MINI_CAR_WHEELS], false);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderFlappyCarBooth()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(100, -33, 115);
+	modelStack.Scale(20, 20, 20);
+	modelStack.Rotate(180, 0, 1, 0);
+	RenderMesh(meshList[GEO_MINIGAME_BOOTH], false);
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_HOLOGRAM], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_CARSURFER_ROAD], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.9, 0.8, 0);
+	modelStack.Rotate(20, 0, 0, -1);
+	RenderMiniDisplayCar();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_FLAPPYCAR_ENVIRONMENT], false);
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+
+}
+
+void SceneText::RenderCarSurfersBooth()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(-100, -33, 115);
+	modelStack.Scale(20, 20, 20);
+	RenderMesh(meshList[GEO_MINIGAME_BOOTH], false);
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_HOLOGRAM], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	RenderMesh(meshList[GEO_CARSURFER_ROAD], false);
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0, 0.05, 0);
+	RenderMiniDisplayCar();
+	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate(0.2, 0.05, 0);
+	RenderMesh(meshList[GEO_CARSURFER_ROCK], false);
+	modelStack.PopMatrix();
+
 
 	modelStack.PopMatrix();
 }
