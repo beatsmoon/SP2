@@ -83,6 +83,7 @@ void MiniGame2::Init()
 	m_parameters[U_IS_ROAD] = glGetUniformLocation(m_programID, "isRoad");
 	m_parameters[U_ROAD_OFFSET] = glGetUniformLocation(m_programID, "roadOffset");
 
+
 	//Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");

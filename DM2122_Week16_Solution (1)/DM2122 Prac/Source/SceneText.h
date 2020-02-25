@@ -175,6 +175,8 @@ class SceneText : public Scene
 		// add these enum for texture
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
+		U_IS_CAR,
+		U_IS_CAR_WHITE,
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -229,7 +231,7 @@ private:
 	int pauseMenuSelection = CHOICE_NONE;
 	float moveIndicator = 0;
 	int moveDirection = 1;
-
+	bool turnCarWhite = false;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
@@ -245,6 +247,7 @@ private:
 	void RenderMiniDisplayCar();
 	void RenderFlappyCarBooth();
 	void RenderCarSurfersBooth();
+	void RenderCarMesh(Mesh *mesh);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

@@ -20,6 +20,8 @@ uniform bool lightEnabled;
 uniform bool isRoad;
 uniform float roadOffset;
 
+//uniform float carOffset;
+
 void main(){
 	// Output position of the vertex, in clip space : MVP * position
 	gl_Position =  MVP * vec4(vertexPosition_modelspace, 1);
@@ -41,5 +43,6 @@ void main(){
 	{
 		texCoord.y -= roadOffset;
 	}
+	
 }
 

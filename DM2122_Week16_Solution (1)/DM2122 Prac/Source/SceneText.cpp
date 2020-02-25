@@ -174,6 +174,9 @@ void SceneText::Init()
 	m_parameters[U_LIGHT7_KL] = glGetUniformLocation(m_programID, "lights[7].kL");
 	m_parameters[U_LIGHT7_KQ] = glGetUniformLocation(m_programID, "lights[7].kQ");
 
+	m_parameters[U_IS_CAR] = glGetUniformLocation(m_programID, "isCar");
+	m_parameters[U_IS_CAR_WHITE] = glGetUniformLocation(m_programID, "isCarWhite");
+
 	//Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -592,7 +595,7 @@ void SceneText::Update(double dt)
 
 	if (renderingState == STATE_TEST_DRIVE && isOnGround == true)
 	{
-		//cout << pow((pow((CarWM->GetPos().x - 110), 2) + pow((CarWM->GetPos().z - 38), 2)), 0.5) << endl;
+		
 
 		if (pow((pow((CarWM->GetPos().x - 110), 2)+ pow((CarWM->GetPos().z - 38), 2)),0.5) <= 109)
 		{
@@ -609,9 +612,21 @@ void SceneText::Update(double dt)
 	else if(isOnGround == false)
 	{
 
-		cout << "hello" << endl;
+		//cout << "hello" << endl;
 		CarWM->Reset();
-		Scaling  = 0;
+		
+	/*	for (int i = 0; i <= 30; i++)
+		{
+			if (i % 10 == 0)
+			{
+				turnCarWhite = true;
+			}
+			else if (i % 5 == 0)
+			{
+				turnCarWhite = false;
+			}
+		}*/
+		turnCarWhite = true;
 		
 		isOnGround = true;
 	}
@@ -1077,27 +1092,27 @@ void SceneText::RenderWMCar()
 	modelStack.PushMatrix();
 	
 	
-	RenderMesh(meshList[GEO_WM_CAR], true);
+	RenderCarMesh(meshList[GEO_WM_CAR]);
 
 	modelStack.PushMatrix();
 	modelStack.Translate(6.45f, -2.5f, 4.8f);
-	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	RenderCarMesh(meshList[GEO_WM_CAR_WHEEL]);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(6.45f, -2.5f, -4.8f);
-	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	RenderCarMesh(meshList[GEO_WM_CAR_WHEEL]);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	//modelStack.Scale(5, 5, 5);
 	modelStack.Translate(-9.2f, -2.5f, 4.8f);
-	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	RenderCarMesh(meshList[GEO_WM_CAR_WHEEL]);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(-9.2f, -2.5f, -4.8f);
-	RenderMesh(meshList[GEO_WM_CAR_WHEEL], true);
+	RenderCarMesh(meshList[GEO_WM_CAR_WHEEL]);
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
@@ -1334,6 +1349,40 @@ void SceneText::RenderCarSurfersBooth()
 
 	modelStack.PopMatrix();
 }
+
+void SceneText::RenderCarMesh(Mesh* mesh)
+{
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
+
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+	glUniform1i(m_parameters[U_IS_CAR], 1);
+	glUniform1i(m_parameters[U_IS_CAR_WHITE], turnCarWhite);
+
+	if (mesh->textureID > 0) {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	mesh->Render(); //this line should only be called once in the whole function
+
+	if (mesh->textureID > 0) glBindTexture(GL_TEXTURE_2D, 0);
+
+}
+
+
 
 void SceneText::RenderPause()
 {
