@@ -90,7 +90,10 @@ void SceneMiniGame1::Init()
 	meshList[GEO_MAIN]->textureID = LoadTGA("Image//MainMenu_FlappyCar1_Clement.tga");	
 	
 	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("Indicator", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//Indicator_FlappyCar1_Clement.tga");
+	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//Indicator_FlappyCar1_Clement.tga");	
+	
+	meshList[GEO_LOST] = MeshBuilder::GenerateQuad("Lost_Menu", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_LOST]->textureID = LoadTGA("Image//Lost_FlappyCar1_Clement.tga");
 	
 	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 
@@ -720,10 +723,10 @@ void SceneMiniGame1::Render()
 	std::string text;
 	if (lost == true)
 	{
-		text = "Game Over!";
-		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 50, 5, 6.5);
-		text = "Score: " + std::to_string(score);
-		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 40, 7, 6.5);
+		RenderImageOnScreen(meshList[GEO_LOST], 350, 350, 400, 300);
+
+		text = std::to_string(score);
+		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 55, 425, 245);
 
 	}
 	else if (playing == false)
@@ -738,30 +741,30 @@ void SceneMiniGame1::Render()
 			switch (Highscore1color)
 			{
 			case 0:
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(1, 0, 0), 65, 3.70, 6.25);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(1, 0, 0), 65, 245, 405);
 				break;
 			case 1:
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(0, 1, 0), 65, 3.70, 6.25);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(0, 1, 0), 65, 245, 405);
 				break;
 			case 2:
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(0, 0, 1), 65, 3.70, 6.25);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(0, 0, 1), 65, 245, 405);
 				break;
 			case 3:
-				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(1, 0.843137, 0), 65, 3.70, 6.25);
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(1, 0.843137, 0), 65, 245, 405);
 				break;
 			}
 
 			//Render 2nd score
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[1]), Color(0.75294, 0.75294, 0.75294), 65, 3.70, 5.35);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[1]), Color(0.75294, 0.75294, 0.75294), 65, 245, 347);
 			
 			//Render 3rd score
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[2]), Color(0.80392, 0.49803, 0.19607), 65, 3.70, 4.45);			
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[2]), Color(0.80392, 0.49803, 0.19607), 65, 245, 289);
 			
 			//Render 4th score
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 3.70, 3.55);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 245, 231);
 
 			//Render 5th score
-			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 3.70, 2.65);
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 245, 170);
 		}
 		else
 		{
@@ -770,27 +773,22 @@ void SceneMiniGame1::Render()
 			//1 - Highscores
 			//2 - Controls
 			//3 - Back to main
+			int y = 330;
 			switch (cursor)
 			{
-			case 0:
-				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 330);
-				break;
-			
-			case 1:
-				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 260);
-				break;
+			case 3: //120
+				y -= 70;
 
-			case 2:
-				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 190);
-				break;
+			case 2: //190
+				y -= 70;
 
-			case 3:
-				RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, 120);
-				break;
-			default:
+			case 1: //260
+				y -= 70;
 
+			case 0: //330
 				break;
 			}
+			RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, y);
 		}
 
 	}
@@ -931,8 +929,8 @@ void SceneMiniGame1::RenderTextOnScreen(Mesh* mesh, std::string text, Color colo
 	viewStack.LoadIdentity(); //No need camera for ortho mode
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity(); //Reset modelStack
-	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
+	modelStack.Scale(size, size, size);
 
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
 	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &color.r);
