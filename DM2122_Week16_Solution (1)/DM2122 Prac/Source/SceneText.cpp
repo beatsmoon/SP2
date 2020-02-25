@@ -527,6 +527,7 @@ void SceneText::Update(double dt)
 
 		if (pow((pow((CarWM->GetPos().x - 110), 2)+ pow((CarWM->GetPos().z - 38), 2)),0.5) <= 109)
 		{
+			cout << "mother" << endl;
 			isOnGround = false;
 		}
 
@@ -536,11 +537,13 @@ void SceneText::Update(double dt)
 		}
 		
 	}
-	else
+	else if(isOnGround == false)
 	{
+
+		cout << "hello" << endl;
 		CarWM->Reset();
 		
-		isOnGround == true;
+		isOnGround = true;
 	}
 
 	// Hardware Abstraction
