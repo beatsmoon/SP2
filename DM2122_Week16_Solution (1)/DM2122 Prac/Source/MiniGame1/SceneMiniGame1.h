@@ -104,6 +104,11 @@ private:
 
 	int Highscores[5];
 
+	//0 - Red
+	//1 - Green
+	//2 - Blue
+	//3 - Gold
+	int Highscore1color;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);

@@ -119,7 +119,7 @@ void SceneMiniGame1::Init()
 	bouncetime = GetTickCount64();
 	scoremenu = false;
 
-
+	Highscore1color = 0;
 
 }
 
@@ -547,13 +547,29 @@ void SceneMiniGame1::Update(double dt)
 				case 1:
 				{
 					scoremenu = true;
+					std::string line;
+					std::ifstream scorefile("Highscore//MiniGame1Highscore.txt");
+					int x = 0;
+					if (scorefile.is_open())
+					{
+						while (getline(scorefile, line))
+						{
+							Highscores[x] = stoi(line); //Convert string to int
+							x++;
+						}
+						scorefile.close();
+					}
 					break;
 				}
 
-				//Exit to mainm
+				//Controls
 				case 2:
 				{
 
+					break;
+				}
+				case 3:
+				{
 					break;
 				}
 				}
@@ -561,6 +577,15 @@ void SceneMiniGame1::Update(double dt)
 		}
 		else //scoremenu
 		{
+			if (gameupdate <= GetTickCount64())
+			{
+				gameupdate = GetTickCount64() + 250;
+				Highscore1color++;
+				if (Highscore1color >= 4)
+				{
+					Highscore1color = 0;
+				}
+			}
 			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
 			{
 				bouncetime = GetTickCount64() + 250;
@@ -705,7 +730,38 @@ void SceneMiniGame1::Render()
 	{
 		if (scoremenu == true)
 		{
+			//Render Scoreboard
 			RenderImageOnScreen(meshList[GEO_SCORE], 500, 500, 400,300);
+			//Render Scores
+
+			//Render 1st Score
+			switch (Highscore1color)
+			{
+			case 0:
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(1, 0, 0), 65, 3.70, 6.25);
+				break;
+			case 1:
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(0, 1, 0), 65, 3.70, 6.25);
+				break;
+			case 2:
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(0, 0, 1), 65, 3.70, 6.25);
+				break;
+			case 3:
+				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[0]), Color(1, 0.843137, 0), 65, 3.70, 6.25);
+				break;
+			}
+
+			//Render 2nd score
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[1]), Color(0.75294, 0.75294, 0.75294), 65, 3.70, 5.35);
+			
+			//Render 3rd score
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[2]), Color(0.80392, 0.49803, 0.19607), 65, 3.70, 4.45);			
+			
+			//Render 4th score
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 3.70, 3.55);
+
+			//Render 5th score
+			RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 3.70, 2.65);
 		}
 		else
 		{
