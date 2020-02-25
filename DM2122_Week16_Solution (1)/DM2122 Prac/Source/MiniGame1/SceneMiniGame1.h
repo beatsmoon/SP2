@@ -27,6 +27,7 @@ class SceneMiniGame1 : public Scene
 		GEO_LOST,
 		GEO_MAIN,
 		GEO_INDICATOR,
+		GEO_CONTROLS,
 		NUM_GEOMETRY,
 	};
 
@@ -90,7 +91,7 @@ private:
 	double bouncetime;
 
 	bool scoremenu;
-
+	bool controlmenu;
 
 	bool walldestroy;
 
@@ -109,6 +110,9 @@ private:
 	//2 - Blue
 	//3 - Gold
 	int Highscore1color;
+
+	float screensizescore;
+	float screensizecontrol;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
