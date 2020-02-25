@@ -122,28 +122,28 @@ void MiniGame2::Init()
 
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateQuad("track", Color(1.f, 1.f, 1.f), 1.f, 1.f);
-	meshList[GEO_TRACK]->textureID = LoadTGA("Image//MiniGame2Track.tga");
+	meshList[GEO_TRACK]->textureID = LoadTGA("image//MiniGame2Track.tga");
 
-	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock","OBJ//rock.obj");
-	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock.tga");
+	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock","Obj//rock.obj");
+	meshList[GEO_ROCK]->textureID = LoadTGA("image//rock.tga");
 
-	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("WMCar", "OBJ//WaiMen_Car.obj");
-	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//WaiMen_Car.tga");
+	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("WMCar", "Obj//Car_WaiMen.obj");
+	meshList[GEO_WM_CAR]->textureID = LoadTGA("image//Car_WaiMen.tga");
 
-	meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("ValCar", "OBJ//Car_ValTay.obj");
-	meshList[GEO_VAL_CAR]->textureID = LoadTGA("Image//Car_Val.tga");
+	meshList[GEO_VAL_CAR] = MeshBuilder::GenerateOBJ("ValCar", "Obj//Car_Val.obj");
+	meshList[GEO_VAL_CAR]->textureID = LoadTGA("image//Car_Val.tga");
 
-	meshList[GEO_G_CAR] = MeshBuilder::GenerateOBJ("GCar", "OBJ//Car_glenda.obj");
-	meshList[GEO_G_CAR]->textureID = LoadTGA("Image//Car_glenda.tga");
+	meshList[GEO_G_CAR] = MeshBuilder::GenerateOBJ("GCar", "Obj//car_glenda.obj");
+	meshList[GEO_G_CAR]->textureID = LoadTGA("image//Car_glenda.tga");
 
-	meshList[GEO_C_CAR] = MeshBuilder::GenerateOBJ("CCar", "OBJ//Car_Clement.obj");
-	meshList[GEO_C_CAR]->textureID = LoadTGA("Image//Car_Clement.tga");
+	meshList[GEO_C_CAR] = MeshBuilder::GenerateOBJ("CCar", "Obj//Car_Clement.obj");
+	meshList[GEO_C_CAR]->textureID = LoadTGA("image//Car_Clement.tga");
 
 	meshList[GEO_DEATHMENU] = MeshBuilder::GenerateQuad("DeathMenu", Color(1, 1, 1), 1, 1);
-	meshList[GEO_DEATHMENU]->textureID = LoadTGA("Image//deathmenu.tga");
+	meshList[GEO_DEATHMENU]->textureID = LoadTGA("image//deathmenu.tga");
 
 	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("arrow", Color(1, 1, 1), 4, 4);
-	meshList[GEO_INDICATOR]->textureID = LoadTGA("Image//indicator.tga");
+	meshList[GEO_INDICATOR]->textureID = LoadTGA("image//indicator.tga");
 
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 

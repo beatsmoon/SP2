@@ -121,7 +121,9 @@ void Application::Run()
 	//Minigame1 Add
 	Scene* mainscene= scene;
 	Scene* minigame1 = new SceneMiniGame1();
+	Scene* minigame2 = new MiniGame2();
 	minigame1->Init();
+	minigame2->Init();
 
 	scene->Init();
 
@@ -148,6 +150,21 @@ void Application::Run()
 				scene = mainscene;
 			}
 		}
+		if (Application::IsKeyPressed('P') && bouncetime <= GetTickCount64())
+		{
+			bouncetime = GetTickCount64() + 1000; //Add 1s into future
+			if (CurrentScene == MAIN) //Temporay change when actual trigger is activated 
+			{
+				CurrentScene = MINIGAME2;
+				scene = minigame2;
+			}
+			else if (CurrentScene == MINIGAME2)
+			{
+				CurrentScene = MAIN;
+				scene = mainscene;
+			}
+		}
+
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
