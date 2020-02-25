@@ -116,7 +116,7 @@ void SceneMiniGame1::Init()
 	gamespeed = -0.4;
 	score = 0;
 	nextanimation = 250;
-	gapsize = 80;
+	gapsize = 175;
 
 	walldestroy = false;
 
@@ -160,10 +160,14 @@ void SceneMiniGame1::Update(double dt)
 		if (gameupdate <= GetTickCount64())
 		{
 			gameupdate = GetTickCount64() + nextupdate;
-			if (gamespeed > -3.5)
+			if (gamespeed > -4.5)
 			{
 				gamespeed -= 0.5;
-				gapsize += 4;
+				if (gamespeed == -4.5)
+				{
+					gapsize = 150;
+					nextupdate = 3500;
+				}
 			}
 
 			WallMid = WallStart;
@@ -174,8 +178,8 @@ void SceneMiniGame1::Update(double dt)
 					WallMid = WallMid->getnextadress();
 				}
 			}
-			float size = (rand() % 580) + 10; //Random num from 0 - 595
-			MiniGame1Obj* newwall = new MiniGame1Obj(810, size, gamespeed - 1, 0);
+			float ylocation = (rand() % 590) + 10; //Random num from 10 - 599
+			MiniGame1Obj* newwall = new MiniGame1Obj(810, ylocation, gamespeed - 1, 0);
 			if (WallStart == nullptr)
 			{
 				WallStart = newwall;
@@ -231,6 +235,7 @@ void SceneMiniGame1::Update(double dt)
 			Player->settype(type);
 		}
 
+		//Update Powerups
 		if (Powerup != nullptr)
 		{
 			Powerup->movexybyvelocity();
@@ -255,7 +260,9 @@ void SceneMiniGame1::Update(double dt)
 					{
 					case 0:
 						gamespeed += 1;
-						gapsize -= 4;
+						
+						gapsize = 175;
+						nextupdate = 5000;
 						break;
 
 					case 1:
@@ -272,7 +279,8 @@ void SceneMiniGame1::Update(double dt)
 						{
 						case 0:
 							gamespeed += 1;
-							gapsize -= 4;
+							gapsize = 175;
+							nextupdate = 5000;
 							break;
 
 						case 1:
@@ -417,12 +425,7 @@ void SceneMiniGame1::Update(double dt)
 		Player->setvely(Player->returnvelocityy() + -0.15);
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE))
 		{
-			Player->setvely(0.7);
-		}
-		if (KeyboardController::GetInstance()->IsKeyDown(VK_MENU))
-		{
-			Player->setvely(5);
-
+			Player->setvely(5.55);
 		}
 		Player->movexybyvelocity();
 		if (Player->returnlocationy() < 25)
@@ -882,7 +885,7 @@ void SceneMiniGame1::Render()
 		if (walldestroy == true)
 		{
 			text = "Wall Destroyer";
-			RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 35, 0, 2);
+			RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 35, 0, 52.5);
 		}
 	}
 
