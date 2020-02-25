@@ -58,8 +58,7 @@ uniform Material material;
 uniform int numLights;
 uniform bool colorTextureEnabled;
 uniform sampler2D colorTexture;
-uniform bool isCar;
-uniform bool isCarWhite;
+
 
 void main(){
 	if(lightEnabled == true)
@@ -124,13 +123,5 @@ void main(){
 			color = fragmentColor;
 	}
 
-	if (isCar == true)
-	{
-		if (isCarWhite == true)
-		{
-		  color.r = 1;
-		  color.b = 1
-		  color.g = 1;
-		}
-	}
+	
 }

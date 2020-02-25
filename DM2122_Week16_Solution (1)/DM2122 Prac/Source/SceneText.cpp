@@ -502,18 +502,7 @@ void SceneText::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	if (Application::IsKeyPressed('I'))
-		light[0].position.z -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('K'))
-		light[0].position.z += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('J'))
-		light[0].position.x -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('L'))
-		light[0].position.x += (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('O'))
-		light[0].position.y -= (float)(LSPEED * dt);
-	if (Application::IsKeyPressed('P'))
-		light[0].position.y += (float)(LSPEED * dt);
+	
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -599,7 +588,7 @@ void SceneText::Update(double dt)
 
 		if (pow((pow((CarWM->GetPos().x - 110), 2)+ pow((CarWM->GetPos().z - 38), 2)),0.5) <= 109)
 		{
-			cout << "mother" << endl;
+			//cout << "mother" << endl;
 			isOnGround = false;
 		}
 
@@ -614,19 +603,23 @@ void SceneText::Update(double dt)
 
 		//cout << "hello" << endl;
 		CarWM->Reset();
-		
-	/*	for (int i = 0; i <= 30; i++)
+		/*int count = 0;
+		while (count != 1000)
 		{
-			if (i % 10 == 0)
+			if (turnCarWhite == false)
 			{
+				cout << "mm" << endl;
 				turnCarWhite = true;
+				
 			}
-			else if (i % 5 == 0)
+			else
 			{
 				turnCarWhite = false;
+				count++;
 			}
 		}*/
 		turnCarWhite = true;
+		
 		
 		isOnGround = true;
 	}
@@ -990,7 +983,7 @@ void SceneText::RenderMesh(Mesh* mesh, bool enableLight)
 	modelView = viewStack.Top() * modelStack.Top();
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 
-
+	glUniform1i(m_parameters[U_IS_CAR], 0);
 	if (enableLight)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
