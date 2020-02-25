@@ -271,22 +271,22 @@ void MiniGame2::Update(double dt)
 		NitroBoostCoolDown(dt);
 		DistanceTravelled(dt);
 	}
-
-	if (NitroUsed)
-	{
-		offset_Y += 1.f * dt;
-	}
-	else
-	{
-		offset_Y += 0.5f * dt;
-	}
-	//Math::Wrap(offset_Y, 0.f, 1.f);
-	if (offset_Y >= 1)
-		offset_Y -= 1;
-
-
 	if (gameEnd == false)
 	{
+		if (NitroUsed)
+		{
+			offset_Y += 1.f * dt;
+		}
+		else
+		{
+			offset_Y += 0.5f * dt;
+		}
+		//Math::Wrap(offset_Y, 0.f, 1.f);
+		if (offset_Y >= 1)
+			offset_Y -= 1;
+
+
+
 		CollisionUpdate(dt);
 	}
 
