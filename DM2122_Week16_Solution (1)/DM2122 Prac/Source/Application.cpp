@@ -145,14 +145,14 @@ void Application::Run()
 				CurrentScene = MINIGAME1;
 				scene = minigame1;
 			}
-			else if (CurrentScene == MINIGAME1)
+			/*else if (CurrentScene == MINIGAME1)
 			{
 				CurrentScene = MINIGAME2;
 				scene = minigame2;
-			}
+			}*/
 			else if (CurrentScene == MINIGAME1)
 			{
-				CurrentScene = MINIGAME2;
+				CurrentScene = MAIN;
 				scene = mainscene;
 			}
 		}

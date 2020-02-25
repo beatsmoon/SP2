@@ -385,7 +385,7 @@ void SceneText::Init()
 	meshList[GEO_MINI_CAR_WHEELS] = MeshBuilder::GenerateOBJ("minicar", "OBJ//miniwheels.obj");
 	meshList[GEO_MINI_CAR_WHEELS]->textureID = LoadTGA("Image//miniwheelsUV.tga");
 
-	meshList[GEO_CARSURFER_ROCK] = MeshBuilder::GenerateOBJ("rock", "OBJ//rock.obj");
+	meshList[GEO_CARSURFER_ROCK] = MeshBuilder::GenerateOBJ("rock", "OBJ//minirock.obj");
 	meshList[GEO_CARSURFER_ROCK]->textureID = LoadTGA("Image//rockUV.tga");
 
 	meshList[GEO_HOLOGRAM] = MeshBuilder::GenerateOBJ("booth_hologram", "OBJ//hologram.obj");
@@ -1204,7 +1204,7 @@ void SceneText::RenderCarSurfersBooth()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0.2, 0.05, 0);
+	//modelStack.Translate(0.2, 0.05, 0);
 	RenderMesh(meshList[GEO_CARSURFER_ROCK], false);
 	modelStack.PopMatrix();
 
