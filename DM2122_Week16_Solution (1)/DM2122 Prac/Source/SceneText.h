@@ -50,6 +50,7 @@ class SceneText : public Scene
 		GEO_FLAPPYCAR_ENVIRONMENT,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
+		GEO_TESTDRIVE_ENVIRONMENT_OBJ,
 		NUM_GEOMETRY,
 	};
 
@@ -105,6 +106,20 @@ class SceneText : public Scene
 		U_LIGHT5_KL,
 		U_LIGHT5_KQ,
 
+		U_LIGHT6_POSITION,
+		U_LIGHT6_COLOR,
+		U_LIGHT6_POWER,
+		U_LIGHT6_KC,
+		U_LIGHT6_KL,
+		U_LIGHT6_KQ,
+
+		U_LIGHT7_POSITION,
+		U_LIGHT7_COLOR,
+		U_LIGHT7_POWER,
+		U_LIGHT7_KC,
+		U_LIGHT7_KL,
+		U_LIGHT7_KQ,
+
 		U_LIGHTENABLED,
 		//add these enum in UNIFORM_TYPE before U_TOTAL
 		U_LIGHT0_TYPE,
@@ -143,10 +158,26 @@ class SceneText : public Scene
 		U_LIGHT5_COSINNER,
 		U_LIGHT5_EXPONENT,
 
+		U_LIGHT6_TYPE,
+		U_LIGHT6_SPOTDIRECTION,
+		U_LIGHT6_COSCUTOFF,
+		U_LIGHT6_COSINNER,
+		U_LIGHT6_EXPONENT,
+
+		U_LIGHT7_TYPE,
+		U_LIGHT7_SPOTDIRECTION,
+		U_LIGHT7_COSCUTOFF,
+		U_LIGHT7_COSINNER,
+		U_LIGHT7_EXPONENT,
+
+		
+
 		U_NUMLIGHTS,
 		// add these enum for texture
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
+		U_IS_CAR,
+		U_IS_CAR_WHITE,
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -180,7 +211,7 @@ private:
 	unsigned m_parameters[U_TOTAL];
 
 	MS modelStack, viewStack, projectionStack;
-	Light light[6];
+	Light light[8];
 
 	Camera2 camera;
 	Camera2 cameraCar;
@@ -193,7 +224,7 @@ private:
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
 	bool isOnGround = true;
-	//int Scaling = 1;
+	int Scaling = 1;
 
 	int renderingState = STATE_SELECTION_SCREEN;
 
@@ -201,7 +232,9 @@ private:
 	int pauseMenuSelection = CHOICE_NONE;
 	float moveIndicator = 0;
 	int moveDirection = 1;
-
+	bool turnCarWhite = false;
+	bool hasCarFell = false;
+	int counter = 0;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
@@ -217,6 +250,7 @@ private:
 	void RenderMiniDisplayCar();
 	void RenderFlappyCarBooth();
 	void RenderCarSurfersBooth();
+	void RenderCarMesh(Mesh *mesh);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

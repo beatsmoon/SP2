@@ -118,7 +118,7 @@ void Car::Turn(bool _direction, double dt)
 {
 	//TODO: Inertia towards target instead of direction or multiply by length of velocity
 	float handling = -Handling;
-	handling *= dt;
+	handling *= dt * 2;
 	handling = Math::DegreeToRadian(handling);
 	if (!_direction)
 		handling = -handling;
@@ -150,7 +150,7 @@ void Car::update(double dt)
 	Vector3 Friction;
 	if (!Velocity.IsZero())
 		Friction = Velocity.Normalized();
-	Velocity -= Friction * 3.f * dt;
+	Velocity -= Friction * 2.f * dt;
 }
 
 void Car::Reset()

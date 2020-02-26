@@ -59,6 +59,7 @@ uniform int numLights;
 uniform bool colorTextureEnabled;
 uniform sampler2D colorTexture;
 
+
 void main(){
 	if(lightEnabled == true)
 	{
@@ -113,6 +114,7 @@ void main(){
 				material.kSpecular * lights[i].color * lights[i].power * pow(cosAlpha, material.kShininess) * attenuationFactor * spotlightEffect;
 		}
 	}
+
 	else
 	{
 		if(colorTextureEnabled == true)
@@ -120,4 +122,6 @@ void main(){
 		else
 			color = fragmentColor;
 	}
+
+	
 }
