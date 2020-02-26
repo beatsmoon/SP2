@@ -430,6 +430,9 @@ void SceneText::Init()
 	meshList[GEO_C_CAR_WHEEL] = MeshBuilder::GenerateOBJ("clement_car_wheel", "OBJ//Car_Wheel_Clement.obj");
 	meshList[GEO_C_CAR_WHEEL]->textureID = LoadTGA("Image//Car_Clement.tga");
 
+	//meshList[GEO_TESTDRIVE_ENVIRONMENT_OBJ] = MeshBuilder::GenerateOBJ("meteorite", "OBJ//met.obj");
+	//meshList[GEO_TESTDRIVE_ENVIRONMENT_OBJ]->textureID = LoadTGA("Image//met.tga");
+
 	meshList[GEO_SPACESTATION_FLOOR] = MeshBuilder::GenerateOBJ("floor", "OBJ//floor.obj");
 	meshList[GEO_SPACESTATION_FLOOR]->textureID = LoadTGA("Image//floorUV.tga");
 
@@ -922,17 +925,20 @@ void SceneText::Render()
 		RenderMesh(meshList[GEO_RACETRACK], false);
 		modelStack.PopMatrix();
 
+		//modelStack.PushMatrix();
+		//modelStack.Translate(110, -7, 38);
+		////modelStack.Scale(18, 18, 18);
+		//RenderMesh(meshList[GEO_TESTDRIVE_ENVIRONMENT_OBJ], false);
+		//modelStack.PopMatrix();
+
+
 		modelStack.PushMatrix();
-		//
 		modelStack.Translate(0, 0, 0);
 		modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
-		
 		float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
 		angle = Math::RadianToDegree(angle);
 		modelStack.Rotate(angle, 0, 1, 0);
 		modelStack.Rotate(-90, 0, 1, 0);
-		//modelStack.Scale(3, 3, 3);
-		//modelStack.Scale(Scaling, Scaling, Scaling);
 		RenderWMCar();
 		modelStack.PopMatrix();
 
