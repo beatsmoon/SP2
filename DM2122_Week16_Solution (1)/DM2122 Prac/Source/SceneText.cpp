@@ -603,26 +603,45 @@ void SceneText::Update(double dt)
 
 		//cout << "hello" << endl;
 		CarWM->Reset();
-		/*int count = 0;
-		while (count != 1000)
+		
+		if (hasCarFell == false)
 		{
-			if (turnCarWhite == false)
-			{
-				cout << "mm" << endl;
-				turnCarWhite = true;
-				
-			}
-			else
-			{
-				turnCarWhite = false;
-				count++;
-			}
-		}*/
-		turnCarWhite = true;
+			counter++;
+			turnCarWhite = true;
+			hasCarFell = true;
+		}
+		
 		
 		
 		isOnGround = true;
 	}
+
+	if (counter > 0 && counter < 20)
+	{
+		
+		if (hasCarFell == true)
+		{
+			if (turnCarWhite == true)
+			{
+				turnCarWhite = false;
+				
+			}
+			else
+			{
+				turnCarWhite = true;
+			}
+			counter++;
+			//cout << counter << endl;
+			if (counter == 20)
+			{
+				counter = 0;
+				hasCarFell = false;
+			}
+		}
+		
+	}
+
+	
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);

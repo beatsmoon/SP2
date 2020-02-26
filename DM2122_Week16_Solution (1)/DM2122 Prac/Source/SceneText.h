@@ -232,6 +232,8 @@ private:
 	float moveIndicator = 0;
 	int moveDirection = 1;
 	bool turnCarWhite = false;
+	bool hasCarFell = false;
+	int counter = 0;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
