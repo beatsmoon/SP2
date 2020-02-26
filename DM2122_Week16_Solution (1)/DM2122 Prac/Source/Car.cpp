@@ -131,6 +131,15 @@ void Car::Turn(bool _direction, double dt)
 	// Set Car Target in that direction
 	Direction = dirVec;
 
+	float p = Velocity.Length();
+	if (!Velocity.IsZero())
+	{
+		Vector3 t = Velocity.Normalized();
+		t *= 1 - (Handling * 0.001f);
+		dirVec *= (Handling * 0.001f);
+		Velocity = (t + dirVec) * p;
+	}
+
 	//selectedCar->Target = dirVec * distVec.Length() + selectedCar->GetPos();
 }
 
