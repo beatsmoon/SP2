@@ -164,11 +164,16 @@ class SceneText : public Scene
 
 	enum MENU_CHOICE
 	{
+		CHOICE_WM,
+		CHOICE_VL,
+		CHOICE_GL,
+		CHOICE_CM,
 		CHOICE_NONE,
 		CHOICE_RESUME,
 		CHOICE_HIGHSCORE,
 		CHOICE_EXIT,
 		CHOICE_BACK,
+		CHOICE_RETURN_STATION,
 	};
 
 private:
@@ -188,7 +193,7 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 
-	Car* CarWM; //TODO change this into an array
+	Car* Cars[4]; //TODO change this into an array
 	bool CarUI[4] = { false, };
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
@@ -202,6 +207,8 @@ private:
 	float moveIndicator = 0;
 	int moveDirection = 1;
 
+	int carSelection = CHOICE_WM;
+	int whichCar;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
