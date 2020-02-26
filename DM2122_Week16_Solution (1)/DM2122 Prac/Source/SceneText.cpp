@@ -563,7 +563,7 @@ void SceneText::Update(double dt)
 			pauseHeight -= 5 * dt;
 	}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed('E'))
+	if (KeyboardController::GetInstance()->IsKeyPressed('E') || MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
 		if (pauseMenuSelection == CHOICE_RESUME)
 		{
