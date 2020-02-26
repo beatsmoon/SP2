@@ -99,7 +99,7 @@ public:
 
 	// Handling Camera
 	void SelectCar(Car* _carPTR);
-	Car GetSelectedCar();
+	Car* GetSelectedCar();
 	
 	
 

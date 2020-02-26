@@ -443,8 +443,8 @@ void CPlayerInfo::SelectCar(Car* _carPTR)
 	selectedCar = _carPTR;
 }
 
-Car CPlayerInfo::GetSelectedCar()
+Car* CPlayerInfo::GetSelectedCar()
 {
-	return *selectedCar;
+	return selectedCar;
 }
 

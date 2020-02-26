@@ -162,7 +162,7 @@ void Car::update(double dt)
 	Vector3 Friction;
 	if (!Velocity.IsZero())
 		Friction = Velocity.Normalized();
-	Velocity -= Friction * 2.f * dt;
+	Velocity -= Friction * 1.f * dt;
 }
 
 void Car::Reset()
