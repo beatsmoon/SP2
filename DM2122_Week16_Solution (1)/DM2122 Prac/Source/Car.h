@@ -16,6 +16,7 @@ private:
 	float Handling;
 	float Acceleration;
 	float Nitro;
+	Car* selectedCar;
 
 public:
 	Car(string name, float top_speed, float handling, float acceleration, float nitro);
@@ -30,6 +31,7 @@ public:
 	void Set_handling(float);
 	void Set_acceleration(float);
 	void Set_nitro(float);
+	void Set_Selected_car(Car*);
 
 	Vector3 GetPos();
 	Vector3 GetVelocity();
@@ -39,6 +41,7 @@ public:
 	float Get_handling();
 	float Get_acceleration();
 	float Get_nitro();
+	Car* Get_Selected_Car();
 
 	// Functions
 	void Accelerate(bool direction, double dt);

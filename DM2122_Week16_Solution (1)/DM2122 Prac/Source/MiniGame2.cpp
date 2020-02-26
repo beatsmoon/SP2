@@ -482,13 +482,13 @@ void MiniGame2::RenderCar()
 	modelStack.PopMatrix();*/
 
 	//VAL CAR
-
 	/*modelStack.PushMatrix();
 	modelStack.Translate(carX, -40, -10);
 	modelStack.Rotate(RotateCar, 0, 1, 0);
 	modelStack.Scale(7.f, 7.f, 7.f);
 	RenderMesh(meshList[GEO_VAL_CAR], false);
 	modelStack.PopMatrix();*/
+
 	
 	//G CAR
 	//modelStack.PushMatrix();

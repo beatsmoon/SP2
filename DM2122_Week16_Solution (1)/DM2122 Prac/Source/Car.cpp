@@ -60,6 +60,11 @@ void Car::Set_nitro(float nitro)
 
 }
 
+void Car::Set_Selected_car(Car* CarSelect)
+{
+	selectedCar = CarSelect;
+}
+
 Vector3 Car::GetPos()
 {
 	return Pos;
@@ -99,6 +104,13 @@ float Car::Get_nitro()
 {
 	return Nitro;
 }
+
+Car* Car::Get_Selected_Car()
+{
+	return selectedCar;
+}
+
+
 
 void Car::Accelerate(bool _direction, double dt)
 {
