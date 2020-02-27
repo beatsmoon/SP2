@@ -767,6 +767,10 @@ void SceneMiniGame1::Update(double dt)
 				bouncetime = GetTickCount64() + 100;
 				carselected = 0;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
+
+				SoundEngine->play2D("audio/sound_victory.wav", GL_TRUE);
+				SoundEngine->play2D("audio/sound_victory.mp3", GL_TRUE);
+
 			}			
 			if (KeyboardController::GetInstance()->IsKeyReleased('2') && bouncetime <= GetTickCount64()) //Glenda
 			{

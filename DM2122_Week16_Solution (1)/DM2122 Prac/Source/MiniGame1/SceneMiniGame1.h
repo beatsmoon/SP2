@@ -9,6 +9,8 @@
 #include "MiniGame1Obj.h"
 #include <fstream>
 #include <iostream>
+#include <../../irrklang/include/irrKlang.h>
+using namespace irrklang;
 
 using namespace std;
 
@@ -127,6 +129,7 @@ private:
 	//2 - Waimen
 	//3 - Val
 	int carselected;
+	ISoundEngine* SoundEngine = createIrrKlangDevice();
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
