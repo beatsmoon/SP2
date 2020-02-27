@@ -76,10 +76,9 @@ void SceneMiniGame1::Init()
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image/Background_FlappyCar1_Clement.tga");
 
-	//meshList[GEO_CAR] = MeshBuilder::GenerateQuad("FlappyCar", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_CAR] = MeshBuilder::GenerateText("FlappyCar", 2, 2);
-	//meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
-	meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");	
+	//meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");	
+	meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
 	
 	meshList[GEO_POWERUP] = MeshBuilder::GenerateText("Powerup", 2, 2);
 	meshList[GEO_POWERUP]->textureID = LoadTGA("Image//PowerUp_FlappyCar1_Clement.tga");	
@@ -97,7 +96,10 @@ void SceneMiniGame1::Init()
 	meshList[GEO_LOST]->textureID = LoadTGA("Image//Lost_FlappyCar1_Clement.tga");	
 
 	meshList[GEO_CONTROLS] = MeshBuilder::GenerateQuad("Control_Menu", Color(1, 1, 1), 1.f, 1.f);
-	meshList[GEO_CONTROLS]->textureID = LoadTGA("Image//Controls_FlappyCar1_Clement.tga");
+	meshList[GEO_CONTROLS]->textureID = LoadTGA("Image//Controls_FlappyCar1_Clement.tga");	
+	
+	meshList[GEO_SELECTION] = MeshBuilder::GenerateQuad("Selection_Menu", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_SELECTION]->textureID = LoadTGA("Image//Selection_FlappyCar1_Clement.tga");
 	
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -150,33 +152,37 @@ void SceneMiniGame1::Init()
 	bouncetime = GetTickCount64();
 	scoremenu = false;
 	controlmenu = false;
+	selectmenu = false;
 
 	Highscore1color = 0;
 
 	screensizescore = 0;
 	screensizecontrol = 0;
+	screensizeselection = 0;
+
 
 	carselected = 0;
+
 }
 
 void SceneMiniGame1::Update(double dt)
 {
-	if (Application::IsKeyPressed(0x31))
-	{
-		glDisable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed(0x32))
-	{
-		glEnable(GL_CULL_FACE);
-	}
-	else if (Application::IsKeyPressed(0x33))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	else if (Application::IsKeyPressed(0x34))
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
+	//if (Application::IsKeyPressed(0x31))
+	//{
+	//	glDisable(GL_CULL_FACE);
+	//}
+	////else if (Application::IsKeyPressed(0x32))
+	//{
+	//	glEnable(GL_CULL_FACE);
+	//}
+	//else if (Application::IsKeyPressed(0x33))
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//}
+	//else if (Application::IsKeyPressed(0x34))
+	//{
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//}
 	
 	CalculateFrameRate();
 	
@@ -247,7 +253,7 @@ void SceneMiniGame1::Update(double dt)
 				if (type >= 4)
 				{
 					wingsgoingup = false;
-					type = 4;
+					type = 2;
 				}
 			}
 			else
@@ -515,7 +521,7 @@ void SceneMiniGame1::Update(double dt)
 	}
 	else //Havnt started
 	{
-		if (scoremenu == false && controlmenu == false)
+		if (scoremenu == false && controlmenu == false && selectmenu == false)
 		{
 			//Reduce Score Screen size
 			if (screensizescore > 0)
@@ -535,19 +541,27 @@ void SceneMiniGame1::Update(double dt)
 					screensizecontrol = 0;
 				}
 			}
+			if (screensizeselection > 0)
+			{
+				screensizeselection -= 20;
+				if (screensizeselection < 0)
+				{
+					screensizeselection = 0;
+				}
+			}
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP) && bouncetime <= GetTickCount64())
 			{
 				cursor--;
 				if (cursor <= -1)
 				{
-					cursor = 3;
+					cursor = 4;
 				}
 				bouncetime = GetTickCount64() + 100;
 			}
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN) && bouncetime <= GetTickCount64())
 			{
 				cursor++;
-				if (cursor >= 4)
+				if (cursor >= 5)
 				{
 					cursor = 0;
 				}
@@ -570,12 +584,14 @@ void SceneMiniGame1::Update(double dt)
 					WallStart = new MiniGame1Obj(800, size, gamespeed - 1, 0);
 					Player->setvely(0);
 					nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
+					Player->settype(0);
+					animationtime = GetTickCount64() + nextanimation;
 					break;
 				}
 				//Highscores
 				case 1:
 				{
-					if (controlmenu == false)
+					if (controlmenu == false && selectmenu == false)
 					{
 						bouncetime = GetTickCount64() + 1000;
 						scoremenu = true;
@@ -599,17 +615,26 @@ void SceneMiniGame1::Update(double dt)
 				case 2:
 				{
 					bouncetime = GetTickCount64() + 1000;
-					if (scoremenu == false)
+					if (scoremenu == false && selectmenu == false)
 					{
 						controlmenu = true;
 					}
 
 					break;
 				}
-				//Exit to showroom
+				//Car Selection
 				case 3:
 				{
+					bouncetime = GetTickCount64() + 1000;
+					if (scoremenu == false && controlmenu == false)
+					{
+						selectmenu = true;
+					}
 					break;
+				}
+				case 4:
+				{
+
 				}
 				}
 			}
@@ -630,6 +655,77 @@ void SceneMiniGame1::Update(double dt)
 			{
 				bouncetime = GetTickCount64() + 500;
 				controlmenu = false;
+			}
+		}
+		else if (selectmenu == true) //Car Selection Menu
+		{
+			if (screensizeselection < 500)
+			{
+				screensizeselection += 10;
+				if (screensizeselection > 500)
+				{
+					screensizeselection = 500;
+				}
+			}
+
+
+			//Update Animations
+			if (animationtime <= GetTickCount64())
+			{
+				animationtime = GetTickCount64() + nextanimation;
+				//For Player
+				//0 - Sprite 1
+				//1 - Sprite 2
+				//2 - Sprite 3
+				//3 - Sprite 4
+				int type = Player->returntype();
+				if (wingsgoingup == true)
+				{
+					type++;
+					if (type >= 4)
+					{
+						wingsgoingup = false;
+						type = 2;
+					}
+				}
+				else
+				{
+					type--;
+					if (type <= -1)
+					{
+						wingsgoingup = true;
+						type = 0;
+					}
+				}
+				Player->settype(type);
+			}
+
+			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
+			{
+				bouncetime = GetTickCount64() + 500;
+				selectmenu = false;
+			}
+			if (KeyboardController::GetInstance()->IsKeyReleased('1')) //Clement
+			{
+				carselected = 0;
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
+			}			
+			if (KeyboardController::GetInstance()->IsKeyReleased('2')) //Glenda
+			{
+				carselected = 1;
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
+
+			}			
+			if (KeyboardController::GetInstance()->IsKeyReleased('3')) //Waimen
+			{
+				carselected = 2;
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
+
+			}			
+			if (KeyboardController::GetInstance()->IsKeyReleased('4')) //Val
+			{
+				carselected = 3;
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
 			}
 		}
 		else //scoremenu
@@ -797,7 +893,7 @@ void SceneMiniGame1::Render()
 	}
 	else if (playing == false)
 	{
-		if (scoremenu == false && controlmenu == false)
+		if (scoremenu == false && controlmenu == false && selectmenu == false)
 		{
 			RenderImageOnScreen(meshList[GEO_MAIN], 600, 600, 400, 300);
 			//0 - Start
@@ -860,13 +956,70 @@ void SceneMiniGame1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 245, 170);
 			}
 		}
+		else if (selectmenu == true)
+		{
+			RenderImageOnScreen(meshList[GEO_SELECTION], screensizeselection, screensizeselection, 400, 300);
+			if (screensizeselection >= 500)
+			{
+				int count = 6;
+				switch (Player->returntype())
+				{
+				case 0:
+					count = 6;
+					break;
+				case 1:
+					count = 12;
+					break;
+				case 2:
+					count = 20;
+					break;
+				case 3:
+					count = 30;
+					break;
+				}
+				//Clement Car 1)
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");
+				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 225, 315);
+
+				//Glenda Car 2)
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
+				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 475, 315);
+				
+				//Waimen Car 3)
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
+				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 225, 140);
+				
+				//Val Car 4)
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
+				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 475, 140);
+
+				switch (carselected)
+				{
+				case 0:
+					meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 190, 410);
+					break;
+				case 1:
+					meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 440, 410);
+					break;
+				case 2:
+					meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 190, 236);
+					break;
+				case 3:
+					meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 440, 236);
+				}
+			}
+		}
 		else //controlmenu
 		{
 			//Render controls
 			RenderImageOnScreen(meshList[GEO_CONTROLS], screensizecontrol, screensizecontrol, 400, 300);
 		}
 		//(For transition)
-		if (scoremenu == false && controlmenu == false)
+		if (scoremenu == false && controlmenu == false && selectmenu == false)
 		{
 
 			//Render Scoreboard
@@ -874,6 +1027,9 @@ void SceneMiniGame1::Render()
 
 			//Render controls
 			RenderImageOnScreen(meshList[GEO_CONTROLS], screensizecontrol, screensizecontrol, 400, 300);
+
+			//Render Selection Menu
+			RenderImageOnScreen(meshList[GEO_SELECTION], screensizeselection, screensizeselection, 400, 300);
 		}
 	}
 	else
@@ -1214,9 +1370,13 @@ void SceneMiniGame1::Restart()
 	bouncetime = GetTickCount64();
 	scoremenu = false;
 	controlmenu = false;
+	selectmenu = false;
 
 	Highscore1color = 0;
 
 	screensizescore = 0;
 	screensizecontrol = 0;
+	screensizeselection = 0;
+
+
 }

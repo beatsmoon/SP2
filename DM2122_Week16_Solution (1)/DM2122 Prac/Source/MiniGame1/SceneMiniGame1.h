@@ -28,6 +28,7 @@ class SceneMiniGame1 : public Scene
 		GEO_MAIN,
 		GEO_INDICATOR,
 		GEO_CONTROLS,
+		GEO_SELECTION,
 		NUM_GEOMETRY,
 	};
 
@@ -92,6 +93,7 @@ private:
 
 	bool scoremenu;
 	bool controlmenu;
+	bool selectmenu;
 
 	bool walldestroy;
 
@@ -111,8 +113,10 @@ private:
 	//3 - Gold
 	int Highscore1color;
 
+	//Control Screen Size
 	float screensizescore;
 	float screensizecontrol;
+	float screensizeselection;
 
 	//0 - Clement
 	//1 - Glenda
