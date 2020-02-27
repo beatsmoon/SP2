@@ -51,6 +51,8 @@ class SceneText : public Scene
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		GEO_TESTDRIVE_ENVIRONMENT_OBJ,
+		GEO_SPEEDOMETER,
+		GEO_SPEEDOMETER_NEEDLE,
 		NUM_GEOMETRY,
 	};
 
@@ -248,6 +250,7 @@ private:
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
 	void RenderPause();
+	void RenderTestDrivePause();
 	void RenderSpaceStation();
 	void RenderWMCar();
 	void RenderStatsUI();
@@ -259,9 +262,11 @@ private:
 	void RenderMiniDisplayCar();
 	void RenderFlappyCarBooth();
 	void RenderCarSurfersBooth();
+	void RenderSpeedometer();
 	void RenderCarMesh(Mesh *mesh);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
 	
