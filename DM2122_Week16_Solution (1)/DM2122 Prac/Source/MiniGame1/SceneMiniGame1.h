@@ -114,12 +114,19 @@ private:
 	float screensizescore;
 	float screensizecontrol;
 
+	//0 - Clement
+	//1 - Glenda
+	//2 - Waimen
+	//3 - Val
+	int carselected;
+
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y);
 	void RenderAnimationOnScreen(Mesh* mesh, int count, float size, float x, float y);
 	void CalculateFrameRate();
+	void Restart();
 
 public:
 	SceneMiniGame1();

@@ -78,7 +78,8 @@ void SceneMiniGame1::Init()
 
 	//meshList[GEO_CAR] = MeshBuilder::GenerateQuad("FlappyCar", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_CAR] = MeshBuilder::GenerateText("FlappyCar", 2, 2);
-	meshList[GEO_CAR]->textureID = LoadTGA("Image//Car_FlappyCar1_Clement.tga");	
+	//meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
+	meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");	
 	
 	meshList[GEO_POWERUP] = MeshBuilder::GenerateText("Powerup", 2, 2);
 	meshList[GEO_POWERUP]->textureID = LoadTGA("Image//PowerUp_FlappyCar1_Clement.tga");	
@@ -98,11 +99,11 @@ void SceneMiniGame1::Init()
 	meshList[GEO_CONTROLS] = MeshBuilder::GenerateQuad("Control_Menu", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_CONTROLS]->textureID = LoadTGA("Image//Controls_FlappyCar1_Clement.tga");
 	
-	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga"); 
 
+	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 	playing = false;
 	lost = false;
 	gameupdate = GetTickCount64();
@@ -115,7 +116,31 @@ void SceneMiniGame1::Init()
 
 	gamespeed = -0.4;
 	score = 0;
-	nextanimation = 250;
+	nextanimation = 150;
+	gapsize = 175;
+
+	walldestroy = false;
+
+	cursor = 0;
+
+	bouncetime = GetTickCount64();
+	scoremenu = false;
+	controlmenu = false;
+
+	Highscore1color = 0;
+
+	screensizescore = 0;
+	screensizecontrol = 0;gameupdate = GetTickCount64();
+	nextupdate = 5000;
+
+	Player = new MiniGame1Obj(400, 300, 0, 0);
+	Player->settype(0);
+	wingsgoingup = false;
+
+
+	gamespeed = -0.4;
+	score = 0;
+	nextanimation = 150;
 	gapsize = 175;
 
 	walldestroy = false;
@@ -130,6 +155,8 @@ void SceneMiniGame1::Init()
 
 	screensizescore = 0;
 	screensizecontrol = 0;
+
+	carselected = 0;
 }
 
 void SceneMiniGame1::Update(double dt)
@@ -483,35 +510,7 @@ void SceneMiniGame1::Update(double dt)
 	{
 		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN))
 		{
-			//Deleting Pointers
-			BackgroundMid = BackgroundStart;
-			BackgroundStart = nullptr;
-			while (BackgroundMid != nullptr)
-			{
-				MiniGame1Obj* Store = BackgroundMid->getnextadress();
-				delete BackgroundMid;
-				BackgroundMid = Store;
-			}
-
-
-			WallMid = WallStart;
-			WallStart = nullptr;
-			while (WallMid != nullptr)
-			{
-				MiniGame1Obj* Store = WallMid->getnextadress();
-				delete WallMid;
-				WallMid = Store;
-			}
-			if (Powerup != nullptr)
-			{
-				delete Powerup;
-				Powerup = nullptr;
-			}
-			delete Player;
-
-			Init();
-			
-
+			Restart();
 		}
 	}
 	else //Havnt started
@@ -541,7 +540,7 @@ void SceneMiniGame1::Update(double dt)
 				cursor--;
 				if (cursor <= -1)
 				{
-					cursor = 4;
+					cursor = 3;
 				}
 				bouncetime = GetTickCount64() + 100;
 			}
@@ -1137,4 +1136,87 @@ void SceneMiniGame1::RenderAnimationOnScreen(Mesh* mesh, int count, float size, 
 
 
 
+}
+
+void SceneMiniGame1::Restart()
+{
+	//Deleting Pointers
+	BackgroundMid = BackgroundStart;
+	BackgroundStart = nullptr;
+	while (BackgroundMid != nullptr)
+	{
+		MiniGame1Obj* Store = BackgroundMid->getnextadress();
+		delete BackgroundMid;
+		BackgroundMid = Store;
+	}
+
+
+	WallMid = WallStart;
+	WallStart = nullptr;
+	while (WallMid != nullptr)
+	{
+		MiniGame1Obj* Store = WallMid->getnextadress();
+		delete WallMid;
+		WallMid = Store;
+	}
+	if (Powerup != nullptr)
+	{
+		delete Powerup;
+		Powerup = nullptr;
+	}
+	delete Player;
+
+	BackgroundStart = new MiniGame1Obj(400, 300, 0, 0);
+
+	playing = false;
+	lost = false;
+	gameupdate = GetTickCount64();
+	nextupdate = 5000;
+
+	Player = new MiniGame1Obj(400, 300, 0, 0);
+	Player->settype(0);
+	wingsgoingup = false;
+
+
+	gamespeed = -0.4;
+	score = 0;
+	nextanimation = 150;
+	gapsize = 175;
+
+	walldestroy = false;
+
+	cursor = 0;
+
+	bouncetime = GetTickCount64();
+	scoremenu = false;
+	controlmenu = false;
+
+	Highscore1color = 0;
+
+	screensizescore = 0;
+	screensizecontrol = 0; gameupdate = GetTickCount64();
+	nextupdate = 5000;
+
+	Player = new MiniGame1Obj(400, 300, 0, 0);
+	Player->settype(0);
+	wingsgoingup = false;
+
+
+	gamespeed = -0.4;
+	score = 0;
+	nextanimation = 150;
+	gapsize = 175;
+
+	walldestroy = false;
+
+	cursor = 0;
+
+	bouncetime = GetTickCount64();
+	scoremenu = false;
+	controlmenu = false;
+
+	Highscore1color = 0;
+
+	screensizescore = 0;
+	screensizecontrol = 0;
 }
