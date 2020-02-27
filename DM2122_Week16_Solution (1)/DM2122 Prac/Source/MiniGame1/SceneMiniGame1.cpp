@@ -899,20 +899,24 @@ void SceneMiniGame1::Render()
 			//0 - Start
 			//1 - Highscores
 			//2 - Controls
-			//3 - Back to main
-			int y = 330;
+			//3 - Car Selection
+			//4 - Back to main
+			int y = 400;
 			switch (cursor)
 			{
-			case 3: //120
+			case 4: //120
 				y -= 70;
 
-			case 2: //190
+			case 3: //190
 				y -= 70;
 
-			case 1: //260
+			case 2: //260
 				y -= 70;
 
-			case 0: //330
+			case 1: //330
+				y -= 70;
+
+			case 0: //400
 				break;
 			}
 			RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, y);
