@@ -533,9 +533,25 @@ void SceneText::Update(double dt)
 			{
 				renderingState = STATE_TEST_DRIVE;
 				thePlayer->SelectCar(Cars[i]);
-				//thePlayer->DetachCamera();
-				//thePlayer->AttachCamera(&cameraCar);
 				thePlayer->Toggle_TestDrive();
+				whichCar = i;
+				switch (i)
+				{
+				case CHOICE_WM:
+					Data::GetInstance()->setCurrCar(Data::CarType::CAR_WM);
+					break;
+				case CHOICE_VL:
+					Data::GetInstance()->setCurrCar(Data::CarType::CAR_V);
+					break;
+				case CHOICE_GL:
+					Data::GetInstance()->setCurrCar(Data::CarType::CAR_G);
+					break;
+				case CHOICE_CM:
+					Data::GetInstance()->setCurrCar(Data::CarType::CAR_C);
+					break;
+				default:
+					break;
+				}
 			}
 
 		}
@@ -598,22 +614,6 @@ void SceneText::Update(double dt)
 		}
 	}
 
-		if (carSelection == CHOICE_WM)
-		{
-			whichCar = 0;
-		}
-		else if (carSelection == CHOICE_VL)
-		{
-			whichCar = 1;
-		}
-		else if (carSelection == CHOICE_GL)
-		{
-			whichCar = 2;
-		}
-		else if (carSelection == CHOICE_CM)
-		{
-			whichCar = 3;
-		}
 	if (renderingState == STATE_TEST_DRIVE && isOnGround == true)
 	{
 		
@@ -691,6 +691,7 @@ void SceneText::Render()
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
+	// Lights
 	{
 		if (light[0].type == Light::LIGHT_DIRECTIONAL)
 		{
@@ -958,7 +959,6 @@ void SceneText::Render()
 		//RenderMesh(meshList[GEO_TESTDRIVE_ENVIRONMENT_OBJ], false);
 		//modelStack.PopMatrix();
 
-
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 0, 0);
 		modelStack.Translate(Cars[whichCar]->GetPos().x, Cars[whichCar]->GetPos().y, Cars[whichCar]->GetPos().z); //TODO swap to selected car ptr
@@ -968,57 +968,43 @@ void SceneText::Render()
 		modelStack.Rotate(angle, 0, 1, 0);
 		modelStack.Rotate(-90, 0, 1, 0);
 		//modelStack.Scale(3, 3, 3);
-		if (carSelection == CHOICE_WM)
+
+		switch (Data::GetInstance()->getCurrCar())
 		{
+		case Data::CarType::CAR_WM:
 			RenderWMCar();
-		}
-		else if (carSelection == CHOICE_VL)
-		{
+			break;
+		case Data::CarType::CAR_V:
 			modelStack.PushMatrix();
 			modelStack.Rotate(90, 0, 1, 0);
 			modelStack.Scale(12, 12, 12);
 			RenderValCar();
 			modelStack.PopMatrix();
-		}
-		else if (carSelection == CHOICE_GL)
-		{
+			break;
+		case Data::CarType::CAR_G:
 			modelStack.PushMatrix();
 			modelStack.Scale(3.5, 3.5, 3.5);
 			RenderGCar();
 			modelStack.PopMatrix();
-		}
-		else if (carSelection == CHOICE_CM)
-		{
+			break;
+		case Data::CarType::CAR_C:
 			modelStack.PushMatrix();
 			modelStack.Rotate(180, 0, 1, 0);
 			modelStack.Scale(12, 12, 12);
 			RenderCCar();
 			modelStack.PopMatrix();
+			break;
+		case Data::CarType::CAR_NONE:
+			cout << "Error: No Car Selected" << endl;
+			break;
+		default:
+			cout << "Error: Default Case ST::Render()" << endl;
+			break;
 		}
+
 		modelStack.PopMatrix();
 
-		//if (isOnGround == true)
-		//{
-		//	
-		//}
-		//else
-		//{
-		//	//cout << isOnGround << endl;
-		//	modelStack.PushMatrix();
-		//	modelStack.Translate(0, 0, 0);
-		//	modelStack.Translate(CarWM->GetPos().x, CarWM->GetPos().y, CarWM->GetPos().z); //TODO swap to selected car ptr
-		//	//modelStack.Scale(Scaling, Scaling, Scaling);
-		//	float angle = atan2f(CarWM->GetDirection().x, CarWM->GetDirection().z);
-		//	angle = Math::RadianToDegree(angle);
-		//	modelStack.Rotate(angle, 0, 1, 0);
-		//	modelStack.Rotate(-90, 0, 1, 0);
-		//	//modelStack.Scale(3, 3, 3);
-		//	RenderWMCar();
-		//	modelStack.PopMatrix();
-		//}
-
 		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(Cars[whichCar]->GetPos().x) + ", " + to_string(Cars[whichCar]->GetPos().y) + ", " + to_string(Cars[whichCar]->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
-
 
 		break;
 	}
@@ -1216,19 +1202,19 @@ void SceneText::RenderStatsUI()
 			{
 			case 0:
 				RenderMesh(meshList[GEO_STATS_WM], false);
-				carSelection = CHOICE_WM;
+				//carSelection = CHOICE_WM;
 				break;
 			case 1:
 				RenderMesh(meshList[GEO_STATS_V], false);
-				carSelection = CHOICE_VL;
+				//carSelection = CHOICE_VL;
 				break;
 			case 2:
 				RenderMesh(meshList[GEO_STATS_G], false);
-				carSelection = CHOICE_GL;
+				//carSelection = CHOICE_GL;
 				break;
 			case 3:
 				RenderMesh(meshList[GEO_STATS_C], false);
-				carSelection = CHOICE_CM;
+				//carSelection = CHOICE_CM;
 				break;
 			default:
 				RenderMesh(meshList[GEO_STATS_WM], false);

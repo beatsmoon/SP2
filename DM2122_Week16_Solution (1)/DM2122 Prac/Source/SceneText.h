@@ -243,7 +243,7 @@ private:
 	bool hasCarFell = false;
 	int counter = 0;
 
-	int carSelection = CHOICE_WM;
+	//int carSelection = CHOICE_WM;
 	int whichCar;
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);

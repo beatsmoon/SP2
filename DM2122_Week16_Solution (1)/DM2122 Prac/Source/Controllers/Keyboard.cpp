@@ -54,6 +54,8 @@ int CKeyboard::Read(const float deltaTime)
 		Move_Jump();
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_CONTROL))
 		Toggle_Pause();
+	if (KeyboardController::GetInstance()->IsKeyPressed(VK_ESCAPE))
+		Toggle_Pause();
 
 
 	/*

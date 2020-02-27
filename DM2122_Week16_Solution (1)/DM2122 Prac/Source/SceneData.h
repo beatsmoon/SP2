@@ -17,7 +17,7 @@ public:
 	enum class CarType
 	{
 		CAR_WM,
-		CAR_VAL,
+		CAR_V,
 		CAR_C,
 		CAR_G,
 		CAR_TOTAL,
@@ -37,6 +37,6 @@ public:
 private:
 	bool isEnd = false;
 	SceneType currScene = SceneType::MAIN;
-	CarType currCar = CarType::CAR_NONE;
+	CarType currCar = CarType::CAR_WM;
 };
 
