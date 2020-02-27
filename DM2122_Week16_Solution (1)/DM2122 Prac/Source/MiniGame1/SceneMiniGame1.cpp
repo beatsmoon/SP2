@@ -716,12 +716,12 @@ void SceneMiniGame1::Update(double dt)
 		}
 		else if (selectmenu == true) //Car Selection Menu
 		{
-			if (screensizeselection < 500)
+			if (screensizeselection < 550)
 			{
 				screensizeselection += 10;
-				if (screensizeselection > 500)
+				if (screensizeselection > 550)
 				{
-					screensizeselection = 500;
+					screensizeselection = 550;
 				}
 			}
 
@@ -1025,7 +1025,7 @@ void SceneMiniGame1::Render()
 		else if (selectmenu == true)
 		{
 			RenderImageOnScreen(meshList[GEO_SELECTION], screensizeselection, screensizeselection, 400, 300);
-			if (screensizeselection >= 500)
+			if (screensizeselection >= 550)
 			{
 				int count = 6;
 				switch (Player->returntype())
@@ -1053,29 +1053,29 @@ void SceneMiniGame1::Render()
 				
 				//Waimen Car 3)
 				
-				RenderAnimationOnScreen(meshList[GEO_WAIMENCAR], count, 150, 225, 140);
+				RenderAnimationOnScreen(meshList[GEO_WAIMENCAR], count, 150, 225, 130);
 				
 				//Val Car 4)
 				
-				RenderAnimationOnScreen(meshList[GEO_VALCAR], count, 150, 475, 140);
+				RenderAnimationOnScreen(meshList[GEO_VALCAR], count, 150, 475, 130);
 
 				switch (carselected)
 				{
 				case 0:
 					
-					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 190, 410);
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 180, 430);
 					break;
 				case 1:
 				
-					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 440, 410);
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 450, 430);
 					break;
 				case 2:
 
-					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 190, 236);
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 180, 238);
 					break;
 				case 3:
 
-					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 440, 236);
+					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 450, 238);
 					break;
 				}
 			}
