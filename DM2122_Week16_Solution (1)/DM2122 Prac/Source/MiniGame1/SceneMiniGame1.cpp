@@ -204,10 +204,26 @@ void SceneMiniGame1::Update(double dt)
 		if (gameupdate <= GetTickCount64())
 		{
 			gameupdate = GetTickCount64() + nextupdate;
-			if (gamespeed > -4.5)
+			float speed;
+			switch (carselected)
+			{
+			case 0:
+				speed = -5.5;
+				break;
+			case 1:
+				speed = -4.5;
+				break;
+			case 2:
+				speed = -4.5;
+				break;
+			case 3:
+				speed = -4;
+			}
+			//Game speed up
+			if (gamespeed > -speed) //SPEED
 			{
 				gamespeed -= 0.5;
-				if (gamespeed == -4.5)
+				if (gamespeed == -speed)
 				{
 					gapsize = 150;
 					nextupdate = 3500;
@@ -466,10 +482,40 @@ void SceneMiniGame1::Update(double dt)
 		}
 		
 		//Player Movement
-		Player->setvely(Player->returnvelocityy() + -0.15);
-		if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE))
+		float negvelocity = -0.15; //Weight
+		switch (carselected)
 		{
-			Player->setvely(5.55);
+		case 0: //Clement 3
+			negvelocity = -0.25;
+			break;
+		case 1: //Glenda 2
+			negvelocity = -0.15;
+			break;
+		case 2: //Waimen 2
+			negvelocity = -0.15;
+			break;
+		case 3: //Val 1
+			negvelocity = -0.10;
+			break;
+		}
+		Player->setvely(Player->returnvelocityy() + negvelocity); //Weight
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE)) //floatiness
+		{
+			switch (carselected)
+			{
+			case 0: //Clement 1
+				Player->setvely(4.95);
+				break;
+			case 1: //Glenda 3
+				Player->setvely(5.55);
+				break;
+			case 2: //Waimen 2
+				Player->setvely(5);
+				break;
+			case 3: //Val 2
+				Player->setvely(5);
+				break;
+			}
 		}
 		Player->movexybyvelocity();
 		if (Player->returnlocationy() < 25)
@@ -716,25 +762,29 @@ void SceneMiniGame1::Update(double dt)
 				bouncetime = GetTickCount64() + 500;
 				selectmenu = false;
 			}
-			if (KeyboardController::GetInstance()->IsKeyReleased('1')) //Clement
+			if (KeyboardController::GetInstance()->IsKeyReleased('1') && bouncetime <= GetTickCount64()) //Clement
 			{
+				bouncetime = GetTickCount64() + 100;
 				carselected = 0;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
 			}			
-			if (KeyboardController::GetInstance()->IsKeyReleased('2')) //Glenda
+			if (KeyboardController::GetInstance()->IsKeyReleased('2') && bouncetime <= GetTickCount64()) //Glenda
 			{
+				bouncetime = GetTickCount64() + 100;
 				carselected = 1;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
 
 			}			
-			if (KeyboardController::GetInstance()->IsKeyReleased('3')) //Waimen
+			if (KeyboardController::GetInstance()->IsKeyReleased('3') && bouncetime <= GetTickCount64()) //Waimen
 			{
+				bouncetime = GetTickCount64() + 100;
 				carselected = 2;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
 
 			}			
-			if (KeyboardController::GetInstance()->IsKeyReleased('4')) //Val
+			if (KeyboardController::GetInstance()->IsKeyReleased('4') && bouncetime <= GetTickCount64()) //Val
 			{
+				bouncetime = GetTickCount64() + 100;
 				carselected = 3;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
 			}
