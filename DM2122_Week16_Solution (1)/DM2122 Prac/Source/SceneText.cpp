@@ -589,6 +589,7 @@ void SceneText::Update(double dt)
 		else if (pauseMenuSelection == CHOICE_RETURN_STATION)
 		{
 			renderingState = STATE_SELECTION_SCREEN;
+			thePlayer->Toggle_TestDrive();
 		}
 		else if(pauseMenuSelection == CHOICE_EXIT)
 		{
