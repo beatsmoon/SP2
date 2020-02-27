@@ -76,10 +76,21 @@ void SceneMiniGame1::Init()
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image/Background_FlappyCar1_Clement.tga");
 
-	meshList[GEO_CAR] = MeshBuilder::GenerateText("FlappyCar", 2, 2);
-	//meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");	
-	meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
+	meshList[GEO_CAR] = MeshBuilder::GenerateText("Car", 2, 2);
+	meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");
+
+	meshList[GEO_CLEMENTCAR] = MeshBuilder::GenerateText("ClementCar", 2, 2);
+	meshList[GEO_CLEMENTCAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");
 	
+	meshList[GEO_GLENDACAR] = MeshBuilder::GenerateText("GlendaCar", 2, 2);
+	meshList[GEO_GLENDACAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");	
+	
+	meshList[GEO_VALCAR] = MeshBuilder::GenerateText("ValCar", 2, 2);
+	meshList[GEO_VALCAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");		
+	
+	meshList[GEO_WAIMENCAR] = MeshBuilder::GenerateText("WaimenCar", 2, 2);
+	meshList[GEO_WAIMENCAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");	
+
 	meshList[GEO_POWERUP] = MeshBuilder::GenerateText("Powerup", 2, 2);
 	meshList[GEO_POWERUP]->textureID = LoadTGA("Image//PowerUp_FlappyCar1_Clement.tga");	
 	
@@ -777,6 +788,7 @@ void SceneMiniGame1::Render()
 		RenderImageOnScreen(meshList[GEO_BACKGROUND], 800, 600, BackgroundMid->returnlocationx(), BackgroundMid->returnlocationy());
 		BackgroundMid = BackgroundMid->getnextadress();
 	}
+	
 	//Render Car
 	switch (Player->returntype())
 	{
@@ -982,38 +994,39 @@ void SceneMiniGame1::Render()
 					break;
 				}
 				//Clement Car 1)
-				meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");
-				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 225, 315);
+				
+				RenderAnimationOnScreen(meshList[GEO_CLEMENTCAR], count, 150, 225, 315);
 
 				//Glenda Car 2)
-				meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
-				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 475, 315);
+				
+				RenderAnimationOnScreen(meshList[GEO_GLENDACAR], count, 150, 475, 315);
 				
 				//Waimen Car 3)
-				meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
-				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 225, 140);
+				
+				RenderAnimationOnScreen(meshList[GEO_WAIMENCAR], count, 150, 225, 140);
 				
 				//Val Car 4)
-				meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
-				RenderAnimationOnScreen(meshList[GEO_CAR], count, 150, 475, 140);
+				
+				RenderAnimationOnScreen(meshList[GEO_VALCAR], count, 150, 475, 140);
 
 				switch (carselected)
 				{
 				case 0:
-					meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");
+					
 					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 190, 410);
 					break;
 				case 1:
-					meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
+				
 					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 440, 410);
 					break;
 				case 2:
-					meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
+
 					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 190, 236);
 					break;
 				case 3:
-					meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
+
 					RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 25, 440, 236);
+					break;
 				}
 			}
 		}
