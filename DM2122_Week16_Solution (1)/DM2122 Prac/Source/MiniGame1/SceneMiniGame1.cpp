@@ -174,6 +174,8 @@ void SceneMiniGame1::Init()
 
 	carselected = 0;
 
+	soundbuffer = GetTickCount64();
+
 }
 
 void SceneMiniGame1::Update(double dt)
@@ -382,6 +384,7 @@ void SceneMiniGame1::Update(double dt)
 						delete WallMid;
 						WallMid = nullptr;
 					}
+					SoundEngine->play2D("audio/sound_wallbreak.mp3", GL_FALSE);
 					walldestroy = false;
 					break;
 				}
@@ -516,6 +519,13 @@ void SceneMiniGame1::Update(double dt)
 				Player->setvely(5);
 				break;
 			}
+			//Waits to play sound again
+			if (soundbuffer <= GetTickCount64())
+			{
+				soundbuffer = GetTickCount64() + 250;
+				SoundEngine->play2D("audio/sound_jump.mp3", GL_FALSE);
+			}
+
 		}
 		Player->movexybyvelocity();
 		if (Player->returnlocationy() < 25)
@@ -548,6 +558,14 @@ void SceneMiniGame1::Update(double dt)
 				if (score >= Highscores[x])
 				{
 					int store = score;
+					if (x == 0) //If new top score
+					{
+						SoundEngine->play2D("audio/sound_highscore.mp3", GL_FALSE);
+					}
+					else
+					{
+						SoundEngine->play2D("audio/sound_crash.wav", GL_FALSE);
+					}
 					for (; x < 5; x++)
 					{
 						int store2 = Highscores[x];
@@ -608,6 +626,7 @@ void SceneMiniGame1::Update(double dt)
 			}
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP) && bouncetime <= GetTickCount64())
 			{
+				SoundEngine->play2D("audio/sound_minigame1cursor.mp3", GL_FALSE);
 				cursor--;
 				if (cursor <= -1)
 				{
@@ -617,6 +636,7 @@ void SceneMiniGame1::Update(double dt)
 			}
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN) && bouncetime <= GetTickCount64())
 			{
+				SoundEngine->play2D("audio/sound_minigame1cursor.mp3", GL_FALSE);
 				cursor++;
 				if (cursor >= 5)
 				{
@@ -666,7 +686,7 @@ void SceneMiniGame1::Update(double dt)
 							scorefile.close();
 						}
 
-						SoundEngine->play2D("audio/sound_highsource.mp3", GL_FALSE);
+						SoundEngine->play2D("audio/sound_highscoremenu.wav", GL_FALSE);
 					}
 					break;
 				}
@@ -678,6 +698,8 @@ void SceneMiniGame1::Update(double dt)
 					if (scoremenu == false && selectmenu == false)
 					{
 						controlmenu = true;
+						SoundEngine->play2D("audio/sound_minigame1menu.mp3", GL_FALSE);
+
 					}
 
 					break;
@@ -690,6 +712,7 @@ void SceneMiniGame1::Update(double dt)
 					{
 						selectmenu = true;
 					}
+					SoundEngine->play2D("audio/sound_minigame1menu.mp3", GL_FALSE);
 					break;
 				}
 				//Exit to main
@@ -966,6 +989,7 @@ void SceneMiniGame1::Render()
 		text = std::to_string(score);
 		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 55, 425, 245);
 
+
 	}
 	else if (playing == false)
 	{
@@ -1162,6 +1186,8 @@ void SceneMiniGame1::Exit()
 		delete Powerup;
 	}
 	delete Player;
+
+	delete SoundEngine;
 }
 
 void SceneMiniGame1::RenderMesh(Mesh* mesh, bool enableLight)
@@ -1459,5 +1485,5 @@ void SceneMiniGame1::Restart()
 	screensizecontrol = 0;
 	screensizeselection = 0;
 
-
+	soundbuffer = GetTickCount64();
 }
