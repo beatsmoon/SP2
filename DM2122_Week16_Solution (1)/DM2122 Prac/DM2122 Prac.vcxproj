@@ -144,6 +144,7 @@
     <ClInclude Include="Source\MiniGame2.h" />
     <ClInclude Include="Source\PlayerInfo\PlayerInfo.h" />
     <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneData.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Utility.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Source\MiniGame1\SceneMiniGame1.cpp" />
     <ClCompile Include="Source\MiniGame2.cpp" />
     <ClCompile Include="Source\PlayerInfo\PlayerInfo.cpp" />
+    <ClCompile Include="Source\SceneData.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Utility.cpp" />

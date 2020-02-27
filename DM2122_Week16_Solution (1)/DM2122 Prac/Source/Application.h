@@ -3,6 +3,7 @@
 #define APPLICATION_H
 
 #include "timer.h"
+#include "sceneData.h"
 
 
 struct GLFWwindow;
@@ -35,14 +36,13 @@ private:
 
 	//Minigame1 Add
 	double bouncetime;
-	enum SceneType
-	{
-		MAIN,
-		MINIGAME1,
-		MINIGAME2,
-	};
-	SceneType CurrentScene;
-
+	//enum SceneType
+	//{
+	//	MAIN,
+	//	MINIGAME1,
+	//	MINIGAME2,
+	//};
+	Data::SceneType CurrentScene;
 };
 
 #endif

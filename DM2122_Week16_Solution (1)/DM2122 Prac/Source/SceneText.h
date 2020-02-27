@@ -9,6 +9,7 @@
 #include "PlayerInfo/PlayerInfo.h"
 #include "Controllers/Keyboard.h"
 #include "Controllers/Mouse.h"
+#include "sceneData.h"
 
 class SceneText : public Scene
 {
@@ -224,7 +225,7 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 
-	Car* Cars[4]; //TODO change this into an array
+	Car* Cars[4];
 	bool CarUI[4] = { false, };
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;

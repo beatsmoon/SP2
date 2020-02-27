@@ -58,6 +58,9 @@
     <ClCompile Include="Source\Car.cpp">
       <Filter>InfoPlayer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -124,6 +127,9 @@
       <Filter>InfoPlayer</Filter>
     </ClInclude>
     <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

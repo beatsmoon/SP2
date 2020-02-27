@@ -518,7 +518,7 @@ void SceneText::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	
-
+	// 4 Cars
 	for (int i = 0; i < 4; i++)
 	{
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
@@ -580,6 +580,7 @@ void SceneText::Update(double dt)
 		else if(pauseMenuSelection == CHOICE_EXIT)
 		{
 			// exit the program here
+			Data::GetInstance()->EndApp();
 		}
 
 	}

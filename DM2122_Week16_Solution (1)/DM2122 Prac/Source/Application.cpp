@@ -57,7 +57,7 @@ Application::~Application()
 void Application::Init()
 {
 	//Minigame1 Add
-	CurrentScene = MAIN;
+	CurrentScene = Data::GetInstance()->getCurrScene();
 	bouncetime = GetTickCount64();
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
@@ -129,44 +129,65 @@ void Application::Run()
 	scene->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
+	while (!glfwWindowShouldClose(m_window) && !Data::GetInstance()->getIsEnd())
 	{
 		glfwPollEvents();
 		UpdateInput();
 
 		scene->Update(m_timer.getElapsedTime());
 		scene->Render();
+
+		if (Data::GetInstance()->getCurrScene()!= CurrentScene)
+		{
+			CurrentScene = Data::GetInstance()->getCurrScene();
+
+			switch (CurrentScene)
+			{
+			case Data::SceneType::MAIN:
+				scene = mainscene;
+				break;
+			case Data::SceneType::MINIGAME1:
+				scene = minigame1;
+				break;
+			case Data::SceneType::MINIGAME2:
+				scene = minigame2;
+				break;
+			default:
+				break;
+			}
+		}
+
 		//Minigame1 Add
 		if (Application::IsKeyPressed(VK_TAB) && bouncetime <= GetTickCount64())
 		{
 			bouncetime = GetTickCount64() + 1000; //Add 1s into future
-			if (CurrentScene == MAIN) //Temporay change when actual trigger is activated 
+			if (CurrentScene == Data::SceneType::MAIN) //Temporay change when actual trigger is activated 
 			{
-				CurrentScene = MINIGAME1;
+				CurrentScene = Data::SceneType::MINIGAME1;
 				scene = minigame1;
 			}
-			else if (CurrentScene == MINIGAME1)
+			else if (CurrentScene == Data::SceneType::MINIGAME1)
 			{
-				CurrentScene = MINIGAME2;
+				CurrentScene = Data::SceneType::MINIGAME2;
 				scene = minigame2;
 			}
-			else if (CurrentScene == MINIGAME1)
+			else if (CurrentScene == Data::SceneType::MINIGAME1)
 			{
-				CurrentScene = MINIGAME2;
+				CurrentScene = Data::SceneType::MINIGAME2;
 				scene = mainscene;
 			}
 		}
 		if (Application::IsKeyPressed('P') && bouncetime <= GetTickCount64())
 		{
 			bouncetime = GetTickCount64() + 1000; //Add 1s into future
-			if (CurrentScene == MAIN) //Temporay change when actual trigger is activated 
+			if (CurrentScene == Data::SceneType::MAIN) //Temporay change when actual trigger is activated 
 			{
-				CurrentScene = MINIGAME2;
+				CurrentScene = Data::SceneType::MINIGAME2;
 				scene = minigame2;
 			}
-			else if (CurrentScene == MINIGAME2)
+			else if (CurrentScene == Data::SceneType::MINIGAME2)
 			{
-				CurrentScene = MAIN;
+				CurrentScene = Data::SceneType::MAIN;
 				scene = mainscene;
 			}
 		}
