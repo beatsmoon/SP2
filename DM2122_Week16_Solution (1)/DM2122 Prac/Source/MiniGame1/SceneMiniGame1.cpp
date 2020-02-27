@@ -632,6 +632,7 @@ void SceneMiniGame1::Update(double dt)
 					//Start Game
 				case 0:
 				{
+					SoundEngine->play2D("audio/sound_start.wav", GL_FALSE);
 					bouncetime = GetTickCount64() + 250;
 					playing = true;
 					BackgroundStart->setvelx(gamespeed);
@@ -664,6 +665,8 @@ void SceneMiniGame1::Update(double dt)
 							}
 							scorefile.close();
 						}
+
+						SoundEngine->play2D("audio/sound_highsource.mp3", GL_FALSE);
 					}
 					break;
 				}
@@ -689,6 +692,7 @@ void SceneMiniGame1::Update(double dt)
 					}
 					break;
 				}
+				//Exit to main
 				case 4:
 				{
 
@@ -764,33 +768,39 @@ void SceneMiniGame1::Update(double dt)
 			}
 			if (KeyboardController::GetInstance()->IsKeyReleased('1') && bouncetime <= GetTickCount64()) //Clement
 			{
-				bouncetime = GetTickCount64() + 100;
+				bouncetime = GetTickCount64() + 500;
 				carselected = 0;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
 
-				SoundEngine->play2D("audio/sound_victory.wav", GL_TRUE);
-				SoundEngine->play2D("audio/sound_victory.mp3", GL_TRUE);
+
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
 
 			}			
 			if (KeyboardController::GetInstance()->IsKeyReleased('2') && bouncetime <= GetTickCount64()) //Glenda
 			{
-				bouncetime = GetTickCount64() + 100;
+				bouncetime = GetTickCount64() + 500;
 				carselected = 1;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
+
 
 			}			
 			if (KeyboardController::GetInstance()->IsKeyReleased('3') && bouncetime <= GetTickCount64()) //Waimen
 			{
-				bouncetime = GetTickCount64() + 100;
+				bouncetime = GetTickCount64() + 500;
 				carselected = 2;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
+
 
 			}			
 			if (KeyboardController::GetInstance()->IsKeyReleased('4') && bouncetime <= GetTickCount64()) //Val
 			{
-				bouncetime = GetTickCount64() + 100;
+				bouncetime = GetTickCount64() + 500;
 				carselected = 3;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
+
 			}
 		}
 		else //scoremenu
