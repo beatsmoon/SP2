@@ -38,6 +38,8 @@ class SceneText : public Scene
 		GEO_STATS_V,
 		GEO_STATS_G,
 		GEO_STATS_C,
+		GEO_INTERFACE_FLAPPY,
+		GEO_INTERFACE_SURFERS,
 		GEO_PAUSE,
 		GEO_HIGHSCOREBOARD,
 		GEO_INDICATOR,
@@ -227,9 +229,11 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 
-	Car* Cars[4];
-	bool CarUI[4] = { false, };
-	float CarUIHeight[4] = {0, };
+
+	Car* Cars[4]; //TODO change this into an array
+	bool CarUI[6] = { false, };
+	float CarUIHeight[6] = {0, };
+
 	float pauseHeight = 0;
 	bool isOnGround = true;
 	int Scaling = 1;

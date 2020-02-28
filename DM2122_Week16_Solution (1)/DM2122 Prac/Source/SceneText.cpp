@@ -409,6 +409,7 @@ void SceneText::Init()
 	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
+	//Interfaces
 	meshList[GEO_INTERFACE_BASE] = MeshBuilder::GenerateQuad("UIBase", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_INTERFACE_BASE]->textureID = LoadTGA("Image//new_UIBase4.tga");
 
@@ -420,6 +421,11 @@ void SceneText::Init()
 	meshList[GEO_STATS_G]->textureID = LoadTGA("Image//new_UIBase3.tga");
 	meshList[GEO_STATS_C] = MeshBuilder::GenerateQuad("UIBase4", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_STATS_C]->textureID = LoadTGA("Image//new_UIBase4.tga");
+
+	meshList[GEO_INTERFACE_FLAPPY] = MeshBuilder::GenerateQuad("UIBase5", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INTERFACE_FLAPPY]->textureID = LoadTGA("Image//new_UIBase5.tga");
+	meshList[GEO_INTERFACE_SURFERS] = MeshBuilder::GenerateQuad("UIBase6", Color(1, 1, 1), 1.f, 1.f);
+	meshList[GEO_INTERFACE_SURFERS]->textureID = LoadTGA("Image//new_UIBase6.tga");
 
 	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("left", "OBJ//Car_WaiMen.obj");
 	meshList[GEO_WM_CAR]->textureID = LoadTGA("Image//Car_WaiMen.tga");
@@ -521,7 +527,7 @@ void SceneText::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	
-	// 4 Cars
+	//Checking Cars
 	for (int i = 0; i < 4; i++)
 	{
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
@@ -567,6 +573,51 @@ void SceneText::Update(double dt)
 				CarUI[i] = false;
 				CarUIHeight[i] = 0;
 			}
+		}
+	}
+
+	//Check for flappy car booth UI and key input to sceene change
+	if ((thePlayer->GetPos().x >= 100 - 80  && thePlayer->GetPos().x <= 100 + 80)
+		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
+	{
+		CarUI[4] = true;
+		if (CarUIHeight[4] < 8)
+			CarUIHeight[4] += 24 * dt;
+		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+			Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME1);
+
+	}
+	else
+	{
+		if (CarUIHeight[4] > 0)
+			CarUIHeight[4] -= 24 * dt;
+
+		else
+		{
+			CarUI[4] = false;
+			CarUIHeight[4] = 0;
+		}
+	}
+	
+	//Car Surfers UI Check
+	if ((thePlayer->GetPos().x <= -100 + 80  && thePlayer->GetPos().x >= -100 - 80)
+		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
+	{
+		CarUI[5]= true;
+		if (CarUIHeight[5] < 8)
+			CarUIHeight[5] += 24 * dt;
+		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+			Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME2);
+	}
+	else
+	{
+		if (CarUIHeight[5] > 0)
+			CarUIHeight[5] -= 24 * dt;
+
+		else
+		{
+			CarUI[5] = false;
+			CarUIHeight[5] = 0;
 		}
 	}
 
@@ -1185,12 +1236,14 @@ void SceneText::RenderWMCar()
 
 void SceneText::RenderStatsUI()
 {
-	Vector3 UIPos[4];
+	Vector3 UIPos[6];
 	UIPos[0] = Vector3(-35, -1, -35);
 	UIPos[1] = Vector3(-35, -1, 35);
 	UIPos[2] = Vector3(50, -1, 35);
 	UIPos[3] = Vector3(50, -1, -35);
-	for (int i = 0; i < 4; ++i)
+	UIPos[4] = Vector3(75, -1, 115);
+	UIPos[5] = Vector3(-70, -1, 115);
+	for (int i = 0; i < 6; ++i)
 	{
 		if (CarUIHeight[i] > 0)
 		{
@@ -1221,6 +1274,12 @@ void SceneText::RenderStatsUI()
 			case 3:
 				RenderMesh(meshList[GEO_STATS_C], false);
 				//carSelection = CHOICE_CM;
+				break;
+			case 4:
+				RenderMesh(meshList[GEO_INTERFACE_FLAPPY], false);
+				break;
+			case 5:
+				RenderMesh(meshList[GEO_INTERFACE_SURFERS], false);
 				break;
 			default:
 				RenderMesh(meshList[GEO_STATS_WM], false);

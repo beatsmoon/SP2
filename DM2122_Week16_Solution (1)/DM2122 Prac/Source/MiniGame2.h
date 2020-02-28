@@ -8,6 +8,7 @@
 #include "PlayerInfo/PlayerInfo.h"
 #include "Controllers/Keyboard.h"
 #include "Controllers/Mouse.h"
+#include "SceneData.h"
 
 class MiniGame2 : public Scene
 {

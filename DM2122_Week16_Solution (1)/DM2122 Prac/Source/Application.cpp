@@ -157,40 +157,7 @@ void Application::Run()
 			}
 		}
 
-		//Minigame1 Add
-		if (Application::IsKeyPressed(VK_TAB) && bouncetime <= GetTickCount64())
-		{
-			bouncetime = GetTickCount64() + 1000; //Add 1s into future
-			if (CurrentScene == Data::SceneType::MAIN) //Temporay change when actual trigger is activated 
-			{
-				CurrentScene = Data::SceneType::MINIGAME1;
-				scene = minigame1;
-			}
-			else if (CurrentScene == Data::SceneType::MINIGAME1)
-			{
-				CurrentScene = Data::SceneType::MINIGAME2;
-				scene = minigame2;
-			}
-			else if (CurrentScene == Data::SceneType::MINIGAME1)
-			{
-				CurrentScene = Data::SceneType::MINIGAME2;
-				scene = mainscene;
-			}
-		}
-		if (Application::IsKeyPressed('P') && bouncetime <= GetTickCount64())
-		{
-			bouncetime = GetTickCount64() + 1000; //Add 1s into future
-			if (CurrentScene == Data::SceneType::MAIN) //Temporay change when actual trigger is activated 
-			{
-				CurrentScene = Data::SceneType::MINIGAME2;
-				scene = minigame2;
-			}
-			else if (CurrentScene == Data::SceneType::MINIGAME2)
-			{
-				CurrentScene = Data::SceneType::MAIN;
-				scene = mainscene;
-			}
-		}
+	
 
 		//Swap buffers
 		glfwSwapBuffers(m_window);
