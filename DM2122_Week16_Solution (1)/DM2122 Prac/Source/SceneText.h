@@ -10,6 +10,8 @@
 #include "Controllers/Keyboard.h"
 #include "Controllers/Mouse.h"
 #include "sceneData.h"
+#include <../../irrklang/include/irrKlang.h>
+using namespace irrklang;
 
 class SceneText : public Scene
 {
@@ -245,6 +247,8 @@ private:
 
 	//int carSelection = CHOICE_WM;
 	int whichCar;
+
+	ISoundEngine* SoundEngine = createIrrKlangDevice();
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();

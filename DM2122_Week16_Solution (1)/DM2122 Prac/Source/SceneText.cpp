@@ -496,7 +496,7 @@ void SceneText::Init()
 
 	theMouse = new CMouse();
 	theMouse->Create(thePlayer);
-
+	SoundEngine->play2D("audio/dejavu.mp3", GL_TRUE); //Play sound for wall breaking
 }
 
 void SceneText::Update(double dt)
@@ -977,6 +977,8 @@ void SceneText::Render()
 		break;
 	}
 	case STATE_TEST_DRIVE:
+
+		cout << "hello" << endl;
 
 		modelStack.PushMatrix();
 		//modelStack.Scale(10, 10, 10);
