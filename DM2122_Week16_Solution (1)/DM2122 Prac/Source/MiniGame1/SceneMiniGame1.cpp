@@ -801,6 +801,8 @@ void SceneMiniGame1::Update(double dt)
 					}
 				}
 				Player->settype(type);
+
+				
 			}
 
 			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
@@ -814,8 +816,9 @@ void SceneMiniGame1::Update(double dt)
 				carselected = 0;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");	
 
+				Data::GetInstance()->setCurrCar(Data::CarType::CAR_C); //Set Car Type
 
-				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE); //Play Sound
 
 			}			
 			if (KeyboardController::GetInstance()->IsKeyReleased('2') && bouncetime <= GetTickCount64()) //Glenda
@@ -823,7 +826,10 @@ void SceneMiniGame1::Update(double dt)
 				bouncetime = GetTickCount64() + 500;
 				carselected = 1;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//GlendaCar_FlappyCar1_Clement.tga");
-				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
+				Data::GetInstance()->setCurrCar(Data::CarType::CAR_G); //Set Car Type
+
+
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE); //Play Sound
 
 
 			}			
@@ -831,8 +837,10 @@ void SceneMiniGame1::Update(double dt)
 			{
 				bouncetime = GetTickCount64() + 500;
 				carselected = 2;
-				meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");
-				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
+				meshList[GEO_CAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");\
+				Data::GetInstance()->setCurrCar(Data::CarType::CAR_WM); //Set Car Type
+
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE); //Play Sound
 
 
 			}			
@@ -841,7 +849,9 @@ void SceneMiniGame1::Update(double dt)
 				bouncetime = GetTickCount64() + 500;
 				carselected = 3;
 				meshList[GEO_CAR]->textureID = LoadTGA("Image//ValCar_FlappyCar1_Clement.tga");
-				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE);
+				Data::GetInstance()->setCurrCar(Data::CarType::CAR_V); //Set Car Type
+
+				SoundEngine->play2D("audio/sound_menu.wav", GL_FALSE); //Play sound
 
 			}
 		}
