@@ -53,13 +53,14 @@ void SceneText::Init()
 	thePlayer->Init();
 	camera.Init(thePlayer->GetPos(), thePlayer->GetTarget(), thePlayer->GetUp());
 	thePlayer->AttachCamera(&camera);
+	thePlayer->SelectCar(Cars[CHOICE_WM]);
 
 	// Init Car Stats
-	Cars[CHOICE_WM] = new Car("WM", 50, 30, 15, 10);
+	Cars[CHOICE_WM] = new Car("WM", 60, 30, 40, 10);
 	Cars[CHOICE_WM]->SetDirection(Vector3(0, 0, 1));
 	cameraCar.Init((Cars[CHOICE_WM]->GetPos() - Cars[CHOICE_WM]->GetDirection()) * 10, Cars[CHOICE_WM]->GetPos(), Vector3(0, 1, 0));
 
-	Cars[CHOICE_VL] = new Car("VL", 50, 30, 15, 10);
+	Cars[CHOICE_VL] = new Car("VL", 55, 35, 36, 10);
 	Cars[CHOICE_VL]->SetDirection(Vector3(0, 0, 1));
 	cameraCar.Init((Cars[CHOICE_VL]->GetPos() - Cars[CHOICE_VL]->GetDirection()) * 10, Cars[CHOICE_VL]->GetPos(), Vector3(0, 1, 0));
 
@@ -67,10 +68,12 @@ void SceneText::Init()
 	Cars[CHOICE_GL]->SetDirection(Vector3(0, 0, 1));
 	cameraCar.Init((Cars[CHOICE_GL]->GetPos() - Cars[CHOICE_GL]->GetDirection()) * 10, Cars[CHOICE_GL]->GetPos(), Vector3(0, 1, 0));
 
-	Cars[CHOICE_CM] = new Car("CM", 50, 30, 15, 10);
+	Cars[CHOICE_CM] = new Car("CM", 50, 40, 40, 10);
 	Cars[CHOICE_CM]->SetDirection(Vector3(0, 0, 1));
 	cameraCar.Init((Cars[CHOICE_CM]->GetPos() - Cars[CHOICE_CM]->GetDirection()) * 10, Cars[CHOICE_CM]->GetPos(), Vector3(0, 1, 0));
 	
+
+
 	{
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -671,13 +674,13 @@ void SceneText::Update(double dt)
 	{
 		
 
-		if (pow((pow((Cars[whichCar]->GetPos().x - 110), 2)+ pow((Cars[whichCar]->GetPos().z - 38), 2)),0.5) <= 109)
+		if (pow((pow((thePlayer->GetSelectedCar()->GetPos().x - 110), 2)+ pow((thePlayer->GetSelectedCar()->GetPos().z - 38), 2)),0.5) <= 109)
 		{
 			//cout << "mother" << endl;
 			isOnGround = false;
 		}
 
-		if (pow((pow((Cars[whichCar]->GetPos().x - 110), 2) + pow((Cars[whichCar]->GetPos().z - 38), 2)), 0.5) >= 159)
+		if (pow((pow((thePlayer->GetSelectedCar()->GetPos().x - 110), 2) + pow((thePlayer->GetSelectedCar()->GetPos().z - 38), 2)), 0.5) >= 159)
 		{
 			isOnGround = false;
 		}
@@ -685,7 +688,7 @@ void SceneText::Update(double dt)
 	}
 	else if(isOnGround == false)
 	{
-		Cars[whichCar]->Reset();
+		thePlayer->GetSelectedCar()->Reset();
 		
 		if (hasCarFell == false)
 		{
@@ -1017,9 +1020,9 @@ void SceneText::Render()
 
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 0, 0);
-		modelStack.Translate(Cars[whichCar]->GetPos().x, Cars[whichCar]->GetPos().y, Cars[whichCar]->GetPos().z); //TODO swap to selected car ptr
+		modelStack.Translate(thePlayer->GetSelectedCar()->GetPos().x, thePlayer->GetSelectedCar()->GetPos().y, thePlayer->GetSelectedCar()->GetPos().z); //TODO swap to selected car ptr
 		//modelStack.Scale(Scaling, Scaling, Scaling);
-		float angle = atan2f(Cars[whichCar]->GetDirection().x, Cars[whichCar]->GetDirection().z);
+		float angle = atan2f(thePlayer->GetSelectedCar()->GetDirection().x, thePlayer->GetSelectedCar()->GetDirection().z);
 		angle = Math::RadianToDegree(angle);
 		modelStack.Rotate(angle, 0, 1, 0);
 		modelStack.Rotate(-90, 0, 1, 0);
@@ -1060,7 +1063,7 @@ void SceneText::Render()
 
 		modelStack.PopMatrix();
 
-		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(Cars[whichCar]->GetPos().x) + ", " + to_string(Cars[whichCar]->GetPos().y) + ", " + to_string(Cars[whichCar]->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
+		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(thePlayer->GetSelectedCar()->GetPos().x) + ", " + to_string(thePlayer->GetSelectedCar()->GetPos().y) + ", " + to_string(thePlayer->GetSelectedCar()->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
 
 		break;
 	}
@@ -1297,11 +1300,11 @@ void SceneText::RenderValCar()
 	modelStack.PushMatrix();
 	
 	
-	RenderMesh(meshList[GEO_VAL_CAR], true);
+	RenderCarMesh(meshList[GEO_VAL_CAR]);
 
 	modelStack.PushMatrix();
 	//modelStack.Translate(0,0,0);
-	RenderMesh(meshList[GEO_VAL_CAR_WHEEL], true);
+	RenderCarMesh(meshList[GEO_VAL_CAR_WHEEL]);
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
@@ -1310,11 +1313,11 @@ void SceneText::RenderValCar()
 void SceneText::RenderGCar()
 {
 	modelStack.PushMatrix();
-	RenderMesh(meshList[GEO_G_CAR], true);
+	RenderCarMesh(meshList[GEO_G_CAR]);
 
 	modelStack.PushMatrix();
 	//modelStack.Translate(0,0,0);
-	RenderMesh(meshList[GEO_G_CAR_WHEEL], true);
+	RenderCarMesh(meshList[GEO_G_CAR_WHEEL]);
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
@@ -1325,11 +1328,11 @@ void SceneText::RenderCCar()
 	modelStack.PushMatrix();
 	
 
-	RenderMesh(meshList[GEO_C_CAR], true);
+	RenderCarMesh(meshList[GEO_C_CAR]);
 
 	modelStack.PushMatrix();
 	//modelStack.Translate(0,0,0);
-	RenderMesh(meshList[GEO_C_CAR_WHEEL], true);
+	RenderCarMesh(meshList[GEO_C_CAR_WHEEL]);
 	modelStack.PopMatrix();
 
 	modelStack.PopMatrix();
