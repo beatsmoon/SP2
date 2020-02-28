@@ -312,7 +312,7 @@ void MiniGame2::Update(double dt)
 		SoundEngine->play2D("audio/CarCrash.mp3", GL_FALSE);
 		crashsound = false;
 	}
-	if (NitroUsed == false)
+	if (NitroUsed == true)
 	{
 		SoundEngine->play2D("audio/NitroBoost2.mp3", GL_FALSE);
 	}
