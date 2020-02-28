@@ -9,6 +9,8 @@
 #include "Controllers/Keyboard.h"
 #include "Controllers/Mouse.h"
 #include "SceneData.h"
+#include <../../irrklang/include/irrKlang.h>
+#pragma comment(lib, "../../irrklang/irrKlang.lib")
 
 class MiniGame2 : public Scene
 {
@@ -78,9 +80,11 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 	Car* theCar;
+	irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 	bool NitroUsed = false;
 	bool gameEnd = false;
 	bool gameStart = false;
+	bool crashsound = false;
 	bool rock1End = true;
 	float distance = 0;
 	int lanes;

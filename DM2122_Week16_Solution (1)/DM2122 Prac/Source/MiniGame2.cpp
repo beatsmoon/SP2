@@ -50,14 +50,14 @@ void MiniGame2::Init()
 
 	thePlayer = CPlayerInfo::GetInstance();
 	thePlayer->Init();
-	camera.Init(Vector3(0,0,0), Vector3(0,-90,0),Vector3(0,0.60f,-0.80f));
+	camera.Init(Vector3(0, 0, 0), Vector3(0, -90, 0), Vector3(0, 0.60f, -0.80f));
 	thePlayer->AttachCamera(&camera);
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
 	projectionStack.LoadMatrix(projection);
-	
+
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
-	
+
 	//m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Texture.fragmentshader"); 
 
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -118,14 +118,14 @@ void MiniGame2::Init()
 	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], light[0].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], light[0].cosInner);
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
-	glUniform1i(m_parameters[U_NUMLIGHTS], 1); 
+	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 
 
 
 	meshList[GEO_TRACK] = MeshBuilder::GenerateQuad("track", Color(1.f, 1.f, 1.f), 1.f, 1.f);
 	meshList[GEO_TRACK]->textureID = LoadTGA("image//MiniGame2Track.tga");
 
-	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock","Obj//rock.obj");
+	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock", "Obj//rock.obj");
 	meshList[GEO_ROCK]->textureID = LoadTGA("image//rock.tga");
 
 	meshList[GEO_WM_CAR] = MeshBuilder::GenerateOBJ("WMCar", "Obj//Car_WaiMen.obj");
@@ -145,7 +145,7 @@ void MiniGame2::Init()
 
 	meshList[GEO_INSTRUCTIONS] = MeshBuilder::GenerateQuad("instructions", Color(1, 1, 1), 1, 1);
 	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("image//MiniGame2_instructions.tga");
-	
+
 
 	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("arrow", Color(1, 1, 1), 4, 4);
 	meshList[GEO_INDICATOR]->textureID = LoadTGA("image//indicator.tga");
@@ -162,8 +162,9 @@ void MiniGame2::Init()
 
 	theMouse = new CMouse();
 	theMouse->Create(thePlayer);
-	
+
 	changeScore = false;
+	
 
 	//Car
 	Position temp;
@@ -303,7 +304,21 @@ void MiniGame2::Update(double dt)
 		CollisionUpdate(dt);
 	}
 
+	if (crashsound == true)
+	{
+		SoundEngine->play2D("audio/CarCrash.mp3", GL_FALSE);
+		crashsound = false;
+	}
+	if (NitroUsed == true)
+	{
+		SoundEngine->play2D("audio/NitroBoost2.mp3", GL_FALSE);
+	}
+	
+
+
 	CalculateFrameRate();
+
+	
 
 }
 
@@ -526,6 +541,7 @@ void MiniGame2::RenderDeathMenu()
 {
 	if (gameEnd == true)
 	{
+		
 		modelStack.PushMatrix();
 		modelStack.Translate(0, -30, 0);
 		modelStack.Rotate(-90, 1, 0, 0);
@@ -588,6 +604,7 @@ void MiniGame2::reset()
 {
 	NitroUsed = false;
 	gameEnd = false;
+	crashsound = false;
 	rock1End = true;
 	distance = 0;
 	carX = 0;
@@ -747,6 +764,7 @@ void MiniGame2::CollisionUpdate(double dt)
 		else if (NitroUsed == false)
 		{
 			gameEnd = true;
+			crashsound = true;
 			changeScore = true;
 			MouseController::GetInstance()->SetKeepMouseCentered(false);
 		}
