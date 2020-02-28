@@ -164,6 +164,11 @@ void MiniGame2::Init()
 
 	changeScore = false;
 	
+	if (gameEnd == false)
+	{
+		SoundEngine->play2D("audio/MiniGame2bgm.mp3", GL_TRUE);
+	}
+
 	//Car
 	Position temp;
 	temp.Set(0,0,0);
@@ -312,13 +317,10 @@ void MiniGame2::Update(double dt)
 
 	CalculateFrameRate();
 
-	if (gameEnd == false)
-	{
-		SoundEngine->play2D("audio/MiniGame2bgm.mp3", GL_TRUE);
-	}
+	
 	if (gameEnd == true)
 	{
-		SoundEngine->play2D("audio/MiniGame2Lose.mp3", GL_TRUE);
+		SoundEngine->play2D("audio/MiniGame2Lose.mp3", GL_FALSE);
 	}
 
 }
