@@ -5,12 +5,23 @@ This is a user guide for the game Re:Pink which includes the controls (and objec
 o WASD keys are used to control the player movement
 o Spacebar makes the player jump
 o Minigames can be accessed by pressing Z while near the respective minigame booth (See Minigames for more details)
-o Diffrent Cars can be selected by going up to it and pressing ?
 o Each car has its own stats seen by the UI in front of them when close to it
-o Players can access the test drive with their selected car by pressing ?
+o Players can access the test drive with their selected car by pressing Z near a car
+o Esc key is to bring up the pause screen (see Pause screen for more details)
 
 
 ------Test Drive------
+o The W key is used to make the car acclerate foward
+o The S key is to reverse
+o The A and D keys are to turn left and right respectively
+o Esc key is to bring up the pause screen (see Pause screen for more details)
+
+
+------Pause Screen------
+o The cause screen cursor can be controled by the Mouse and click the Left Mouse Button
+o Clicking on resume will resume the game
+o Clicking on Highscores will bring up the highscore menu 
+o Clicking on exit will close the game
 
 
 ------Minigames------
