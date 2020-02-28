@@ -508,7 +508,7 @@ void SceneText::Init()
 
 	theMouse = new CMouse();
 	theMouse->Create(thePlayer);
-
+	SoundEngine->play2D("audio/dejavu.mp3", GL_TRUE); //Play sound for wall breaking
 }
 
 void SceneText::Update(double dt)
@@ -543,10 +543,11 @@ void SceneText::Update(double dt)
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
 			{
-				renderingState = STATE_TEST_DRIVE;
+				//renderingState = STATE_TEST_DRIVE;
 				thePlayer->SelectCar(Cars[i]);
-				thePlayer->Toggle_TestDrive();
+				//thePlayer->Toggle_TestDrive();
 				whichCar = i;
+				
 				switch (i)
 				{
 				case CHOICE_WM:
@@ -701,7 +702,7 @@ void SceneText::Update(double dt)
 		
 		isOnGround = true;
 	}
-
+	
 	if (counter > 0 && counter < 20)
 	{
 		if (hasCarFell == true)
@@ -730,6 +731,42 @@ void SceneText::Update(double dt)
 	if (skyboxOffset >= 1)
 	{
 		skyboxOffset - 1;
+
+	////detection for mini game booth 1
+	// alr done by clement on other branch so can ignore this while merging thx
+	//if (((((thePlayer->GetPos().x - (95)) >= -50) && ((thePlayer->GetPos().x - (95)) <= 50)) && (((thePlayer->GetPos().z - 110) >= -50) && ((thePlayer->GetPos().z - 110) <= 50))))
+	//{
+	//	if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+	//	{
+	//		//cout << "hello" << endl;
+	//		Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME1);
+	//	}
+
+	//}
+
+	//detection for mini game booth 2
+	//if (((((thePlayer->GetPos().x - (-99)) >= -50) && ((thePlayer->GetPos().x - (-99)) <= 50)) && (((thePlayer->GetPos().z - 115) >= -50) && ((thePlayer->GetPos().z - 115) <= 50))))
+	//{
+	//	if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+	//	{
+	//		//cout << "hello" << endl;
+	//		Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME2);
+	//	}
+	//	
+	//}
+
+	//detection for mini game booth 2
+
+	if (((((thePlayer->GetPos().x - (42)) >= -80) && ((thePlayer->GetPos().x - (42)) <= 80)) && (((thePlayer->GetPos().z - (-120)) >= -50) && ((thePlayer->GetPos().z - (-120)) <= 50))))
+	{
+		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+		{
+			//cout << "hello" << endl;
+			Data::GetInstance()->setCurrScene(Data::SceneType::MAIN);
+			renderingState = STATE_TEST_DRIVE;
+			thePlayer->Toggle_TestDrive();
+		}
+
 	}
 
 	// Hardware Abstraction
@@ -1001,6 +1038,8 @@ void SceneText::Render()
 	}
 	case STATE_TEST_DRIVE:
 
+		cout << "hello" << endl;
+
 		modelStack.PushMatrix();
 		//modelStack.Scale(10, 10, 10);
 		RenderSkybox();
@@ -1193,7 +1232,7 @@ void SceneText::RenderSpaceStation()
 {
 	modelStack.PushMatrix();
 	modelStack.Translate(0, -50, 0);
-	modelStack.Scale(12, 8, 8);
+	modelStack.Scale(14, 8, 8);
 	modelStack.PushMatrix();
 	//modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
 	RenderMesh(meshList[GEO_SPACESTATION_FLOOR], true);

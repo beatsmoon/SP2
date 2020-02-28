@@ -10,6 +10,8 @@
 #include "Controllers/Keyboard.h"
 #include "Controllers/Mouse.h"
 #include "sceneData.h"
+#include <../../irrklang/include/irrKlang.h>
+using namespace irrklang;
 
 class SceneText : public Scene
 {
@@ -254,6 +256,8 @@ private:
 
 	float skyboxOffset; // 0.f - 1.f
 	int skyboxSwapValue; // 0-3
+
+	ISoundEngine* SoundEngine = createIrrKlangDevice();
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderCarMesh(Mesh *mesh);
