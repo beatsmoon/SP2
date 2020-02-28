@@ -31,7 +31,6 @@ o The booth with a car driving on a road is Car Surfers
 
 
 ------Flappy Car------
-
 ~Main Menu
 o Flappy car's main menu can be navigated by using the Up and Down arrow keys and Enter.
 o The selected car and its stats can also be seen in the Car Selection Menu where you can press 1 to 4 to select a car,
@@ -55,12 +54,11 @@ o After hitting a wall the car will crash and a game over screen will appear, pr
 
 
 ------Car Surfers------
-
 ~Playing
 o The objective is obtain as many points as possible, the futher the player drives the more points are gained!
 o The player loses when they crash into a boulder.
 o Player can control their car by pressing the A and D keys to move left and right respestivly.
-o Player can active their nitro boost by pressing ? to go faster and deflect boulders for awhile.
+o Player can active their nitro boost by pressing Spacebar to go faster and deflect boulders for awhile when you have 100 nitro.
 
 ~Death Menu
 o After losing a menu will appear, the cursor can be controled by the Mouse and click the Left Mouse Button
