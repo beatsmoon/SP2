@@ -189,6 +189,9 @@ void SceneText::Init()
 	m_parameters[U_IS_CAR] = glGetUniformLocation(m_programID, "isCar");
 	m_parameters[U_IS_CAR_WHITE] = glGetUniformLocation(m_programID, "isCarWhite");
 
+	m_parameters[U_IS_SKYBOXSIDE] = glGetUniformLocation(m_programID, "isSkybox");
+	m_parameters[U_SKYBOX_OFFSET] = glGetUniformLocation(m_programID, "skyboxOffset");
+
 	//Get a handle for our "colorTexture" uniform
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -553,7 +556,6 @@ void SceneText::Update(double dt)
 					break;
 				}
 			}
-
 		}
 		else
 		{
@@ -568,8 +570,43 @@ void SceneText::Update(double dt)
 		}
 	}
 
+	// If the game is paused / in options screen
 	if (thePlayer->GetPause())
 	{
+		if (KeyboardController::GetInstance()->IsKeyPressed('E') || MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
+		{
+			if (pauseMenuSelection == CHOICE_RESUME)
+			{
+				thePlayer->Toggle_Pause();
+			}
+			else if (pauseMenuSelection == CHOICE_HIGHSCORE)
+			{
+				highScoreBoard = true;
+			}
+			else if (pauseMenuSelection == CHOICE_BACK)
+			{
+				highScoreBoard = false;
+			}
+			else if (pauseMenuSelection == CHOICE_EXIT)
+			{
+				// exit the program here
+				Data::GetInstance()->EndApp();
+			}
+		}
+
+		if (pauseMenuSelection == CHOICE_BACK)
+		{
+			moveIndicator += moveDirection * 0.3 * dt;
+			if (moveIndicator > 0.13)
+			{
+				moveDirection = -1;
+			}
+			else if (moveIndicator < -0.05)
+			{
+				moveDirection = 1;
+			}
+		}
+
 		if (pauseHeight < 1)
 			pauseHeight += 5 * dt;
 	}
@@ -577,41 +614,6 @@ void SceneText::Update(double dt)
 	{
 		if (pauseHeight > 0)
 			pauseHeight -= 5 * dt;
-	}
-
-	if (KeyboardController::GetInstance()->IsKeyPressed('E') || MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
-	{
-		if (pauseMenuSelection == CHOICE_RESUME)
-		{
-			thePlayer->Toggle_Pause();
-		}
-		else if (pauseMenuSelection == CHOICE_HIGHSCORE)
-		{
-			highScoreBoard = true;
-		}
-		else if (pauseMenuSelection == CHOICE_BACK)
-		{
-			highScoreBoard = false;
-		}
-		else if(pauseMenuSelection == CHOICE_EXIT)
-		{
-			// exit the program here
-			Data::GetInstance()->EndApp();
-		}
-
-	}
-
-	if (pauseMenuSelection == CHOICE_BACK)
-	{
-		moveIndicator += moveDirection * 0.3 * dt;
-		if (moveIndicator > 0.13)
-		{
-			moveDirection = -1;
-		}
-		else if(moveIndicator < -0.05)
-		{
-			moveDirection = 1;
-		}
 	}
 
 	if (renderingState == STATE_TEST_DRIVE && isOnGround == true)
@@ -648,13 +650,11 @@ void SceneText::Update(double dt)
 
 	if (counter > 0 && counter < 20)
 	{
-		
 		if (hasCarFell == true)
 		{
 			if (turnCarWhite == true)
 			{
 				turnCarWhite = false;
-				
 			}
 			else
 			{
@@ -671,7 +671,12 @@ void SceneText::Update(double dt)
 		
 	}
 
-	
+	// Skybox Movement
+	skyboxOffset += 0.00f * dt;
+	if (skyboxOffset >= 1)
+	{
+		skyboxOffset - 1;
+	}
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
@@ -1050,6 +1055,7 @@ void SceneText::RenderMesh(Mesh* mesh, bool enableLight)
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 
 	glUniform1i(m_parameters[U_IS_CAR], 0);
+	glUniform1i(m_parameters[U_IS_SKYBOXSIDE], 0);
 	if (enableLight)
 	{
 		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
@@ -1089,13 +1095,13 @@ void SceneText::RenderSkybox()
 		///scale, translate, rotate 
 		modelStack.Translate(-0.5f, 0.f, 0.f);
 		modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-		RenderMesh(meshList[GEO_LEFT], false);
+		RenderSkyboxWallMesh(meshList[GEO_LEFT]);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
 		modelStack.Translate(0.5f, 0.f, 0.f);
 		modelStack.Rotate(-90.f, 0.f, 1.f, 0.f);
-		RenderMesh(meshList[GEO_RIGHT], false);
+		RenderSkyboxWallMesh(meshList[GEO_RIGHT]);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
@@ -1118,13 +1124,13 @@ void SceneText::RenderSkybox()
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
 		modelStack.Translate(0.f, 0.f, -0.5f);
-		RenderMesh(meshList[GEO_FRONT], false);
+		RenderSkyboxWallMesh(meshList[GEO_FRONT]);
 	modelStack.PopMatrix();
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
 		modelStack.Translate(0.f, 0.f, 0.5f);
 		modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-		RenderMesh(meshList[GEO_BACK], false);
+		RenderSkyboxWallMesh(meshList[GEO_BACK]);
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
@@ -1424,6 +1430,7 @@ void SceneText::RenderCarMesh(Mesh* mesh)
 	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
 
 	glUniform1i(m_parameters[U_LIGHTENABLED], 1);
+	glUniform1i(m_parameters[U_IS_SKYBOXSIDE], 0);
 	glUniform1i(m_parameters[U_IS_CAR], 1);
 	glUniform1i(m_parameters[U_IS_CAR_WHITE], turnCarWhite);
 
@@ -1445,7 +1452,38 @@ void SceneText::RenderCarMesh(Mesh* mesh)
 
 }
 
+void SceneText::RenderSkyboxWallMesh(Mesh* mesh)
+{
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+
+	modelView = viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
+
+	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(m_parameters[U_IS_CAR], 0);
+	glUniform1i(m_parameters[U_IS_SKYBOXSIDE], 1);
+	glUniform1f(m_parameters[U_SKYBOX_OFFSET], skyboxOffset);
+	
+
+	if (mesh->textureID > 0) {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	}
+	else {
+		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	mesh->Render(); //this line should only be called once in the whole function
+
+	if (mesh->textureID > 0) glBindTexture(GL_TEXTURE_2D, 0);
+}
 
 void SceneText::RenderPause()
 {

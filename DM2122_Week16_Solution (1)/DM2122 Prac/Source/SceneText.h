@@ -171,14 +171,16 @@ class SceneText : public Scene
 		U_LIGHT7_COSINNER,
 		U_LIGHT7_EXPONENT,
 
-		
-
 		U_NUMLIGHTS,
+
 		// add these enum for texture
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
 		U_IS_CAR,
 		U_IS_CAR_WHITE,
+		U_IS_SKYBOXSIDE,
+		U_SKYBOX_OFFSET,
+
 		U_TEXT_ENABLED,
 		U_TEXT_COLOR,
 		U_TOTAL,
@@ -245,8 +247,14 @@ private:
 
 	//int carSelection = CHOICE_WM;
 	int whichCar;
+
+	float skyboxOffset; // 0.f - 1.f
+	int skyboxSwapValue; // 0-3
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
+	void RenderCarMesh(Mesh *mesh);
+	void RenderSkyboxWallMesh(Mesh *mesh);
+
 	void RenderSkybox();
 	void RenderPause();
 	void RenderSpaceStation();
@@ -260,7 +268,6 @@ private:
 	void RenderMiniDisplayCar();
 	void RenderFlappyCarBooth();
 	void RenderCarSurfersBooth();
-	void RenderCarMesh(Mesh *mesh);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);

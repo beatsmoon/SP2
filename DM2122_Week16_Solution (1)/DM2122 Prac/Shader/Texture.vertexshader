@@ -19,6 +19,8 @@ uniform mat4 MV_inverse_transpose;
 uniform bool lightEnabled;
 uniform bool isRoad;
 uniform float roadOffset;
+uniform bool isSkybox;
+uniform float skyboxOffset;
 
 //uniform float carOffset;
 
@@ -39,9 +41,14 @@ void main(){
 	fragmentColor = vertexColor;
 	// A simple pass through. The texCoord of each fragment will be interpolated from texCoord of each vertex
 	texCoord = vertexTexCoord;
+
 	if (isRoad == true)
 	{
 		texCoord.y -= roadOffset;
+	}
+	if (isSkybox)
+	{
+		texCoord.x += skyboxOffset;
 	}
 	
 }
