@@ -1,0 +1,58 @@
+Re:Pink
+This is a user guide for the game Re:Pink which includes the controls (and objective) of the game(s)
+
+------Motorshow------
+o WASD keys are used to control the player movement
+o Spacebar makes the player jump
+o Minigames can be accessed by pressing Z while near the respective minigame booth (See Minigames for more details)
+o Diffrent Cars can be selected by going up to it and pressing ?
+o Each car has its own stats seen by the UI in front of them when close to it
+o Players can access the test drive with their selected car by pressing ?
+
+
+------Test Drive------
+
+
+------Minigames------
+o Minigames can be accessed by pressing Z while near the respective minigame booth in the motorshow area
+o The booth with a car jumping through a wall is Flappy Car
+o The booth with a car driving on a road is Car Surfers
+
+
+------Flappy Car------
+
+~Main Menu
+o Flappy car's main menu can be navigated by using the Up and Down arrow keys and Enter.
+o The selected car and its stats can also be seen in the Car Selection Menu where you can press 1 to 4 to select a car,
+each car has its own stats, 
+Weight (how fast it falls), 
+Floatiness (how fast it rises),
+and Speed (maxmium speed it can move horizontally).
+o The top 5 highest socres can be seen in the Highscore menu.
+o Controls can also be seen in the controls menu.
+
+~Playing
+o The objective is to get as many points as possible by flying through walls
+o Spacebar makes the car rise.
+   - Powerups
+   o Powerups will spawn randomly when playing, collect them to gain a special effect!
+   o The powerup crate with a broken wall will allow you to break 1 wall by pressing Enter.
+   o The powerup crate with a stopwatch will slow down the game for awhile.
+   o The powerup crate with +100 on it will give you an additonal 100 points
+   O The powerup crate with a ? on it will a random powerup chosen from above
+o After hitting a wall the car will crash and a game over screen will appear, press Enter to return to the main menu
+
+
+------Car Surfers------
+
+~Playing
+o The objective is obtain as many points as possible, the futher the player drives the more points are gained!
+o The player loses when they crash into a boulder.
+o Player can control their car by pressing the A and D keys to move left and right respestivly.
+o Player can active their nitro boost by pressing ? to go faster and deflect boulders for awhile.
+
+~Death Menu
+o After losing a menu will appear, the cursor can be controled by the Mouse and click the Left Mouse Button
+o The top 5 highest scores will be displayed on the death menu
+
+
