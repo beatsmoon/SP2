@@ -233,10 +233,10 @@ void SceneMiniGame1::Update(double dt)
 				speed = -4;
 			}
 			//Game speed up
-			if (gamespeed > -speed) //SPEED
+			if (gamespeed > speed) //SPEED
 			{
 				gamespeed -= 0.5;
-				if (gamespeed <= -speed) //Reached max speed
+				if (gamespeed <= speed) //Reached max speed
 				{
 					gapsize = 150;
 					nextupdate = 3500;
@@ -344,7 +344,10 @@ void SceneMiniGame1::Update(double dt)
 					case 0:
 						gamespeed += 1;
 						gapsize = 175;
+						//Set game update speed
+						gameupdate -= nextupdate;
 						nextupdate = 5000;
+						gameupdate += nextupdate;
 						break;
 
 					case 1:
@@ -363,7 +366,10 @@ void SceneMiniGame1::Update(double dt)
 						case 0:
 							gamespeed += 1;
 							gapsize = 175;
+							//Set game update speed
+							gameupdate -= nextupdate;
 							nextupdate = 5000;
+							gameupdate += nextupdate;
 							break;
 
 						case 1:
