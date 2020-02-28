@@ -529,7 +529,7 @@ void SceneText::Update(double dt)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
-	
+
 	//Checking Cars
 	for (int i = 0; i < 4; i++)
 	{
@@ -538,8 +538,8 @@ void SceneText::Update(double dt)
 			light[i].power = 10;
 
 			CarUI[i] = true;
-				if (CarUIHeight[i] < 8)
-					CarUIHeight[i] += 24 * dt;
+			if (CarUIHeight[i] < 8)
+				CarUIHeight[i] += 24 * dt;
 
 			if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
 			{
@@ -547,7 +547,7 @@ void SceneText::Update(double dt)
 				thePlayer->SelectCar(Cars[i]);
 				//thePlayer->Toggle_TestDrive();
 				whichCar = i;
-				
+
 				switch (i)
 				{
 				case CHOICE_WM:
@@ -581,7 +581,7 @@ void SceneText::Update(double dt)
 	}
 
 	//Check for flappy car booth UI and key input to sceene change
-	if ((thePlayer->GetPos().x >= 100 - 80  && thePlayer->GetPos().x <= 100 + 80)
+	if ((thePlayer->GetPos().x >= 100 - 80 && thePlayer->GetPos().x <= 100 + 80)
 		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
 	{
 		CarUI[4] = true;
@@ -602,12 +602,12 @@ void SceneText::Update(double dt)
 			CarUIHeight[4] = 0;
 		}
 	}
-	
+
 	//Car Surfers UI Check
-	if ((thePlayer->GetPos().x <= -100 + 80  && thePlayer->GetPos().x >= -100 - 80)
+	if ((thePlayer->GetPos().x <= -100 + 80 && thePlayer->GetPos().x >= -100 - 80)
 		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
 	{
-		CarUI[5]= true;
+		CarUI[5] = true;
 		if (CarUIHeight[5] < 8)
 			CarUIHeight[5] += 24 * dt;
 		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
@@ -673,9 +673,9 @@ void SceneText::Update(double dt)
 
 	if (renderingState == STATE_TEST_DRIVE && isOnGround == true)
 	{
-		
 
-		if (pow((pow((thePlayer->GetSelectedCar()->GetPos().x - 110), 2)+ pow((thePlayer->GetSelectedCar()->GetPos().z - 38), 2)),0.5) <= 109)
+
+		if (pow((pow((thePlayer->GetSelectedCar()->GetPos().x - 110), 2) + pow((thePlayer->GetSelectedCar()->GetPos().z - 38), 2)), 0.5) <= 109)
 		{
 			//cout << "mother" << endl;
 			isOnGround = false;
@@ -685,24 +685,24 @@ void SceneText::Update(double dt)
 		{
 			isOnGround = false;
 		}
-		
+
 	}
-	else if(isOnGround == false)
+	else if (isOnGround == false)
 	{
 		thePlayer->GetSelectedCar()->Reset();
-		
+
 		if (hasCarFell == false)
 		{
 			counter++;
 			turnCarWhite = true;
 			hasCarFell = true;
 		}
-		
-		
-		
+
+
+
 		isOnGround = true;
 	}
-	
+
 	if (counter > 0 && counter < 20)
 	{
 		if (hasCarFell == true)
@@ -723,7 +723,7 @@ void SceneText::Update(double dt)
 				hasCarFell = false;
 			}
 		}
-		
+
 	}
 
 	// Skybox Movement
@@ -731,7 +731,7 @@ void SceneText::Update(double dt)
 	if (skyboxOffset >= 1)
 	{
 		skyboxOffset - 1;
-
+	}
 	////detection for mini game booth 1
 	// alr done by clement on other branch so can ignore this while merging thx
 	//if (((((thePlayer->GetPos().x - (95)) >= -50) && ((thePlayer->GetPos().x - (95)) <= 50)) && (((thePlayer->GetPos().z - 110) >= -50) && ((thePlayer->GetPos().z - 110) <= 50))))
@@ -741,9 +741,7 @@ void SceneText::Update(double dt)
 	//		//cout << "hello" << endl;
 	//		Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME1);
 	//	}
-
 	//}
-
 	//detection for mini game booth 2
 	//if (((((thePlayer->GetPos().x - (-99)) >= -50) && ((thePlayer->GetPos().x - (-99)) <= 50)) && (((thePlayer->GetPos().z - 115) >= -50) && ((thePlayer->GetPos().z - 115) <= 50))))
 	//{
@@ -754,7 +752,6 @@ void SceneText::Update(double dt)
 	//	}
 	//	
 	//}
-
 	//detection for mini game booth 2
 
 	if (((((thePlayer->GetPos().x - (42)) >= -80) && ((thePlayer->GetPos().x - (42)) <= 80)) && (((thePlayer->GetPos().z - (-120)) >= -50) && ((thePlayer->GetPos().z - (-120)) <= 50))))
@@ -777,6 +774,7 @@ void SceneText::Update(double dt)
 	thePlayer->Update();
 	CalculateFrameRate();
 }
+
 
 void SceneText::Render()
 {
