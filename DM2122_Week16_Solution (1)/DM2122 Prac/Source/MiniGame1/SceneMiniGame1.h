@@ -7,6 +7,7 @@
 #include "../Mesh.h"
 #include "../Light.h"
 #include "MiniGame1Obj.h"
+#include "../sceneData.h"
 #include <fstream>
 #include <iostream>
 #include <../../irrklang/include/irrKlang.h>

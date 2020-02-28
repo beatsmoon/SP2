@@ -718,7 +718,7 @@ void SceneMiniGame1::Update(double dt)
 				//Exit to main
 				case 4:
 				{
-
+					Data::GetInstance()->setCurrScene(Data::SceneType::MAIN);
 				}
 				}
 			}
