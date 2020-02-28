@@ -18,16 +18,20 @@ o Esc key is to bring up the pause screen (see Pause screen for more details)
 
 
 ------Pause Screen------
-o The cause screen cursor can be controled by the Mouse and click the Left Mouse Button
-o Clicking on resume will resume the game
-o Clicking on Highscores will bring up the highscore menu 
-o Clicking on exit will close the game
+o The pause screen is accessed by the Esc button in the showroom and testdrive.
+o The pause screen cursor can be controled by the Mouse and click the Left Mouse Button.
+o The current car selected will be shown at the bottom.
+o Clicking on resume will resume the game.
+o Clicking on Highscores will bring up the highscore menu.
+o Clicking on exit will close the game.
+o When in test drive mode, clicking on return to showroom will return the player to the showroom.
+
 
 
 ------Minigames------
 o Minigames can be accessed by pressing Z while near the respective minigame booth in the motorshow area
-o The booth with a car jumping through a wall is Flappy Car
-o The booth with a car driving on a road is Car Surfers
+o The booth with a car jumping through a wall is Flappy Car.
+o The booth with a car driving on a road is Car Surfers.
 
 
 ------Flappy Car------
