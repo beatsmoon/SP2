@@ -625,6 +625,7 @@ void SceneText::Update(double dt)
 			CarUIHeight[5] -= 24 * dt;
 
 		else
+		{
 			CarUI[5] = false;
 			CarUIHeight[5] = 0;
 		}
