@@ -157,8 +157,7 @@ void Application::Run()
 			}
 		}
 
-		
-		}
+	
 
 		//Swap buffers
 		glfwSwapBuffers(m_window);
