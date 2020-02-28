@@ -226,7 +226,7 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 
-	Car* Cars[4]; //TODO change this into an array
+	Car* Cars[4];
 	bool CarUI[4] = { false, };
 	float CarUIHeight[4] = {0, };
 	float pauseHeight = 0;
@@ -246,6 +246,12 @@ private:
 
 	int carSelection = CHOICE_WM;
 	int whichCar;
+
+	int needleRotation = 0;
+
+	// int to keep the highscores in
+	int flappyCar[3];
+	int carSurfer[3];
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderSkybox();
@@ -259,6 +265,7 @@ private:
 	void RenderCCar();
 	void RenderIndicator();
 	void RenderHighscore();
+	void RenderHighscores();
 	void RenderMiniDisplayCar();
 	void RenderFlappyCarBooth();
 	void RenderCarSurfersBooth();
@@ -266,7 +273,7 @@ private:
 	void RenderCarMesh(Mesh *mesh);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y);
+	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y,float rotation);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
 	

@@ -685,7 +685,16 @@ void SceneText::Update(double dt)
 		
 	}
 
-	
+	//cout << Cars[whichCar]->Get << endl;
+	/*while (Cars[whichCar]->GetVelocity().Length() > 0)
+	{
+		needleRotation = -Cars[whichCar]->GetVelocity().Length();
+
+		if (needleRotation > 180)
+		{
+			needleRotation = 180;
+		}
+	}*/
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
@@ -1030,7 +1039,6 @@ void SceneText::Render()
 		//	RenderWMCar();
 		//	modelStack.PopMatrix();
 		//}
-
 		RenderSpeedometer();
 		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(thePlayer->GetSelectedCar()->GetPos().x) + ", " + to_string(thePlayer->GetSelectedCar()->GetPos().y) + ", " + to_string(thePlayer->GetSelectedCar()->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
 
@@ -1040,7 +1048,10 @@ void SceneText::Render()
 
 	if (thePlayer->GetPause() || pauseHeight > 0)
 		if (highScoreBoard)
-			RenderHighscore();
+		{
+			RenderHighscore();	//the board
+			RenderHighscores();	//the text
+		}
 		else if (renderingState == STATE_SELECTION_SCREEN)
 			RenderPause();
 		else if (renderingState == STATE_TEST_DRIVE)
@@ -1354,11 +1365,22 @@ void SceneText::RenderHighscore()
 	modelStack.Scale(1, pauseHeight, 1);
 	RenderMesh(meshList[GEO_HIGHSCOREBOARD], false);
 
+	////Render the highscore text here
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	RenderText(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f));
+
+	//}
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	RenderText(meshList[GEO_TEXT], to_string(carSurfer[i]), Color(0.98f, 0.41f, 1.f));
+	//}
+
 	modelStack.PushMatrix();
 
 	float x, y;
 	MouseController::GetInstance()->GetMousePosition(x, y);
-	cout << y << endl;
+	//cout << y << endl;
 	modelStack.Translate(-1.6f, 1.6f, 0.1f);
 	if (y < 240)
 	{
@@ -1436,7 +1458,8 @@ void SceneText::RenderCarSurfersBooth()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0.2, 0.05, 0);
+	modelStack.Translate(-0.6, 1.45, 0);
+	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_CARSURFER_ROCK], false);
 	modelStack.PopMatrix();
 
@@ -1447,12 +1470,12 @@ void SceneText::RenderCarSurfersBooth()
 void SceneText::RenderSpeedometer()
 {
 	modelStack.PushMatrix();
-	RenderImageOnScreen(meshList[GEO_SPEEDOMETER], 100, 100, 600, 90);
+	RenderImageOnScreen(meshList[GEO_SPEEDOMETER], 100, 100, 600, 90,0);
 	
 	modelStack.PushMatrix();
-	modelStack.Rotate(90, 1, 1, 1);
+	/*modelStack.Rotate(90, 1, 1, 1);*/
 	modelStack.Translate(0, 0, 0.1f);
-	RenderMesh(meshList[GEO_SPEEDOMETER_NEEDLE], false);
+	RenderImageOnScreen(meshList[GEO_SPEEDOMETER_NEEDLE], 100,100,600,90,needleRotation);	//change the 90 at the back to a variable for animation
 
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -1672,7 +1695,7 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 
 }
 
-void SceneText::RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y)
+void SceneText::RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y, float rotation)
 {
 
 	glDisable(GL_DEPTH_TEST);
@@ -1687,6 +1710,7 @@ void SceneText::RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float 
 	modelStack.LoadIdentity(); //Reset modelStack
 
 	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(rotation, 0, 0, 1);
 	modelStack.Scale(sizex, sizey, 1);
 
 	RenderMesh(mesh, false);
@@ -1756,5 +1780,50 @@ void SceneText::CalculateFrameRate()
 		lastTime = currentTime;
 		fps = (int)framesPerSecond;
 		framesPerSecond = 0;
+	}
+}
+
+void SceneText::RenderHighscores()
+{
+	//read flappy car highscores here
+	int x = 0;
+	int store = 0;
+	std::string line;
+	std::ifstream Flappyfile("Highscore//MiniGame1Highscore.txt");
+	if (Flappyfile.is_open())
+	{
+		while (getline(Flappyfile, line) && x >! 3)
+		{
+			flappyCar[x] = stoi(line); //Convert string to int
+			x++;
+		}
+		Flappyfile.close();
+	}
+
+	//Print Score
+	for (int i = 0; i < 3; i++)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f), 8, 0.9, 4.3f + (-1.7 * i));
+	}
+
+	//read car surfers highscores here
+	x = 0;
+	store = 0;
+	std::string lines;
+	std::ifstream CarSurferfile("Highscore//minigame2.txt");
+	if (CarSurferfile.is_open())
+	{
+		while (getline(CarSurferfile, lines) && x > !3)
+		{
+			carSurfer[x] = stoi(lines); //Convert string to int
+			x++;
+		}
+		CarSurferfile.close();
+	}
+
+	//Print Score
+	for (int q = 0; q < 3; q++)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(carSurfer[q]), Color(0.98f, 0.41f, 1.f), 8, 4.7, 4.1f + (-1.7 * q));
 	}
 }
