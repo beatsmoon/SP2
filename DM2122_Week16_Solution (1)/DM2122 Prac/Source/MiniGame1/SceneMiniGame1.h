@@ -19,6 +19,10 @@ class SceneMiniGame1 : public Scene
 		GEO_AXES = 0,
 		GEO_BACKGROUND,
 		GEO_CAR,
+		GEO_CLEMENTCAR,
+		GEO_VALCAR,
+		GEO_WAIMENCAR,
+		GEO_GLENDACAR,
 		GEO_TEXT,
 		GEO_WALL,
 		GEO_WALLTEST,
@@ -26,6 +30,9 @@ class SceneMiniGame1 : public Scene
 		GEO_SCORE,
 		GEO_LOST,
 		GEO_MAIN,
+		GEO_INDICATOR,
+		GEO_CONTROLS,
+		GEO_SELECTION,
 		NUM_GEOMETRY,
 	};
 
@@ -89,7 +96,8 @@ private:
 	double bouncetime;
 
 	bool scoremenu;
-
+	bool controlmenu;
+	bool selectmenu;
 
 	bool walldestroy;
 
@@ -103,6 +111,22 @@ private:
 
 	int Highscores[5];
 
+	//0 - Red
+	//1 - Green
+	//2 - Blue
+	//3 - Gold
+	int Highscore1color;
+
+	//Control Screen Size
+	float screensizescore;
+	float screensizecontrol;
+	float screensizeselection;
+
+	//0 - Clement
+	//1 - Glenda
+	//2 - Waimen
+	//3 - Val
+	int carselected;
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
@@ -110,6 +134,7 @@ private:
 	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y);
 	void RenderAnimationOnScreen(Mesh* mesh, int count, float size, float x, float y);
 	void CalculateFrameRate();
+	void Restart();
 
 public:
 	SceneMiniGame1();

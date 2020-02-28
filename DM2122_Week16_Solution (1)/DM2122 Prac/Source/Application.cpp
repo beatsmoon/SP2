@@ -168,13 +168,14 @@ void Application::Run()
 			}
 			else if (CurrentScene == Data::SceneType::MINIGAME1)
 			{
+
 				CurrentScene = Data::SceneType::MINIGAME2;
 				scene = minigame2;
 			}
 			else if (CurrentScene == Data::SceneType::MINIGAME1)
 			{
 				CurrentScene = Data::SceneType::MINIGAME2;
-				scene = mainscene;
+				
 			}
 		}
 		if (Application::IsKeyPressed('P') && bouncetime <= GetTickCount64())
