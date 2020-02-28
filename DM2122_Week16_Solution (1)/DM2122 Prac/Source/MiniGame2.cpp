@@ -534,7 +534,7 @@ void MiniGame2::RenderDeathMenu()
 				modelStack.Translate(0.f, 0.f, -0.8f);
 				if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 				{
-					//reset();
+					Data::GetInstance()->setCurrScene(Data::SceneType::MAIN);
 				}
 			}
 			else if(MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))

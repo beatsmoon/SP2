@@ -180,6 +180,24 @@ void SceneMiniGame1::Init()
 
 void SceneMiniGame1::Update(double dt)
 {
+	switch (Data::GetInstance()->getCurrCar())
+	{
+	case Data::CarType::CAR_C:
+		carselected = 0;
+		break;
+	case Data::CarType::CAR_G:
+		carselected = 1;
+		break;
+	case Data::CarType::CAR_WM:
+		carselected = 2;
+		break;
+	case Data::CarType::CAR_V:
+		carselected = 3;
+		break;
+	default:
+		carselected = 0;
+		break;
+	}
 	//if (Application::IsKeyPressed(0x31))
 	//{
 	//	glDisable(GL_CULL_FACE);
@@ -1488,3 +1506,4 @@ void SceneMiniGame1::Restart()
 
 	soundbuffer = GetTickCount64();
 }
+
