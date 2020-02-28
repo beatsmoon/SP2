@@ -9,6 +9,8 @@
 #include "MiniGame1Obj.h"
 #include <fstream>
 #include <iostream>
+#include <../../irrklang/include/irrKlang.h>
+using namespace irrklang;
 
 using namespace std;
 
@@ -127,6 +129,10 @@ private:
 	//2 - Waimen
 	//3 - Val
 	int carselected;
+
+	//Play Sound
+	ISoundEngine* SoundEngine = createIrrKlangDevice();
+	double soundbuffer; //Stops sound from playing until time
 
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderText(Mesh* mesh, std::string text, Color color);
