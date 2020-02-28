@@ -704,7 +704,7 @@ void SceneMiniGame1::Update(double dt)
 				case 0:
 				{
 					SoundEngine->play2D("audio/sound_start.wav", GL_FALSE); //Play sound for starting game
-					bouncetime = GetTickCount64() + 250;
+					bouncetime = GetTickCount64() + 250; //Set time until next key press allowed
 					playing = true;
 					BackgroundStart->setvelx(gamespeed);
 					gameupdate = GetTickCount64() + nextupdate;
@@ -722,7 +722,7 @@ void SceneMiniGame1::Update(double dt)
 				{
 					if (controlmenu == false && selectmenu == false)
 					{
-						bouncetime = GetTickCount64() + 1000;
+						bouncetime = GetTickCount64() + 1000;//Set time until next key press allowed
 						scoremenu = true;
 						std::string line;
 						std::ifstream scorefile("Highscore//MiniGame1Highscore.txt");
@@ -745,7 +745,7 @@ void SceneMiniGame1::Update(double dt)
 				//Controls
 				case 2:
 				{
-					bouncetime = GetTickCount64() + 1000;
+					bouncetime = GetTickCount64() + 1000;//Set time until next key press allowed
 					if (scoremenu == false && selectmenu == false)
 					{
 						controlmenu = true;
@@ -758,7 +758,7 @@ void SceneMiniGame1::Update(double dt)
 				//Car Selection
 				case 3:
 				{
-					bouncetime = GetTickCount64() + 1000;
+					bouncetime = GetTickCount64() + 1000; //Set time until next key press allowed
 					if (scoremenu == false && controlmenu == false)
 					{
 						selectmenu = true;
@@ -924,14 +924,12 @@ void SceneMiniGame1::Render()
 {
 	//Clear color & depth buffer every frame
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	//Load Camera
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z, camera.target.x, camera.target.y, camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
-	// passing the light direction if it is a direction light	
-
-	//Render Background
+	//Render Backgrounds
 	BackgroundMid = BackgroundStart;
 	while (BackgroundMid != nullptr)
 	{
@@ -939,7 +937,7 @@ void SceneMiniGame1::Render()
 		BackgroundMid = BackgroundMid->getnextadress();
 	}
 	
-	//Render Car
+	//Render Car based on which animation frame its on
 	switch (Player->returntype())
 	{
 	case 0: //Sprite 1
@@ -968,10 +966,9 @@ void SceneMiniGame1::Render()
 		break;
 	}
 	}
-	//RenderTextOnScreen(meshList[GEO_CAR], "j", Color(1, 1, 1), 50, Player->returnlocationx() - 25, Player->returnlocationy() - 25);
-	//RenderImageOnScreen(meshList[GEO_CAR], 50, 50, Player->returnlocationx()-25, Player->returnlocationy()-25);
 
-	//Render Powerups
+
+	//Render Powerups base on which powerup it is
 	if (Powerup != nullptr)
 	{
 		//0 - Slowdown
@@ -1006,9 +1003,9 @@ void SceneMiniGame1::Render()
 			break;
 		}
 		}
-		//RenderImageOnScreen(meshList[GEO_POWERUP], 20, 20, Powerup->returnlocationx(), Powerup->returnlocationy());
+		
 	}
-	//Render Wallks
+	//Render All Walls
 	WallMid = WallStart;
 	while (WallMid != nullptr)
 	{
@@ -1045,20 +1042,26 @@ void SceneMiniGame1::Render()
 	}
 
 	std::string text;
-	if (lost == true)
+	if (lost == true) //If playe has lost
 	{
+		//Render Lost Screen
 		RenderImageOnScreen(meshList[GEO_LOST], 350, 350, 400, 300);
 
+		//Render Score
 		text = std::to_string(score);
 		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 1, 0), 55, 425, 245);
 
 
 	}
-	else if (playing == false)
+	else if (playing == false) //Main Menu
 	{
+		//Main Menu
 		if (scoremenu == false && controlmenu == false && selectmenu == false)
 		{
+			//Render Main Menu Screen
 			RenderImageOnScreen(meshList[GEO_MAIN], 600, 600, 400, 300);
+			
+			//Set cursor position
 			//0 - Start
 			//1 - Highscores
 			//2 - Controls
@@ -1082,10 +1085,10 @@ void SceneMiniGame1::Render()
 			case 0: //400
 				break;
 			}
-			RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, y);
+			RenderImageOnScreen(meshList[GEO_INDICATOR], 50, 50, 220, y); //Render Cursor
 
 		}
-		else if (scoremenu == true)
+		else if (scoremenu == true) //Score menu
 		{
 
 			//Render Scoreboard
@@ -1093,7 +1096,7 @@ void SceneMiniGame1::Render()
 			//Render Scores
 			if (screensizescore >= 500)
 			{
-				//Render 1st Score
+				//Render 1st Score based on color appearing
 				switch (Highscore1color)
 				{
 				case 0:
@@ -1123,9 +1126,11 @@ void SceneMiniGame1::Render()
 				RenderTextOnScreen(meshList[GEO_TEXT], to_string(Highscores[3]), Color(0.31764, 1, 0), 65, 245, 170);
 			}
 		}
-		else if (selectmenu == true)
+		else if (selectmenu == true) //Car Selection Menu
 		{
+			//Render Car Selection Menu
 			RenderImageOnScreen(meshList[GEO_SELECTION], screensizeselection, screensizeselection, 400, 300);
+			//If screen size is big enough
 			if (screensizeselection >= 550)
 			{
 				int count = 6;
@@ -1160,7 +1165,7 @@ void SceneMiniGame1::Render()
 				
 				RenderAnimationOnScreen(meshList[GEO_VALCAR], count, 150, 475, 130);
 
-				switch (carselected)
+				switch (carselected) //Render indicator based on which car is selected
 				{
 				case 0:
 					
@@ -1200,13 +1205,16 @@ void SceneMiniGame1::Render()
 			RenderImageOnScreen(meshList[GEO_SELECTION], screensizeselection, screensizeselection, 400, 300);
 		}
 	}
-	else
+	else //Playing
 	{
+		//Render current score at bottom left
 		text = "Score: " + std::to_string(score);
 		RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 35, 0, 0);
 
+		//If wall destroyer power up collected
 		if (walldestroy == true)
 		{
+			//Render wall destoryer text on bottom left above score
 			text = "Wall Destroyer";
 			RenderTextOnScreen(meshList[GEO_TEXT], text, Color(0, 0, 1), 35, 0, 52.5);
 		}
@@ -1226,7 +1234,9 @@ void SceneMiniGame1::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 
-	//Deleting Pointers
+	//Deleting All Pointers
+
+	//Deleting Background pointers
 	BackgroundMid = BackgroundStart;
 	while (BackgroundMid != nullptr)
 	{
@@ -1235,7 +1245,7 @@ void SceneMiniGame1::Exit()
 		delete Store;
 	}	
 	
-
+	//Deleting Wall Pointers
 	WallMid = WallStart;
 	while (WallMid != nullptr)
 	{
@@ -1244,12 +1254,15 @@ void SceneMiniGame1::Exit()
 		delete Store;
 	}
 
+	//Deleteing Powerup pointers
 	if (Powerup != nullptr)
 	{
 		delete Powerup;
 	}
+	//Deleting Player poointer
 	delete Player;
 
+	//Selecting sound pointer
 	delete SoundEngine;
 }
 
