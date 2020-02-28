@@ -587,8 +587,8 @@ void SceneText::Update(double dt)
 	}
 
 	//Check for flappy car booth UI and key input to sceene change
-	if ((thePlayer->GetPos().x >= 100 - 80 && thePlayer->GetPos().x <= 100 + 80)
-		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
+	if ((thePlayer->GetPos().x >= 100 - 60 && thePlayer->GetPos().x <= 100 + 60)
+		&& (thePlayer->GetPos().z >= 115 - 60 && thePlayer->GetPos().x <= 115 + 60))
 	{
 		CarUI[4] = true;
 		if (CarUIHeight[4] < 8)
@@ -610,8 +610,8 @@ void SceneText::Update(double dt)
 	}
 
 	//Car Surfers UI Check
-	if ((thePlayer->GetPos().x <= -100 + 80 && thePlayer->GetPos().x >= -100 - 80)
-		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
+	if ((thePlayer->GetPos().x <= -100 + 60 && thePlayer->GetPos().x >= -100 - 60)
+		&& (thePlayer->GetPos().z >= 115 - 60 && thePlayer->GetPos().x <= 115 + 60))
 	{
 		CarUI[5] = true;
 		if (CarUIHeight[5] < 8)
