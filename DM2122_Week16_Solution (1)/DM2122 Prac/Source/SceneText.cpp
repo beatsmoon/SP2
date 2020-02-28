@@ -507,6 +507,7 @@ void SceneText::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
+	carName = "None";
 
 	// Hardware Abstraction
 	theKeyboard = new CKeyboard();
@@ -776,6 +777,11 @@ void SceneText::Update(double dt)
 		}
 
 	}
+
+	if (thePlayer->GetSelectedCar() != nullptr)
+		carName = thePlayer->GetSelectedCar()->Get_name();
+	else
+		carName = "None";
 
 	//cout << Cars[whichCar]->Get << endl;
 	/*while (Cars[whichCar]->GetVelocity().Length() > 0)
@@ -1705,6 +1711,10 @@ void SceneText::RenderPause()
 
 		}
 	}
+
+	RenderTextOnScreen(meshList[GEO_TEXT],carName, Color(0.98f, 0.41f, 1.f), 8, 3.75, 1.44);
+
+
 	RenderIndicator();
 	modelStack.PopMatrix();
 
@@ -1783,6 +1793,7 @@ void SceneText::RenderTestDrivePause()
 		}
 
 	}
+	RenderTextOnScreen(meshList[GEO_TEXT], carName, Color(0.98f, 0.41f, 1.f), 8, 3.7, 0.5);
 	RenderIndicator();
 	modelStack.PopMatrix();
 
