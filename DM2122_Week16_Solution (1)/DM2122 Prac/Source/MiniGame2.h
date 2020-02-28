@@ -21,6 +21,7 @@ class MiniGame2 : public Scene
 		GEO_G_CAR,
 		GEO_C_CAR,
 		GEO_DEATHMENU,
+		GEO_INSTRUCTIONS,
 		GEO_INDICATOR,
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
@@ -78,6 +79,7 @@ private:
 	Car* theCar;
 	bool NitroUsed = false;
 	bool gameEnd = false;
+	bool gameStart = false;
 	bool rock1End = true;
 	float distance = 0;
 	int lanes;
@@ -99,6 +101,7 @@ private:
 	void RockGoingDown(double dt); //posZ going down
 	void RenderCar();
 	void RenderDeathMenu();
+	void RenderInstructions();
 	void reset();
 
 	bool collisionWithRock();

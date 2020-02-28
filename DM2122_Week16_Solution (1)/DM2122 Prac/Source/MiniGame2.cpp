@@ -143,6 +143,10 @@ void MiniGame2::Init()
 	meshList[GEO_DEATHMENU] = MeshBuilder::GenerateQuad("DeathMenu", Color(1, 1, 1), 1, 1);
 	meshList[GEO_DEATHMENU]->textureID = LoadTGA("image//deathmenu.tga");
 
+	meshList[GEO_INSTRUCTIONS] = MeshBuilder::GenerateQuad("instructions", Color(1, 1, 1), 1, 1);
+	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("image//MiniGame2_instructions.tga");
+	
+
 	meshList[GEO_INDICATOR] = MeshBuilder::GenerateQuad("arrow", Color(1, 1, 1), 4, 4);
 	meshList[GEO_INDICATOR]->textureID = LoadTGA("image//indicator.tga");
 
@@ -224,7 +228,7 @@ void MiniGame2::Update(double dt)
 	thePlayer->Update();
 
 	Rotate += 50 * (float)(dt);
-	if (gameEnd == false)
+	if (gameEnd == false && gameStart == true)
 	{
 		if (KeyboardController::GetInstance()->IsKeyDown('A'))
 		{
@@ -272,7 +276,15 @@ void MiniGame2::Update(double dt)
 		NitroBoostCoolDown(dt);
 		DistanceTravelled(dt);
 	}
-	if (gameEnd == false)
+	if (gameStart == false)
+	{
+		if (KeyboardController::GetInstance()->IsKeyPressed(VK_SPACE))
+		{
+			gameStart = true;
+		}
+	}
+
+	if (gameEnd == false && gameStart == true)
 	{
 		if (NitroUsed)
 		{
@@ -370,6 +382,8 @@ void MiniGame2::Render()
 
 	string dis = to_string(distance);
 	RenderTextOnScreen(meshList[GEO_TEXT], "SCORE : " + dis, Color(0, 1, 0), 3, 15, 19);
+
+	RenderInstructions();
 
 	RenderDeathMenu();
 }
@@ -553,6 +567,22 @@ void MiniGame2::RenderDeathMenu()
 	}
 }
 
+void MiniGame2::RenderInstructions()
+{
+	if (gameStart == false)
+	{
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, -30, 0);
+		modelStack.Rotate(-90, 1, 0, 0);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Rotate(90, 0, 0, 1);
+		modelStack.Scale(30, 30, 30);
+		RenderMesh(meshList[GEO_INSTRUCTIONS], false);
+		modelStack.PopMatrix();
+	}
+}
+
 
 void MiniGame2::reset()
 {
@@ -617,7 +647,7 @@ void MiniGame2::NitroBoostCoolDown(double dt) //FOR NITROBOOST TO FILL UP AND FO
 
 void MiniGame2::DistanceTravelled(double dt)
 {
-	if (gameEnd == false)
+	if (gameEnd == false && gameStart == true)
 	{
 		if (NitroUsed == false)
 		{
@@ -736,7 +766,7 @@ void MiniGame2::CollisionUpdate(double dt)
 		}
 	}
 	
-	if (gameEnd == true)
+	if (gameEnd == true && gameStart == false)
 	{
 		StartZ = StartZ;
 	}
