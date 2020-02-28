@@ -496,6 +496,12 @@ void SceneText::Init()
 	meshList[GEO_FLAPPYCAR_ENVIRONMENT] = MeshBuilder::GenerateOBJ("wall", "OBJ//miniwalls.obj");
 	meshList[GEO_FLAPPYCAR_ENVIRONMENT]->textureID = LoadTGA("Image//miniwallUV.tga");
 
+	meshList[GEO_SPEEDOMETER] = MeshBuilder::GenerateQuad("speedometer", Color(1, 1, 1), 4, 4);
+	meshList[GEO_SPEEDOMETER]->textureID = LoadTGA("Image//speedometer.tga");
+
+	meshList[GEO_SPEEDOMETER_NEEDLE] = MeshBuilder::GenerateQuad("speedometer_needle", Color(1, 1, 1), 4, 4);
+	meshList[GEO_SPEEDOMETER_NEEDLE]->textureID = LoadTGA("Image//speedometer_needle.tga");
+
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -619,7 +625,6 @@ void SceneText::Update(double dt)
 			CarUIHeight[5] -= 24 * dt;
 
 		else
-		{
 			CarUI[5] = false;
 			CarUIHeight[5] = 0;
 		}
@@ -641,6 +646,11 @@ void SceneText::Update(double dt)
 			else if (pauseMenuSelection == CHOICE_BACK)
 			{
 				highScoreBoard = false;
+			}
+			else if (pauseMenuSelection == CHOICE_RETURN_STATION)
+			{
+				renderingState = STATE_SELECTION_SCREEN;
+				thePlayer->Toggle_TestDrive();
 			}
 			else if (pauseMenuSelection == CHOICE_EXIT)
 			{
@@ -765,6 +775,17 @@ void SceneText::Update(double dt)
 		}
 
 	}
+
+	//cout << Cars[whichCar]->Get << endl;
+	/*while (Cars[whichCar]->GetVelocity().Length() > 0)
+	{
+		needleRotation = -Cars[whichCar]->GetVelocity().Length();
+
+		if (needleRotation > 180)
+		{
+			needleRotation = 180;
+		}
+	}*/
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
@@ -1099,7 +1120,7 @@ void SceneText::Render()
 		}
 
 		modelStack.PopMatrix();
-
+		RenderSpeedometer();
 		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(thePlayer->GetSelectedCar()->GetPos().x) + ", " + to_string(thePlayer->GetSelectedCar()->GetPos().y) + ", " + to_string(thePlayer->GetSelectedCar()->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
 
 		break;
@@ -1107,9 +1128,14 @@ void SceneText::Render()
 
 	if (thePlayer->GetPause() || pauseHeight > 0)
 		if (highScoreBoard)
-			RenderHighscore();
-		else
+		{
+			RenderHighscore();	//the board
+			RenderHighscores();	//the text
+		}
+		else if (renderingState == STATE_SELECTION_SCREEN)
 			RenderPause();
+		else if (renderingState == STATE_TEST_DRIVE)
+			RenderTestDrivePause();
 	else
 		pauseHeight = 0;
 
@@ -1428,11 +1454,22 @@ void SceneText::RenderHighscore()
 	modelStack.Scale(1, pauseHeight, 1);
 	RenderMesh(meshList[GEO_HIGHSCOREBOARD], false);
 
+	////Render the highscore text here
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	RenderText(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f));
+
+	//}
+	//for (int i = 0; i < 3; i++)
+	//{
+	//	RenderText(meshList[GEO_TEXT], to_string(carSurfer[i]), Color(0.98f, 0.41f, 1.f));
+	//}
+
 	modelStack.PushMatrix();
 
 	float x, y;
 	MouseController::GetInstance()->GetMousePosition(x, y);
-	cout << y << endl;
+	//cout << y << endl;
 	modelStack.Translate(-1.6f, 1.6f, 0.1f);
 	if (y < 240)
 	{
@@ -1510,11 +1547,26 @@ void SceneText::RenderCarSurfersBooth()
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0.2, 0.05, 0);
+	modelStack.Translate(-0.6, 1.45, 0);
+	modelStack.Scale(0.1, 0.1, 0.1);
 	RenderMesh(meshList[GEO_CARSURFER_ROCK], false);
 	modelStack.PopMatrix();
 
 
+	modelStack.PopMatrix();
+}
+
+void SceneText::RenderSpeedometer()
+{
+	modelStack.PushMatrix();
+	RenderImageOnScreen(meshList[GEO_SPEEDOMETER], 100, 100, 600, 90,0);
+	
+	modelStack.PushMatrix();
+	/*modelStack.Rotate(90, 1, 1, 1);*/
+	modelStack.Translate(0, 0, 0.1f);
+	RenderImageOnScreen(meshList[GEO_SPEEDOMETER_NEEDLE], 100,100,600,90,needleRotation);	//change the 90 at the back to a variable for animation
+
+	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
 
@@ -1586,6 +1638,8 @@ void SceneText::RenderSkyboxWallMesh(Mesh* mesh)
 
 void SceneText::RenderPause()
 {
+	meshList[GEO_PAUSE]->textureID = LoadTGA("Image//pause.tga");
+
 	// Find direction opposite of Player target 
 	Vector3 dir = (thePlayer->GetPos() - thePlayer->GetTarget()).Normalized();
 
@@ -1656,6 +1710,84 @@ void SceneText::RenderPause()
 	modelStack.PopMatrix();
 }
 
+void SceneText::RenderTestDrivePause()
+{
+	meshList[GEO_PAUSE]->textureID = LoadTGA("Image//pause_testdrive.tga");
+
+	// Find direction opposite of Player target 
+	Vector3 dir = (thePlayer->GetPos() - thePlayer->GetTarget()).Normalized();
+
+	// Find angle from 0 to dir vector
+	float angle = atan2f(dir.x, dir.z);
+	angle = Math::RadianToDegree(angle);
+	float angle2;
+	if (angle > 0)
+	{
+		if ((angle < 45) || (angle > 135))
+			angle2 = atan2f(dir.y, dir.z);
+		else
+			angle2 = atan2f(dir.y, dir.x);
+	}
+	else
+	{
+		if ((angle > -45) || (angle < -135))
+			angle2 = atan2f(dir.y, dir.z);
+		else
+			angle2 = atan2f(dir.y, dir.x);
+	}
+	angle2 = Math::RadianToDegree(angle2);
+
+	// Get postion units away from player in direction found prevoiusly
+	Vector3 pos = thePlayer->GetPos() - 5 * dir;
+
+	// Model Stack
+	modelStack.PushMatrix();
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(angle, 0, 1, 0); //side to side
+	if (angle > 135 || angle < -45)
+	{
+		modelStack.Rotate(180, 1, 0, 0);
+		modelStack.Rotate(angle2, 1, 0, 0); //up to down
+	}
+	else
+		modelStack.Rotate(-angle2, 1, 0, 0); //up to down
+
+	modelStack.Rotate(10, 0, 1, 0); //up to down
+	modelStack.Translate(-0.5f, 0, 0);
+	modelStack.Scale(1, pauseHeight, 1);
+	RenderMesh(meshList[GEO_PAUSE], false);
+
+	modelStack.PushMatrix();
+	float x, y;
+	MouseController::GetInstance()->GetMousePosition(x, y);
+	cout << y << endl;
+	modelStack.Translate(-1.5f, 0.5f, 0.1f);
+	if (y < 240)
+	{
+		pauseMenuSelection = CHOICE_RESUME;
+	}
+	else if (y > 240)
+	{
+		modelStack.Translate(0.f, -0.5f, 0.f);
+		pauseMenuSelection = CHOICE_HIGHSCORE;
+		if (y > 320)
+		{
+			modelStack.Translate(0.f, -0.4f, 0.f);
+			pauseMenuSelection = CHOICE_RETURN_STATION;
+			if (y > 370)
+			{
+				modelStack.Translate(0.f, -0.4f, 0.f);
+				pauseMenuSelection = CHOICE_EXIT;
+			}
+		}
+
+	}
+	RenderIndicator();
+	modelStack.PopMatrix();
+
+	modelStack.PopMatrix();
+}
+
 void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
@@ -1681,6 +1813,35 @@ void SceneText::RenderText(Mesh* mesh, std::string text, Color color)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 	glEnable(GL_DEPTH_TEST);
+
+}
+
+void SceneText::RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y, float rotation)
+{
+
+	glDisable(GL_DEPTH_TEST);
+
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 800, 0, 600, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity(); //Reset modelStack
+
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(rotation, 0, 0, 1);
+	modelStack.Scale(sizex, sizey, 1);
+
+	RenderMesh(mesh, false);
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	projectionStack.PopMatrix();
+
+
+	glEnable(GL_DEPTH_TEST);
+
 
 }
 
@@ -1740,5 +1901,50 @@ void SceneText::CalculateFrameRate()
 		lastTime = currentTime;
 		fps = (int)framesPerSecond;
 		framesPerSecond = 0;
+	}
+}
+
+void SceneText::RenderHighscores()
+{
+	//read flappy car highscores here
+	int x = 0;
+	int store = 0;
+	std::string line;
+	std::ifstream Flappyfile("Highscore//MiniGame1Highscore.txt");
+	if (Flappyfile.is_open())
+	{
+		while (getline(Flappyfile, line) && x >! 3)
+		{
+			flappyCar[x] = stoi(line); //Convert string to int
+			x++;
+		}
+		Flappyfile.close();
+	}
+
+	//Print Score
+	for (int i = 0; i < 3; i++)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f), 8, 0.9, 4.3f + (-1.7 * i));
+	}
+
+	//read car surfers highscores here
+	x = 0;
+	store = 0;
+	std::string lines;
+	std::ifstream CarSurferfile("Highscore//minigame2.txt");
+	if (CarSurferfile.is_open())
+	{
+		while (getline(CarSurferfile, lines) && x > !3)
+		{
+			carSurfer[x] = stoi(lines); //Convert string to int
+			x++;
+		}
+		CarSurferfile.close();
+	}
+
+	//Print Score
+	for (int q = 0; q < 3; q++)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(carSurfer[q]), Color(0.98f, 0.41f, 1.f), 8, 4.7, 4.1f + (-1.7 * q));
 	}
 }

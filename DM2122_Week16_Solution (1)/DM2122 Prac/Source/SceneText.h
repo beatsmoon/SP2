@@ -56,6 +56,8 @@ class SceneText : public Scene
 		GEO_LIGHTSPHERE,
 		GEO_TEXT,
 		GEO_TESTDRIVE_ENVIRONMENT_OBJ,
+		GEO_SPEEDOMETER,
+		GEO_SPEEDOMETER_NEEDLE,
 		NUM_GEOMETRY,
 	};
 
@@ -231,7 +233,6 @@ private:
 	CMouse* theMouse;
 	CKeyboard* theKeyboard;
 
-
 	Car* Cars[4]; //TODO change this into an array
 	bool CarUI[6] = { false, };
 	float CarUIHeight[6] = {0, };
@@ -258,6 +259,11 @@ private:
 	int skyboxSwapValue; // 0-3
 
 	ISoundEngine* SoundEngine = createIrrKlangDevice();
+	int needleRotation = 0;
+
+	// int to keep the highscores in
+	int flappyCar[3];
+	int carSurfer[3];
 	
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderCarMesh(Mesh *mesh);
@@ -265,6 +271,7 @@ private:
 
 	void RenderSkybox();
 	void RenderPause();
+	void RenderTestDrivePause();
 	void RenderSpaceStation();
 	void RenderWMCar();
 	void RenderStatsUI();
@@ -273,11 +280,14 @@ private:
 	void RenderCCar();
 	void RenderIndicator();
 	void RenderHighscore();
+	void RenderHighscores();
 	void RenderMiniDisplayCar();
 	void RenderFlappyCarBooth();
 	void RenderCarSurfersBooth();
+	void RenderSpeedometer();
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
+	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y,float rotation);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void CalculateFrameRate();
 	
