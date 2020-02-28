@@ -76,6 +76,7 @@ void SceneMiniGame1::Init()
 	meshList[GEO_BACKGROUND] = MeshBuilder::GenerateQuad("FlappyCarBackground", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_BACKGROUND]->textureID = LoadTGA("Image/Background_FlappyCar1_Clement.tga");
 
+	//Car meshes
 	meshList[GEO_CAR] = MeshBuilder::GenerateText("Car", 2, 2);
 	meshList[GEO_CAR]->textureID = LoadTGA("Image//ClementCar_FlappyCar1_Clement.tga");
 
@@ -91,9 +92,11 @@ void SceneMiniGame1::Init()
 	meshList[GEO_WAIMENCAR] = MeshBuilder::GenerateText("WaimenCar", 2, 2);
 	meshList[GEO_WAIMENCAR]->textureID = LoadTGA("Image//WaimenCar_FlappyCar1_Clement.tga");	
 
+	
 	meshList[GEO_POWERUP] = MeshBuilder::GenerateText("Powerup", 2, 2);
 	meshList[GEO_POWERUP]->textureID = LoadTGA("Image//PowerUp_FlappyCar1_Clement.tga");	
 	
+	//Menu meshes
 	meshList[GEO_SCORE] = MeshBuilder::GenerateQuad("Score", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_SCORE]->textureID = LoadTGA("Image//Highscore_FlappyCar1_Clement.tga");
 	
@@ -112,10 +115,12 @@ void SceneMiniGame1::Init()
 	meshList[GEO_SELECTION] = MeshBuilder::GenerateQuad("Selection_Menu", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_SELECTION]->textureID = LoadTGA("Image//Selection_FlappyCar1_Clement.tga");
 	
-
+	//Genral Text Mesh
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga"); 
 
+
+	//Inital values for startup
 	BackgroundStart = new MiniGame1Obj(400,300,0,0);
 	playing = false;
 	lost = false;
@@ -180,6 +185,7 @@ void SceneMiniGame1::Init()
 
 void SceneMiniGame1::Update(double dt)
 {
+	//Check and set current car
 	switch (Data::GetInstance()->getCurrCar())
 	{
 	case Data::CarType::CAR_C:
@@ -198,33 +204,20 @@ void SceneMiniGame1::Update(double dt)
 		carselected = 0;
 		break;
 	}
-	//if (Application::IsKeyPressed(0x31))
-	//{
-	//	glDisable(GL_CULL_FACE);
-	//}
-	////else if (Application::IsKeyPressed(0x32))
-	//{
-	//	glEnable(GL_CULL_FACE);
-	//}
-	//else if (Application::IsKeyPressed(0x33))
-	//{
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//}
-	//else if (Application::IsKeyPressed(0x34))
-	//{
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//}
-	
 	CalculateFrameRate();
 	
-	//Active
+
+	//States for game
+	//User is playing now
 	if (playing == true && lost == false)
 	{
+		//Checking for game update
 		//Spawn New Wall + Speed Up Game
 		if (gameupdate <= GetTickCount64())
 		{
-			gameupdate = GetTickCount64() + nextupdate;
+			gameupdate = GetTickCount64() + nextupdate; //Set time to next update
 			float speed;
+			//Max speed according to which car selected
 			switch (carselected)
 			{
 			case 0:
@@ -243,30 +236,33 @@ void SceneMiniGame1::Update(double dt)
 			if (gamespeed > -speed) //SPEED
 			{
 				gamespeed -= 0.5;
-				if (gamespeed == -speed)
+				if (gamespeed <= -speed) //Reached max speed
 				{
 					gapsize = 150;
 					nextupdate = 3500;
 				}
 			}
 
-			WallMid = WallStart;
-			if (WallStart != nullptr)
+			//Form new wall
+			WallMid = WallStart; //Set wallmid to start
+			if (WallStart != nullptr) //Check if starting has a wall
 			{
-				while (WallMid->getnextadress() != nullptr)
+				while (WallMid->getnextadress() != nullptr) //Check until last wall
 				{
-					WallMid = WallMid->getnextadress();
+					WallMid = WallMid->getnextadress(); //if not last wall get next wall
 				}
 			}
-			float ylocation = (rand() % 590) + 10; //Random num from 10 - 599
+			//Set random gap location
+			float ylocation = (rand() % 590) + 10; //Random num from 10 - 599 
+			//Form new wall
 			MiniGame1Obj* newwall = new MiniGame1Obj(810, ylocation, gamespeed - 1, 0);
-			if (WallStart == nullptr)
+			if (WallStart == nullptr) //If there was no first wall
 			{
-				WallStart = newwall;
+				WallStart = newwall; //Set start to new wall
 			}
 			else
 			{
-				WallMid->setnextaddress(newwall);
+				WallMid->setnextaddress(newwall); //Set next wall to be new wall
 
 			}
 		}
@@ -274,8 +270,9 @@ void SceneMiniGame1::Update(double dt)
 		//Spawn Powerup
 		if (nextpowerspawn <= GetTickCount64())
 		{
+			//Set random time until next powerup spawn
 			nextpowerspawn = GetTickCount() + (((rand() % 10) + 10) * 1000); //Randomsise Next Spawn Time (10-20s)
-			Powerup = new MiniGame1Obj(810, 300, gamespeed - 1, 0);
+			Powerup = new MiniGame1Obj(810, 300, gamespeed - 1, 0); //Spawn new powerup;
 			int type = rand() % 4; //nunmber from 0 - 3
 			//0 - Slowdown
 			//1 - Destroy Wall
@@ -287,43 +284,48 @@ void SceneMiniGame1::Update(double dt)
 		//Update Animations
 		if (animationtime <= GetTickCount64())
 		{
+			//Set time until next animation
 			animationtime = GetTickCount64() + nextanimation;
 			//For Player
 			//0 - Sprite 1
 			//1 - Sprite 2
 			//2 - Sprite 3
 			//3 - Sprite 4
-			int type = Player->returntype();
-			if (wingsgoingup == true)
+			int type = Player->returntype(); //Check current animation state
+			if (wingsgoingup == true) //Check if animation going foward
 			{
 				type++;
-				if (type >= 4)
+				if (type >= 4) //Max animation state is 3
 				{
 					wingsgoingup = false;
 					type = 2;
 				}
 			}
-			else
+			else //Animation going backwards
 			{
 				type--;
-				if (type <= -1)
+				if (type <= -1) //minimum animation state is 0
 				{
 					wingsgoingup = true;
 					type = 0;
 				}
 			}
-			Player->settype(type);
+			Player->settype(type); //Set animation state
 		}
 
 		//Update Powerups
 		if (Powerup != nullptr)
 		{
-			Powerup->movexybyvelocity();
+			Powerup->movexybyvelocity(); //Move powerup location based on velocity
+			//Check if too far left
 			if (Powerup->returnlocationx() < -30)
 			{
+				//Delete powerup
 				delete Powerup;
 				Powerup = nullptr;
 			}
+
+			//Check if player has touched powerup box
 			//Check x location
 			else if ((Player->returnlocationx() + 25 >= Powerup->returnlocationx() - 25 && Player->returnlocationx() + 25 <= Powerup->returnlocationx() + 25) || /*Front half*/
 				(Player->returnlocationx() - 25 >= Powerup->returnlocationx() - 25 && Player->returnlocationx() - 25 <= Powerup->returnlocationx() + 25) /*Back half*/)
@@ -336,11 +338,11 @@ void SceneMiniGame1::Update(double dt)
 					//1 - Destroy Wall
 					//2 - Gain Score
 					//3 - Random
+					// Check what kind of powerup
 					switch (Powerup->returntype())
 					{
 					case 0:
 						gamespeed += 1;
-						
 						gapsize = 175;
 						nextupdate = 5000;
 						break;
@@ -354,6 +356,7 @@ void SceneMiniGame1::Update(double dt)
 						break;
 
 					case 3:
+						//Generate a random number
 						int type = rand() % 3; //Random number from 0 - 2
 						switch (type)
 						{
@@ -373,6 +376,7 @@ void SceneMiniGame1::Update(double dt)
 						}
 						break;
 					}
+					//Destory powerup box after collection
 					delete Powerup;
 					Powerup = nullptr;
 				}
@@ -380,14 +384,18 @@ void SceneMiniGame1::Update(double dt)
 
 		}
 
-		//Destroy Wall button
+		//Destroy Wall 
+		//Check for Key press and powerup collected
 		if (KeyboardController::GetInstance()->IsKeyPressed(VK_RETURN) && walldestroy == true)
 		{
+			//Set mid to starting wall
 			WallMid = WallStart;
+			//Store prev wall
 			MiniGame1Obj* Prev;
-			Prev = WallStart;
-			while (WallMid != nullptr)
+			Prev = WallStart; //Sety prev to startingh wall
+			while (WallMid != nullptr) //Check until no more walls
 			{
+				//Wall directly infront of player
 				if (WallMid->returnlocationx() > Player->returnlocationx())
 				{
 					if (WallMid == WallStart) //First Wall
@@ -396,20 +404,20 @@ void SceneMiniGame1::Update(double dt)
 						delete WallMid;
 						WallMid = nullptr;
 					}
-					else
+					else //Not first wall
 					{
 						Prev->setnextaddress(WallMid->getnextadress());
 						delete WallMid;
 						WallMid = nullptr;
 					}
-					SoundEngine->play2D("audio/sound_wallbreak.mp3", GL_FALSE);
+					SoundEngine->play2D("audio/sound_wallbreak.mp3", GL_FALSE); //Play sound for wall breaking
 					walldestroy = false;
 					break;
 				}
-				else
+				else //Wall is not directly infront of player
 				{
 					Prev = WallMid;
-					WallMid = WallMid->getnextadress();
+					WallMid = WallMid->getnextadress(); //Get next wall
 				}
 				
 			}
@@ -419,10 +427,11 @@ void SceneMiniGame1::Update(double dt)
 		WallMid = WallStart;
 		while (WallMid != nullptr)
 		{
+			//Move wall by veclocity
 			WallMid->movexybyvelocity();
 
 			//AABB collision check
-			//Player x position check (front half or back half hit
+			//Player x position check (front half or back half hit)
 			if ((Player->returnlocationx() + 25 >= WallMid->returnlocationx() - 25 && Player->returnlocationx() + 25 <= WallMid->returnlocationx() + 25) || /*Front half*/
 				(Player->returnlocationx() - 25 >= WallMid->returnlocationx() - 25 && Player->returnlocationx() - 25 <= WallMid->returnlocationx() + 25) /*Back half*/)
 			{
@@ -449,6 +458,7 @@ void SceneMiniGame1::Update(double dt)
 						lost = true;
 					}
 				}
+				//Wall gap in middle
 				if (Topactive == true && Bottomactive == true)
 				{
 					//Check Player y location
@@ -460,50 +470,56 @@ void SceneMiniGame1::Update(double dt)
 				}
 				
 			}
-			if (WallMid->getnextadress() == nullptr)
+			if (WallMid->getnextadress() == nullptr) //No more walls
 			{
 				break;
 			}
-			WallMid = WallMid->getnextadress();
+			WallMid = WallMid->getnextadress(); //Check next wall
 		}
 
-		//Delete Wall
+		//Delete Wall if wall if too far left
 		if (WallStart != nullptr && WallStart->returnlocationx() <= -20)
 		{
 			MiniGame1Obj* store = WallStart;
 			WallStart = WallStart->getnextadress();
-			delete store;
-			score += 100;
+			delete store; //Delete wall
+			score += 100; //Increase score
 		}
 
 		//Update Background
 		BackgroundMid = BackgroundStart;
-		while (true)
+		while (true) //Check until no more backgrounds
 		{
+			//Set background vecloity to gamespeed
 			BackgroundMid->setvelx(gamespeed);
+			//Move background by velocity
 			BackgroundMid->movexybyvelocity();
+			//Check if there is another background pointer
 			if (BackgroundMid->getnextadress() == nullptr)
 			{
 				break;
 			}
+			//Set next background
 			BackgroundMid = BackgroundMid->getnextadress();
 		}
 		
+		//Check if last background is far enough to spawn another background
 		if (BackgroundMid->returnlocationx() <= 400)
 		{
 			MiniGame1Obj* NewBackGround = new MiniGame1Obj(BackgroundMid->returnlocationx() + 798.5 ,300,BackgroundMid->returnvelocityx(),0);
 			BackgroundMid->setnextaddress(NewBackGround);
 			
 		}
-		if (BackgroundStart->returnlocationx() <= -400)
+		if (BackgroundStart->returnlocationx() <= -400) //Background cannot be seen anymore
 		{
 			MiniGame1Obj* Store = BackgroundStart->getnextadress();
-			delete BackgroundStart;
-			BackgroundStart = Store;
+			delete BackgroundStart; //Delet background
+			BackgroundStart = Store; //New starting background
 		}
 		
 		//Player Movement
-		float negvelocity = -0.15; //Weight
+		float negvelocity = -0.15; //Default Weight
+		//Set weight based on stats of car (Weight) (Name: Stat no.)
 		switch (carselected)
 		{
 		case 0: //Clement 3
@@ -519,9 +535,11 @@ void SceneMiniGame1::Update(double dt)
 			negvelocity = -0.10;
 			break;
 		}
-		Player->setvely(Player->returnvelocityy() + negvelocity); //Weight
+		Player->setvely(Player->returnvelocityy() + negvelocity); //Set velcoity based on weight
+		//Player Jumped
 		if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE)) //floatiness
 		{
+			//Set y upwards velocity based on car stats (Floatiness) (Name : Stat no.)
 			switch (carselected)
 			{
 			case 0: //Clement 1
@@ -541,26 +559,28 @@ void SceneMiniGame1::Update(double dt)
 			if (soundbuffer <= GetTickCount64())
 			{
 				soundbuffer = GetTickCount64() + 250;
-				SoundEngine->play2D("audio/sound_jump.mp3", GL_FALSE);
+				SoundEngine->play2D("audio/sound_jump.mp3", GL_FALSE); //Play jump sound
 			}
 
 		}
-		Player->movexybyvelocity();
-		if (Player->returnlocationy() < 25)
+		Player->movexybyvelocity(); //Move player by velocity
+		if (Player->returnlocationy() < 25) //Check if player at bottom
 		{
-			Player->sety(25);
+			Player->sety(25); //Prevent playe from falling below the road
 		}
-		else if (Player->returnlocationy() > 575)
+		else if (Player->returnlocationy() > 575) //Check if player is on the top
 		{
-			Player->sety(575);
+			Player->sety(575); //Prevent player from flying off the top of the map
 		}
 
 		//Player just lost
 		if (lost == true)
 		{
 			int x = 0;
+			bool newhighscore = false;
 			std::string line;
-			std::ifstream scorefile("Highscore//MiniGame1Highscore.txt");
+			std::ifstream scorefile("Highscore//MiniGame1Highscore.txt"); //Read from file
+			//Get Highscores from filem
 			if (scorefile.is_open())
 			{
 				while (getline(scorefile, line))
@@ -571,6 +591,7 @@ void SceneMiniGame1::Update(double dt)
 			scorefile.close();
 			}
 
+			//Compare highscores
 			for (int x = 0; x < 5; x++)
 			{
 				if (score >= Highscores[x])
@@ -578,24 +599,32 @@ void SceneMiniGame1::Update(double dt)
 					int store = score;
 					if (x == 0) //If new top score
 					{
-						SoundEngine->play2D("audio/sound_highscore.mp3", GL_FALSE);
+						newhighscore = true;
 					}
-					else
-					{
-						SoundEngine->play2D("audio/sound_crash.wav", GL_FALSE);
-					}
+					//Shift rest of the scores down
 					for (; x < 5; x++)
 					{
-						int store2 = Highscores[x];
-						Highscores[x] = store;
-						store = store2;
+						int store2 = Highscores[x]; //Save old current score
+						Highscores[x] = store; //Set new score
+						store = store2; //Store old current score
 					}
 				}
 			}
+			//Play sound based on if new highscore or not
+			if (newhighscore == true)
+			{
+				SoundEngine->play2D("audio/sound_highscore.mp3", GL_FALSE); //Play sound for highscore
+			}
+			else
+			{
+				SoundEngine->play2D("audio/sound_crash.wav", GL_FALSE); //Play sound for crashing
+			}
 
+			//Write into txt file
 			ofstream scorefiles("Highscore//MiniGame1Highscore.txt");
 			if (scorefiles.is_open())
 			{
+				//Write all scores
 				for (int x = 0; x < 5; x++)
 				{
 					scorefiles << (Highscores[x]) << "\n";
@@ -604,16 +633,18 @@ void SceneMiniGame1::Update(double dt)
 			}
 		}
 	}
-	//After losing
+	//User has lost
 	else if (lost == true)
 	{
-		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN))
+		if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN)) //Wait for return keypress
 		{
 			Restart();
 		}
 	}
-	else //Havnt started
+	//User hasnt started game
+	else
 	{
+		//Main Menu
 		if (scoremenu == false && controlmenu == false && selectmenu == false)
 		{
 			//Reduce Score Screen size
@@ -634,6 +665,7 @@ void SceneMiniGame1::Update(double dt)
 					screensizecontrol = 0;
 				}
 			}
+			//Reduce Car Selection Selection screen size
 			if (screensizeselection > 0)
 			{
 				screensizeselection -= 20;
@@ -642,35 +674,36 @@ void SceneMiniGame1::Update(double dt)
 					screensizeselection = 0;
 				}
 			}
+			//Moving Cursor
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP) && bouncetime <= GetTickCount64())
 			{
-				SoundEngine->play2D("audio/sound_minigame1cursor.mp3", GL_FALSE);
+				SoundEngine->play2D("audio/sound_minigame1cursor.mp3", GL_FALSE); //Play sound for cursor
 				cursor--;
-				if (cursor <= -1)
+				if (cursor <= -1) //Minimun cursor number is 0
 				{
 					cursor = 4;
 				}
-				bouncetime = GetTickCount64() + 100;
+				bouncetime = GetTickCount64() + 100; //Set time until next keypress
 			}
 			if (KeyboardController::GetInstance()->IsKeyPressed(VK_DOWN) && bouncetime <= GetTickCount64())
 			{
-				SoundEngine->play2D("audio/sound_minigame1cursor.mp3", GL_FALSE);
+				SoundEngine->play2D("audio/sound_minigame1cursor.mp3", GL_FALSE);//Play sound for cursor
 				cursor++;
-				if (cursor >= 5)
+				if (cursor >= 5) //MAx cursor num is 4
 				{
 					cursor = 0;
 				}
-				bouncetime = GetTickCount64() + 100;
+				bouncetime = GetTickCount64() + 100; //Set time until next keypress
 			}
-			//Start Game
+			//Selection Menu Button
 			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
 			{
 				switch (cursor)
 				{
-					//Start Game
+				//Start Game
 				case 0:
 				{
-					SoundEngine->play2D("audio/sound_start.wav", GL_FALSE);
+					SoundEngine->play2D("audio/sound_start.wav", GL_FALSE); //Play sound for starting game
 					bouncetime = GetTickCount64() + 250;
 					playing = true;
 					BackgroundStart->setvelx(gamespeed);
@@ -704,7 +737,7 @@ void SceneMiniGame1::Update(double dt)
 							scorefile.close();
 						}
 
-						SoundEngine->play2D("audio/sound_highscoremenu.wav", GL_FALSE);
+						SoundEngine->play2D("audio/sound_highscoremenu.wav", GL_FALSE); //Play Sound for highscore menu
 					}
 					break;
 				}
@@ -716,7 +749,7 @@ void SceneMiniGame1::Update(double dt)
 					if (scoremenu == false && selectmenu == false)
 					{
 						controlmenu = true;
-						SoundEngine->play2D("audio/sound_minigame1menu.mp3", GL_FALSE);
+						SoundEngine->play2D("audio/sound_minigame1menu.mp3", GL_FALSE); //Play sound for menu screen
 
 					}
 
@@ -730,14 +763,14 @@ void SceneMiniGame1::Update(double dt)
 					{
 						selectmenu = true;
 					}
-					SoundEngine->play2D("audio/sound_minigame1menu.mp3", GL_FALSE);
+					SoundEngine->play2D("audio/sound_minigame1menu.mp3", GL_FALSE); //Play sound for menu screen
 					break;
 				}
 				//Exit to main
 				case 4:
 				{
 					Data::GetInstance()->setCurrScene(Data::SceneType::MAIN);
-					cursor = 2;
+					cursor = 2; //Set cursor to controls
 				}
 				}
 			}
@@ -748,7 +781,7 @@ void SceneMiniGame1::Update(double dt)
 			if (screensizecontrol < 500)
 			{
 				screensizecontrol += 10;
-				if (screensizecontrol > 500)
+				if (screensizecontrol > 500) //Max screen  size is 500
 				{
 					screensizecontrol = 500;
 				}
@@ -765,7 +798,7 @@ void SceneMiniGame1::Update(double dt)
 			if (screensizeselection < 550)
 			{
 				screensizeselection += 10;
-				if (screensizeselection > 550)
+				if (screensizeselection > 550) //Max scren size is 550
 				{
 					screensizeselection = 550;
 				}
@@ -862,12 +895,12 @@ void SceneMiniGame1::Update(double dt)
 			if (screensizescore < 500)
 			{
 				screensizescore += 10;
-				if (screensizescore > 500)
+				if (screensizescore > 500) //Max screen size is 500
 				{
 					screensizescore = 500;
 				}
 			}
-
+			//Update Colors for highscore
 			if (gameupdate <= GetTickCount64())
 			{
 				gameupdate = GetTickCount64() + 250;
@@ -877,6 +910,7 @@ void SceneMiniGame1::Update(double dt)
 					Highscore1color = 0;
 				}
 			}
+			//Player wants to return to main menu
 			if (KeyboardController::GetInstance()->IsKeyReleased(VK_RETURN) && bouncetime <= GetTickCount64())
 			{
 				bouncetime = GetTickCount64() + 500;
