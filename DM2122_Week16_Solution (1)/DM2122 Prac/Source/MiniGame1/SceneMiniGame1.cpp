@@ -158,7 +158,7 @@ void SceneMiniGame1::Init()
 
 	walldestroy = false;
 
-	cursor = 0;
+	cursor = 2;
 
 	bouncetime = GetTickCount64();
 	scoremenu = false;
@@ -719,6 +719,7 @@ void SceneMiniGame1::Update(double dt)
 				case 4:
 				{
 					Data::GetInstance()->setCurrScene(Data::SceneType::MAIN);
+					cursor = 2;
 				}
 				}
 			}

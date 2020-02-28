@@ -524,11 +524,7 @@ void SceneText::Update(double dt)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	
-<<<<<<< HEAD
-	// 4 Cars
-=======
-	//Check for Car
->>>>>>> Motorshow-Minigame-Interface
+	//Checking Cars
 	for (int i = 0; i < 4; i++)
 	{
 		if ((((thePlayer->GetPos().x - light[i].position.x) >= -80) && ((thePlayer->GetPos().x - light[i].position.x) <= 80)) && (((thePlayer->GetPos().z - light[i].position.z) >= -50) && ((thePlayer->GetPos().z - light[i].position.z) <= 50)))
@@ -578,13 +574,16 @@ void SceneText::Update(double dt)
 		}
 	}
 
-	//Check for flappy car booth UI
+	//Check for flappy car booth UI and key input to sceene change
 	if ((thePlayer->GetPos().x >= 100 - 80  && thePlayer->GetPos().x <= 100 + 80)
 		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
 	{
 		CarUI[4] = true;
 		if (CarUIHeight[4] < 8)
 			CarUIHeight[4] += 24 * dt;
+		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+			Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME1);
+
 	}
 	else
 	{
@@ -605,6 +604,8 @@ void SceneText::Update(double dt)
 		CarUI[5]= true;
 		if (CarUIHeight[5] < 8)
 			CarUIHeight[5] += 24 * dt;
+		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+			Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME2);
 	}
 	else
 	{
