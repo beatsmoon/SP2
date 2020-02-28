@@ -84,6 +84,7 @@ private:
 	bool NitroUsed = false;
 	bool gameEnd = false;
 	bool gameStart = false;
+	bool crashsound = false;
 	bool rock1End = true;
 	float distance = 0;
 	int lanes;
