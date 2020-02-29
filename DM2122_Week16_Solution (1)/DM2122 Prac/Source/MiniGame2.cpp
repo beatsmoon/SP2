@@ -416,6 +416,9 @@ void MiniGame2::Exit()
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 
+	delete thePlayer;
+	delete theCar;
+	delete SoundEngine;
 }
 
 void MiniGame2::RenderMesh(Mesh* mesh, bool enableLight)
