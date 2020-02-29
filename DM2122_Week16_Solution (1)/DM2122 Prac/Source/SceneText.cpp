@@ -1027,8 +1027,7 @@ void SceneText::Render()
 		RenderSkybox();
 		RenderSpaceStation();
 
-		// Render Car Stat Interfaces
-		RenderStatsUI();
+
 
 		// Render Cars
 		modelStack.PushMatrix();
@@ -1068,6 +1067,8 @@ void SceneText::Render()
 		RenderCarSurfersBooth();
 		RenderFlappyCarBooth();
 		RenderTestDrivePopup();
+		// Render Car Stat Interfaces
+		RenderStatsUI();
 		break;
 	}
 	case STATE_TEST_DRIVE:
