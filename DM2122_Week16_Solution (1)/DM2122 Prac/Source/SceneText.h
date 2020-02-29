@@ -58,6 +58,7 @@ class SceneText : public Scene
 		GEO_TESTDRIVE_ENVIRONMENT_OBJ,
 		GEO_SPEEDOMETER,
 		GEO_SPEEDOMETER_NEEDLE,
+		GEO_TESTDRIVE_POPUP,
 		NUM_GEOMETRY,
 	};
 
@@ -287,6 +288,7 @@ private:
 	void RenderFlappyCarBooth();
 	void RenderCarSurfersBooth();
 	void RenderSpeedometer();
+	void RenderTestDrivePopup();
 
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderImageOnScreen(Mesh* mesh, float sizex, float sizey, float x, float y,float rotation);

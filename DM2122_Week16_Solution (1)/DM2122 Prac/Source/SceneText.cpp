@@ -502,6 +502,9 @@ void SceneText::Init()
 	meshList[GEO_SPEEDOMETER_NEEDLE] = MeshBuilder::GenerateQuad("speedometer_needle", Color(1, 1, 1), 4, 4);
 	meshList[GEO_SPEEDOMETER_NEEDLE]->textureID = LoadTGA("Image//speedometer_needle.tga");
 
+	meshList[GEO_TESTDRIVE_POPUP] = MeshBuilder::GenerateQuad("testdrive_popup", Color(1, 1, 1), 4, 4);
+	meshList[GEO_TESTDRIVE_POPUP]->textureID = LoadTGA("Image//testdrive_popup.tga");
+
 	meshList[GEO_LIGHTSPHERE] = MeshBuilder::GenerateSphere("lightBall", Color(1.f, 1.f, 1.f), 9, 36, 1.f);
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -1064,6 +1067,7 @@ void SceneText::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "[" + to_string(thePlayer->GetPos().x) + ", " + to_string(thePlayer->GetPos().y) + ", " + to_string(thePlayer->GetPos().z) + "]", Color(0, 1, 0), 2, 0, 2);
 		RenderCarSurfersBooth();
 		RenderFlappyCarBooth();
+		RenderTestDrivePopup();
 		break;
 	}
 	case STATE_TEST_DRIVE:
@@ -1313,7 +1317,7 @@ void SceneText::RenderWMCar()
 
 void SceneText::RenderStatsUI()
 {
-	Vector3 UIPos[6];
+	Vector3 UIPos[7];
 	UIPos[0] = Vector3(-35, -1, -35);
 	UIPos[1] = Vector3(-35, -1, 35);
 	UIPos[2] = Vector3(50, -1, 35);
@@ -1580,6 +1584,16 @@ void SceneText::RenderSpeedometer()
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
 }
+
+void SceneText::RenderTestDrivePopup()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(10, -10, -130);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_TESTDRIVE_POPUP], false);
+	modelStack.PopMatrix();
+}
+
 
 void SceneText::RenderCarMesh(Mesh* mesh)
 {
