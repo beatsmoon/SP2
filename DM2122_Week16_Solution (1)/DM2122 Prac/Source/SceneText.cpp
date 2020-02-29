@@ -1733,7 +1733,8 @@ void SceneText::RenderPause()
 		}
 	}
 
-	RenderTextOnScreen(meshList[GEO_TEXT],carName, Color(0.98f, 0.41f, 1.f), 8, 3.75, 1.44);
+	if(pauseHeight > 0.9)
+		RenderTextOnScreen(meshList[GEO_TEXT],carName, Color(0.98f, 0.41f, 1.f), 8, 3.75, 1.44);
 
 
 	RenderIndicator();
@@ -1814,7 +1815,9 @@ void SceneText::RenderTestDrivePause()
 		}
 
 	}
-	RenderTextOnScreen(meshList[GEO_TEXT], carName, Color(0.98f, 0.41f, 1.f), 8, 3.7, 0.5);
+	if (pauseHeight > 0.9)
+		RenderTextOnScreen(meshList[GEO_TEXT], carName, Color(0.98f, 0.41f, 1.f), 8, 3.7, 0.5);
+
 	RenderIndicator();
 	modelStack.PopMatrix();
 
