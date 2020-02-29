@@ -507,7 +507,6 @@ void SceneText::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	carName = "None";
 
 	// Hardware Abstraction
 	theKeyboard = new CKeyboard();
@@ -588,8 +587,8 @@ void SceneText::Update(double dt)
 	}
 
 	//Check for flappy car booth UI and key input to sceene change
-	if ((thePlayer->GetPos().x >= 100 - 60 && thePlayer->GetPos().x <= 100 + 60)
-		&& (thePlayer->GetPos().z >= 115 - 60 && thePlayer->GetPos().x <= 115 + 60))
+	if ((thePlayer->GetPos().x >= 100 - 80 && thePlayer->GetPos().x <= 100 + 80)
+		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
 	{
 		CarUI[4] = true;
 		if (CarUIHeight[4] < 8)
@@ -611,8 +610,8 @@ void SceneText::Update(double dt)
 	}
 
 	//Car Surfers UI Check
-	if ((thePlayer->GetPos().x <= -100 + 60 && thePlayer->GetPos().x >= -100 - 60)
-		&& (thePlayer->GetPos().z >= 115 - 60 && thePlayer->GetPos().x <= 115 + 60))
+	if ((thePlayer->GetPos().x <= -100 + 80 && thePlayer->GetPos().x >= -100 - 80)
+		&& (thePlayer->GetPos().z >= 115 - 80 && thePlayer->GetPos().x <= 115 + 80))
 	{
 		CarUI[5] = true;
 		if (CarUIHeight[5] < 8)
@@ -778,11 +777,6 @@ void SceneText::Update(double dt)
 
 	}
 
-	if (thePlayer->GetSelectedCar() != nullptr)
-		carName = thePlayer->GetSelectedCar()->Get_name();
-	else
-		carName = "None";
-
 	//cout << Cars[whichCar]->Get << endl;
 	/*while (Cars[whichCar]->GetVelocity().Length() > 0)
 	{
@@ -793,10 +787,6 @@ void SceneText::Update(double dt)
 			needleRotation = 180;
 		}
 	}*/
-	if (thePlayer->GetSelectedCar() != nullptr)
-		needleRotation = -(thePlayer->GetSelectedCar()->GetSpeed());
-	else
-		needleRotation = 0;
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
@@ -1575,7 +1565,7 @@ void SceneText::RenderSpeedometer()
 	modelStack.PushMatrix();
 	/*modelStack.Rotate(90, 1, 1, 1);*/
 	modelStack.Translate(0, 0, 0.1f);
-	RenderImageOnScreen(meshList[GEO_SPEEDOMETER_NEEDLE], 100,100,600,-2,needleRotation);	//change the 90 at the back to a variable for animation
+	RenderImageOnScreen(meshList[GEO_SPEEDOMETER_NEEDLE], 100,100,600,90,needleRotation);	//change the 90 at the back to a variable for animation
 
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -1715,10 +1705,6 @@ void SceneText::RenderPause()
 
 		}
 	}
-
-	RenderTextOnScreen(meshList[GEO_TEXT],carName, Color(0.98f, 0.41f, 1.f), 8, 3.75, 1.44);
-
-
 	RenderIndicator();
 	modelStack.PopMatrix();
 
@@ -1797,7 +1783,6 @@ void SceneText::RenderTestDrivePause()
 		}
 
 	}
-	RenderTextOnScreen(meshList[GEO_TEXT], carName, Color(0.98f, 0.41f, 1.f), 8, 3.7, 0.5);
 	RenderIndicator();
 	modelStack.PopMatrix();
 

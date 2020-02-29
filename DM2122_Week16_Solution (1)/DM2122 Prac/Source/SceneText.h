@@ -265,8 +265,6 @@ private:
 	int flappyCar[3];
 	int carSurfer[3];
 	
-	string carName;
-
 	void RenderMesh(Mesh* mesh, bool enableLight);
 	void RenderCarMesh(Mesh *mesh);
 	void RenderSkyboxWallMesh(Mesh *mesh);

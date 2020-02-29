@@ -6,8 +6,8 @@ o WASD keys are used to control the player movement
 o Spacebar makes the player jump
 o Minigames can be accessed by pressing Z while near the respective minigame booth (See Minigames for more details)
 o Each car has its own stats seen by the UI in front of them when close to it
-o Press Z near the car to select it
-o Press Z near the TV to test drive the selected car on rainbow road
+o The player can select a car by pressing Z while near it.
+o Players can access the test drive with their selected car by pressing Z infront of the picture.
 o Esc key is to bring up the pause screen (see Pause screen for more details)
 
 

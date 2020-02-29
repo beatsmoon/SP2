@@ -37,7 +37,6 @@ public:
 	Vector3 GetVelocity();
 	Vector3 GetDirection();
 	string Get_name();
-	float GetSpeed();
 	float Get_top_speed();
 	float Get_handling();
 	float Get_acceleration();
