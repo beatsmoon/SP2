@@ -9,6 +9,7 @@
 #include "KeyboardController.h"
 #include "MouseController.h"
 #include "LoadTGA.h"
+#include "SceneData.h"
 
 #define ROT_LIMIT 45.f;
 #define SCALE_LIMIT 5.f;
@@ -501,41 +502,68 @@ void MiniGame2::RenderTrack()
 
 }
 void MiniGame2::RenderCar()
-{  // WMCAR
-	/*modelStack.PushMatrix();
-	modelStack.Translate(carX, -40, -10);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Rotate(RotateCar, 0, 1, 0);
-	modelStack.Scale(0.5f, 0.5f, 0.5f);
-	RenderMesh(meshList[GEO_WM_CAR], false);
-	modelStack.PopMatrix();*/
-
-	//VAL CAR
-	/*modelStack.PushMatrix();
-	modelStack.Translate(carX, -40, -10);
-	modelStack.Rotate(RotateCar, 0, 1, 0);
-	modelStack.Scale(7.f, 7.f, 7.f);
-	RenderMesh(meshList[GEO_VAL_CAR], false);
-	modelStack.PopMatrix();*/
-
-	
-	//G CAR
-	//modelStack.PushMatrix();
-	//modelStack.Translate(-1 + carX, -40, -10);
-	//modelStack.Rotate(-90, 0, 1, 0);
-	//modelStack.Rotate(RotateCar, 0, 1, 0);
-	//modelStack.Scale(2.f, 2.f, 2.f);
-	//RenderMesh(meshList[GEO_G_CAR], false);
-	//modelStack.PopMatrix();
-
-	//C CAR
-	modelStack.PushMatrix();
-	modelStack.Translate(carX, -40, -10);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Rotate(RotateCar, 0, 1, 0);
-	modelStack.Scale(10.f, 10.f, 10.f);
-	RenderMesh(meshList[GEO_C_CAR], false);
-	modelStack.PopMatrix();
+{
+	switch (Data::GetInstance()->getCurrCar())
+	{
+	case Data::CarType::CAR_WM:
+		carselected = 0;
+		break;
+	case Data::CarType::CAR_V:
+		carselected = 1;
+		break;
+	case Data::CarType::CAR_G:
+		carselected = 2;
+		break;
+	case Data::CarType::CAR_C:
+		carselected = 3;
+		break;
+	default:
+		carselected = 0;
+		break;
+	}
+	if (carselected == 0)
+	{
+		// WMCAR
+		modelStack.PushMatrix();
+		modelStack.Translate(carX, -40, -10);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Rotate(RotateCar, 0, 1, 0);
+		modelStack.Scale(0.5f, 0.5f, 0.5f);
+		RenderMesh(meshList[GEO_WM_CAR], false);
+		modelStack.PopMatrix();
+	}
+	if (carselected == 1)
+	{
+		//VAL CAR
+		modelStack.PushMatrix();
+		modelStack.Translate(carX, -40, -10);
+		modelStack.Rotate(RotateCar, 0, 1, 0);
+		modelStack.Scale(7.f, 7.f, 7.f);
+		RenderMesh(meshList[GEO_VAL_CAR], false);
+		modelStack.PopMatrix();
+	}
+	if (carselected == 2)
+	{
+		//G CAR
+		modelStack.PushMatrix();
+		modelStack.Translate(-1 + carX, -40, -10);
+		modelStack.Rotate(-90, 0, 1, 0);
+		modelStack.Rotate(RotateCar, 0, 1, 0);
+		modelStack.Scale(2.f, 2.f, 2.f);
+		RenderMesh(meshList[GEO_G_CAR], false);
+		modelStack.PopMatrix();
+	}
+	if (carselected == 3)
+	{
+		//C CAR
+		modelStack.PushMatrix();
+		modelStack.Translate(carX, -40, -10);
+		modelStack.Rotate(90, 0, 1, 0);
+		modelStack.Rotate(RotateCar, 0, 1, 0);
+		modelStack.Scale(10.f, 10.f, 10.f);
+		RenderMesh(meshList[GEO_C_CAR], false);
+		modelStack.PopMatrix();
+	}
 }
 void MiniGame2::RenderDeathMenu()
 {
