@@ -25,6 +25,7 @@ SceneText::SceneText()
 
 SceneText::~SceneText()
 {
+	// thePlayer, theMouse, theKeyboard, Cars[4], SoundEngine, skyboxWall[4]
 	if (theMouse)
 	{
 		delete theMouse;
@@ -35,6 +36,24 @@ SceneText::~SceneText()
 		delete theKeyboard;
 		theKeyboard = NULL;
 	}
+	/*if (thePlayer)
+	{
+		delete thePlayer;
+		thePlayer = NULL;
+	}
+	if (SoundEngine)
+	{
+		delete SoundEngine;
+		SoundEngine = NULL;
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		delete Cars[i];
+		Cars[i] = NULL;
+
+		delete skyboxWall[i];
+		skyboxWall[i] = NULL;
+	}*/
 }
 
 void SceneText::Init()
