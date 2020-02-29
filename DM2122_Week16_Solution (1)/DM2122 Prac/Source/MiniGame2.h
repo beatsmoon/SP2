@@ -93,6 +93,7 @@ private:
 	float Rotate = 0;
 	float RotateCar = 0;
 	float Highscores[5];
+	int carselected = 0;
 
 	float offset_Y = 0;
 
