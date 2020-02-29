@@ -59,7 +59,7 @@ void SceneText::Init()
 	Cars[CHOICE_WM]->SetDirection(Vector3(0, 0, 1));
 	cameraCar.Init((Cars[CHOICE_WM]->GetPos() - Cars[CHOICE_WM]->GetDirection()) * 10, Cars[CHOICE_WM]->GetPos(), Vector3(0, 1, 0));
 
-	Cars[CHOICE_VL] = new Car("VL", 55, 35, 36, 10);
+	Cars[CHOICE_VL] = new Car("VL", 55, 35, 30, 10);
 	Cars[CHOICE_VL]->SetDirection(Vector3(0, 0, 1));
 	cameraCar.Init((Cars[CHOICE_VL]->GetPos() - Cars[CHOICE_VL]->GetDirection()) * 10, Cars[CHOICE_VL]->GetPos(), Vector3(0, 1, 0));
 
@@ -660,7 +660,10 @@ void SceneText::Update(double dt)
 			else if (pauseMenuSelection == CHOICE_RETURN_STATION)
 			{
 				renderingState = STATE_SELECTION_SCREEN;
-				thePlayer->Toggle_TestDrive();
+				thePlayer->SetPos(Vector3(0, 0, 10));
+				thePlayer->Toggle_TestDrive(); 
+				thePlayer->SetTarget(Vector3(0, 0, 0));
+				thePlayer->SetUp(Vector3(0, 1, 0));
 			}
 			else if (pauseMenuSelection == CHOICE_EXIT)
 			{
