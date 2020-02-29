@@ -162,8 +162,11 @@ void Application::Run()
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
         m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms. 
 		PostInputUpdate();
-	} //Check if the ESC key had been pressed or if the window had been closed
-	scene->Exit();
+	}
+	//Exit scenes
+	mainscene->Exit();
+	minigame1->Exit();
+	minigame2->Exit();
 
 
 	delete scene;
