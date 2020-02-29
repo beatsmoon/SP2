@@ -1909,7 +1909,7 @@ void SceneText::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.4f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -1960,7 +1960,7 @@ void SceneText::RenderHighscores()
 	for (int i = 0; i < 3; i++)
 	{
 		if (pauseHeight > 0.9)
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f), 8, 0.9, 4.3f + (-1.7 * i));
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f), 8, 1.1, 4.25f + (-1.7 * i));
 	}
 
 	//read car surfers highscores here
@@ -1981,6 +1981,6 @@ void SceneText::RenderHighscores()
 	for (int q = 0; q < 3; q++)
 	{
 		if(pauseHeight > 0.9)
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(carSurfer[q]), Color(0.98f, 0.41f, 1.f), 8, 4.7, 4.1f + (-1.7 * q));
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(carSurfer[q]), Color(0.98f, 0.41f, 1.f), 8, 4.8, 4.25f + (-1.7 * q));
 	}
 }
