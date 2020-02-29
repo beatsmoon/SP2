@@ -80,6 +80,11 @@ Vector3 Car::GetDirection()
 	return Direction;
 }
 
+float Car::GetSpeed()
+{
+	return Velocity.Length();
+}
+
 string Car::Get_name()
 {
 	return Name;
