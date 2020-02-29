@@ -257,6 +257,7 @@ private:
 
 	float skyboxOffset; // 0.f - 1.f
 	int skyboxSwapValue; // 0-3
+	Mesh* skyboxWall[4];
 
 	ISoundEngine* SoundEngine = createIrrKlangDevice();
 	int needleRotation = 0;

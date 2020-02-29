@@ -48,7 +48,7 @@ void main(){
 	}
 	if (isSkybox)
 	{
-		texCoord.x += skyboxOffset;
+		texCoord.x -= skyboxOffset;
 	}
 	
 }

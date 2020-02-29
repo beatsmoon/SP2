@@ -509,6 +509,11 @@ void SceneText::Init()
 
 	carName = "None";
 
+	skyboxWall[0] = meshList[GEO_LEFT];
+	skyboxWall[1] = meshList[GEO_FRONT];
+	skyboxWall[2] = meshList[GEO_RIGHT];
+	skyboxWall[3] = meshList[GEO_BACK];
+
 	// Hardware Abstraction
 	theKeyboard = new CKeyboard();
 	theKeyboard->Create(thePlayer);
@@ -685,8 +690,6 @@ void SceneText::Update(double dt)
 
 	if (renderingState == STATE_TEST_DRIVE && isOnGround == true)
 	{
-
-
 		if (pow((pow((thePlayer->GetSelectedCar()->GetPos().x - 110), 2) + pow((thePlayer->GetSelectedCar()->GetPos().z - 38), 2)), 0.5) <= 109)
 		{
 			//cout << "mother" << endl;
@@ -739,32 +742,14 @@ void SceneText::Update(double dt)
 	}
 
 	// Skybox Movement
-	skyboxOffset += 0.00f * dt;
+	skyboxOffset += 0.02f * dt;
 	if (skyboxOffset >= 1)
 	{
-		skyboxOffset - 1;
+		skyboxOffset -= 1;
+		skyboxSwapValue -= 1;
+		if (skyboxSwapValue < 0)
+			skyboxSwapValue += 4;
 	}
-	////detection for mini game booth 1
-	// alr done by clement on other branch so can ignore this while merging thx
-	//if (((((thePlayer->GetPos().x - (95)) >= -50) && ((thePlayer->GetPos().x - (95)) <= 50)) && (((thePlayer->GetPos().z - 110) >= -50) && ((thePlayer->GetPos().z - 110) <= 50))))
-	//{
-	//	if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
-	//	{
-	//		//cout << "hello" << endl;
-	//		Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME1);
-	//	}
-	//}
-	//detection for mini game booth 2
-	//if (((((thePlayer->GetPos().x - (-99)) >= -50) && ((thePlayer->GetPos().x - (-99)) <= 50)) && (((thePlayer->GetPos().z - 115) >= -50) && ((thePlayer->GetPos().z - 115) <= 50))))
-	//{
-	//	if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
-	//	{
-	//		//cout << "hello" << endl;
-	//		Data::GetInstance()->setCurrScene(Data::SceneType::MINIGAME2);
-	//	}
-	//	
-	//}
-	//detection for mini game booth 2
 
 	if (((((thePlayer->GetPos().x - (42)) >= -80) && ((thePlayer->GetPos().x - (42)) <= 80)) && (((thePlayer->GetPos().z - (-120)) >= -50) && ((thePlayer->GetPos().z - (-120)) <= 50))))
 	{
@@ -783,16 +768,6 @@ void SceneText::Update(double dt)
 	else
 		carName = "None";
 
-	//cout << Cars[whichCar]->Get << endl;
-	/*while (Cars[whichCar]->GetVelocity().Length() > 0)
-	{
-		needleRotation = -Cars[whichCar]->GetVelocity().Length();
-
-		if (needleRotation > 180)
-		{
-			needleRotation = 180;
-		}
-	}*/
 	if (thePlayer->GetSelectedCar() != nullptr)
 		needleRotation = -(thePlayer->GetSelectedCar()->GetSpeed());
 	else
@@ -806,7 +781,6 @@ void SceneText::Update(double dt)
 	thePlayer->Update();
 	CalculateFrameRate();
 }
-
 
 void SceneText::Render()
 {
@@ -1223,14 +1197,27 @@ void SceneText::RenderSkybox()
 		///scale, translate, rotate 
 		modelStack.Translate(-0.5f, 0.f, 0.f);
 		modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
-		RenderSkyboxWallMesh(meshList[GEO_LEFT]);
+		RenderSkyboxWallMesh(skyboxWall[((0 + skyboxSwapValue)% 4)]);
 	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-0.499f, 0.0f, (1-skyboxOffset-0.0016f)); 
+	//modelStack.Translate(-0.5f, 0.f, 0.f);
+	modelStack.Rotate(90.f, 0.f, 1.f, 0.f);
+	RenderMesh(skyboxWall[((3 + skyboxSwapValue) % 4)], false);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
 		modelStack.Translate(0.5f, 0.f, 0.f);
 		modelStack.Rotate(-90.f, 0.f, 1.f, 0.f);
-		RenderSkyboxWallMesh(meshList[GEO_RIGHT]);
+		RenderSkyboxWallMesh(skyboxWall[((2 + skyboxSwapValue) % 4)]);
 	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(0.499f, 0.0f, -(1 - skyboxOffset - 0.0016f));
+	modelStack.Rotate(-90.f, 0.f, 1.f, 0.f);
+	RenderMesh(skyboxWall[((1 + skyboxSwapValue) % 4)], false);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
 		modelStack.Translate(0.f, 0.5f, 0.f);
@@ -1249,17 +1236,29 @@ void SceneText::RenderSkybox()
 		RenderMesh(meshList[GEO_BOTTOM], false);
 		modelStack.PopMatrix();
 		modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
 		modelStack.Translate(0.f, 0.f, -0.5f);
-		RenderSkyboxWallMesh(meshList[GEO_FRONT]);
+		RenderSkyboxWallMesh(skyboxWall[((1 + skyboxSwapValue) % 4)]);
 	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate(-(1 - skyboxOffset - 0.0016f), 0.0f, -0.499f);
+	RenderMesh(skyboxWall[((0 + skyboxSwapValue) % 4)], false);
+	modelStack.PopMatrix();
+
 	modelStack.PushMatrix();
 		///scale, translate, rotate 
 		modelStack.Translate(0.f, 0.f, 0.5f);
 		modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
-		RenderSkyboxWallMesh(meshList[GEO_BACK]);
+		RenderSkyboxWallMesh(skyboxWall[((3 + skyboxSwapValue) % 4)]);
 	modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate((1 - skyboxOffset - 0.0016f), 0.0f, 0.499f);
+	modelStack.Rotate(180.f, 0.f, 1.f, 0.f);
+	RenderMesh(skyboxWall[((2 + skyboxSwapValue) % 4)], false);
+	modelStack.PopMatrix();
+
 	modelStack.PopMatrix();
 }
 
