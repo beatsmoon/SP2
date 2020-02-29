@@ -92,7 +92,7 @@ private:
 	float StartZ = 30; //Starting Position of Z
 	float Rotate = 0;
 	float RotateCar = 0;
-	float Highscores[5];
+	int Highscores[5];
 	int carselected = 0;
 
 	float offset_Y = 0;
