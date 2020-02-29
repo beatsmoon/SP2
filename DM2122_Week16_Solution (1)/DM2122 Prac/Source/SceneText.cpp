@@ -793,6 +793,10 @@ void SceneText::Update(double dt)
 			needleRotation = 180;
 		}
 	}*/
+	if (thePlayer->GetSelectedCar() != nullptr)
+		needleRotation = -(thePlayer->GetSelectedCar()->GetSpeed());
+	else
+		needleRotation = 0;
 
 	// Hardware Abstraction
 	theKeyboard->Read(dt);
@@ -1571,7 +1575,7 @@ void SceneText::RenderSpeedometer()
 	modelStack.PushMatrix();
 	/*modelStack.Rotate(90, 1, 1, 1);*/
 	modelStack.Translate(0, 0, 0.1f);
-	RenderImageOnScreen(meshList[GEO_SPEEDOMETER_NEEDLE], 100,100,600,90,needleRotation);	//change the 90 at the back to a variable for animation
+	RenderImageOnScreen(meshList[GEO_SPEEDOMETER_NEEDLE], 100,100,600,-2,needleRotation);	//change the 90 at the back to a variable for animation
 
 	modelStack.PopMatrix();
 	modelStack.PopMatrix();
