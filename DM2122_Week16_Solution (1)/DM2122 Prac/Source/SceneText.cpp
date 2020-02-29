@@ -53,7 +53,6 @@ void SceneText::Init()
 	thePlayer->Init();
 	camera.Init(thePlayer->GetPos(), thePlayer->GetTarget(), thePlayer->GetUp());
 	thePlayer->AttachCamera(&camera);
-	thePlayer->SelectCar(Cars[CHOICE_WM]);
 
 	// Init Car Stats
 	Cars[CHOICE_WM] = new Car("WM", 60, 30, 40, 10);
@@ -71,7 +70,8 @@ void SceneText::Init()
 	Cars[CHOICE_CM] = new Car("CM", 50, 40, 40, 10);
 	Cars[CHOICE_CM]->SetDirection(Vector3(0, 0, 1));
 	cameraCar.Init((Cars[CHOICE_CM]->GetPos() - Cars[CHOICE_CM]->GetDirection()) * 10, Cars[CHOICE_CM]->GetPos(), Vector3(0, 1, 0));
-	
+
+	thePlayer->SelectCar(Cars[CHOICE_WM]);
 
 
 	{
