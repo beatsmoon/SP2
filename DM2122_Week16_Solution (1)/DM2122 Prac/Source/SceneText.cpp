@@ -1960,7 +1960,7 @@ void SceneText::RenderHighscores()
 	for (int i = 0; i < 3; i++)
 	{
 		if (pauseHeight > 0.9)
-		RenderTextOnScreen(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f), 8, 1.1, 4.25f + (-1.7 * i));
+		RenderTextOnScreen(meshList[GEO_TEXT], to_string(flappyCar[i]), Color(0.98f, 0.41f, 1.f), 8, 1.1, 4.28f + (-1.9 * i));
 	}
 
 	//read car surfers highscores here
