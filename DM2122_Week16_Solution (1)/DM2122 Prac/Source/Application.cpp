@@ -77,7 +77,7 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(800, 600, "Test Window", NULL, NULL);
+	m_window = glfwCreateWindow(800, 600, "Re: Pink", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
